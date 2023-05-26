@@ -1,7 +1,7 @@
 import 'model_repository.dart';
 
 class NoteData extends ModelRepository {
-  List<dynamic> data;
+  List<dynamic>? data;
 
   NoteData({required this.data, int? status, int? error})
       : super(status: status, error: error);

@@ -6,8 +6,21 @@ class Constant {
   static const KEY_BASE_URL = "https://it-fresher.edu.vn/nms";
 
   // ignore: constant_identifier_names
-  static const KEY_NOTE_READ_ALL = "$KEY_BASE_URL/get?tab=Note&email=kyle@r2s.com.vn";
+  static const KEY_NOTE_READ_ALL = "$KEY_BASE_URL/get?tab=Note&email=";
 
+  // ignore: constant_identifier_names
+  static const KEY_CREATE_NOTE = "$KEY_BASE_URL/add?tab=Note&email=";
+
+  // ignore: constant_identifier_names
+  static const KEY_CATEGORY_READ_ALL = "$KEY_BASE_URL/get?tab=Category&email=";
+
+  // ignore: constant_identifier_names
+  static const KEY_STATUS_READ_ALL = "$KEY_BASE_URL/get?tab=Status&email=";
+
+  // ignore: constant_identifier_names
+  static const KEY_PRIORITY_READ_ALL = "$KEY_BASE_URL/get?tab=Priority&email=";
+
+  // ignore: constant_identifier_names
   static const PRIMARY_COLOR = Color(0XFF4CAEE3);
 
   // Đăng nhập đăng ký
