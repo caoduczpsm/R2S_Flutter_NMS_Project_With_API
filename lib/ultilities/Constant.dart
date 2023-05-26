@@ -15,6 +15,9 @@ class Constant {
   static const KEY_UPDATE_NOTE = "$KEY_BASE_URL/update?tab=Note&email=";
 
   // ignore: constant_identifier_names
+  static const KEY_DELETE_NOTE = "$KEY_BASE_URL/del?tab=Note&email=";
+
+  // ignore: constant_identifier_names
   static const KEY_CATEGORY_READ_ALL = "$KEY_BASE_URL/get?tab=Category&email=";
 
   // ignore: constant_identifier_names

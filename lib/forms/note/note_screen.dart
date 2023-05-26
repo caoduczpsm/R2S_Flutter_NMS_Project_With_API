@@ -35,6 +35,7 @@ class _NoteScreen extends StatefulWidget {
 }
 
 class __NoteScreenState extends State<_NoteScreen> {
+  final String email = "kyle@r2s.com.vn";
   final nameController = TextEditingController();
 
   final noteCubit = NoteCubit(NoteRepository());
@@ -57,7 +58,7 @@ class __NoteScreenState extends State<_NoteScreen> {
   @override
   void initState() {
     super.initState();
-    noteCubit.getAllNotes("kyle@r2s.com.vn");
+    noteCubit.getAllNotes(email);
     getData();
   }
 
@@ -72,11 +73,11 @@ class __NoteScreenState extends State<_NoteScreen> {
   }
 
   Future<void> getData() async {
-    categories = await categoryCubit.getAllData("kyle@r2s.com.vn");
+    categories = await categoryCubit.getAllData(email);
     categoryListData = categories?.data;
-    status = await statusCubit.getAllData("kyle@r2s.com.vn");
+    status = await statusCubit.getAllData(email);
     statusListData = status?.data;
-    priorities = await priorityCubit.getAllData("kyle@r2s.com.vn");
+    priorities = await priorityCubit.getAllData(email);
     priorityListData = priorities?.data;
   }
 
@@ -293,7 +294,7 @@ class __NoteScreenState extends State<_NoteScreen> {
                           Navigator.of(context).pop();
                           if (note == null) {
                             NoteData? result = await noteCubit.createNote(
-                                "kyle@r2s.com.vn",
+                                email,
                                 nameController.text,
                                 priorityDropdownValue,
                                 categoryDropdownValue,
@@ -301,8 +302,8 @@ class __NoteScreenState extends State<_NoteScreen> {
                                 _selectedDate);
                             if (result != null) {
                               if (result.status == 1) {
-                                showMessage("Successfully");
-                                noteCubit.getAllNotes("kyle@r2s.com.vn");
+                                showMessage("Create Successfully");
+                                noteCubit.getAllNotes(email);
                               } else if (result.status == -1 &&
                                   result.error == 2) {
                                 showMessage("Duplicate name");
@@ -310,7 +311,7 @@ class __NoteScreenState extends State<_NoteScreen> {
                             }
                           } else {
                             NoteData? result = await noteCubit.updateNote(
-                                "kyle@r2s.com.vn",
+                                email,
                                 nameController.text,
                                 priorityDropdownValue,
                                 categoryDropdownValue,
@@ -318,8 +319,8 @@ class __NoteScreenState extends State<_NoteScreen> {
                                 _selectedDate);
                             if (result != null) {
                               if (result.status == 1) {
-                                showMessage("Successfully");
-                                noteCubit.getAllNotes("kyle@r2s.com.vn");
+                                showMessage("Update Successfully");
+                                noteCubit.getAllNotes(email);
                               } else if (result.status == -1 &&
                                   result.error == 2) {
                                 showMessage("Duplicate name");
@@ -334,9 +335,10 @@ class __NoteScreenState extends State<_NoteScreen> {
             }));
   }
 
-  Future<bool> _showConfirmDeleteNoteDialog() async {
+  Future<bool> _showConfirmDeleteNoteDialog(List<dynamic> note) async {
     bool result = await showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
           title: const Text("Confirm Delete"),
@@ -351,6 +353,15 @@ class __NoteScreenState extends State<_NoteScreen> {
             TextButton(
               onPressed: () async {
                 Navigator.of(context).pop(true);
+                NoteData? result = await noteCubit.deleteNote(email, note[0]);
+                if(result != null) {
+                  if(result.status == 1) {
+                    noteCubit.getAllNotes(email);
+                    showMessage("Delete Successfully");
+                  } else if(result.status == -1 && result.error == 2){
+                    showMessage("Less 6 months");
+                  }
+                }
               },
               child: const Text("Yes"),
             ),
@@ -550,7 +561,7 @@ class __NoteScreenState extends State<_NoteScreen> {
                                 _showModalBottomSheet(note[index]);
                                 return false;
                               } else {
-                                return await _showConfirmDeleteNoteDialog();
+                                return await _showConfirmDeleteNoteDialog(note[index]);
                               }
                             },
                             child: buildListCard(note[index], index),
