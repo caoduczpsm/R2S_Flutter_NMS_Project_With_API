@@ -309,7 +309,22 @@ class __NoteScreenState extends State<_NoteScreen> {
                               }
                             }
                           } else {
-                            showMessage("Update");
+                            NoteData? result = await noteCubit.updateNote(
+                                "kyle@r2s.com.vn",
+                                nameController.text,
+                                priorityDropdownValue,
+                                categoryDropdownValue,
+                                statusDropdownValue,
+                                _selectedDate);
+                            if (result != null) {
+                              if (result.status == 1) {
+                                showMessage("Successfully");
+                                noteCubit.getAllNotes("kyle@r2s.com.vn");
+                              } else if (result.status == -1 &&
+                                  result.error == 2) {
+                                showMessage("Duplicate name");
+                              }
+                            }
                           }
                         },
                         child: Text(note == null ? "Create New" : "Update")),
