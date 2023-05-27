@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "658801652344",
+    "project_id": "r2s-flutter-nms-project-with",
+    "storage_bucket": "r2s-flutter-nms-project-with.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:658801652344:android:d6385bc3e1e5b9092cb38d",
+        "android_client_info": {
+          "package_name": "com.example.note_management_system_api"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGjy544yerTWH8bMuidQb2MLrcQ5PpfsA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

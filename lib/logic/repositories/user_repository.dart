@@ -1,6 +1,10 @@
 
-import '../../ultilities/Constant.dart';
+import 'dart:convert';
 
+import 'package:note_management_system_api/data/user_data.dart';
+
+import '../../ultilities/Constant.dart';
+import 'package:http/http.dart' as http;
 class UserRepository {
 
   static int checkValidEmail(String email){
@@ -44,5 +48,35 @@ class UserRepository {
     } else {
       return Constant.KEY_NAME_VALID;
     }
+  }
+
+  static Future<UserData> signIn(User user) async {
+    final uri = Uri.parse('${Constant.KEY_BASE_URL}/login/?email=${user.email}&pass=${user.password}');
+
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      return UserData.fromJson(responseBody);
+    } else {
+      throw Exception('Failed to Sign In');
+    }
+  }
+
+  static Future<UserData> signUp(User user) async {
+    Info? info = user.info;
+    final uri = Uri.parse(
+        '${Constant.KEY_BASE_URL}/signup?email=${user.email}&pass=${user.password}&firstname=${info?.firstName}&lastname=${info?.lastName}');
+
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      return UserData.fromJson(responseBody);
+    } else {
+      throw Exception('Failed to Sign Up');
+    }
+
+
   }
 }

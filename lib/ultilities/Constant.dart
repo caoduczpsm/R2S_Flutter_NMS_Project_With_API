@@ -32,6 +32,11 @@ class Constant {
   // Đăng nhập đăng ký
 
   // ignore: constant_identifier_names
+  static const KEY_STATUS_SIGNIN_SUCCESS = 1;
+  // ignore: constant_identifier_names
+  static const KEY_STATUS_SIGNUP_SUCCESS = 1;
+
+  // ignore: constant_identifier_names
   static const KEY_EMAIL_HAS_LENGTH_LESS_6_CHAR  = 1;
   // ignore: constant_identifier_names
   static const KEY_EMAIL_HAS_LENGTH_GREATER_256_CHAR  = 2;

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import '../../data/user_data.dart';
 import '../../logic/cubits/drawer_cubit.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NoteApp extends StatelessWidget {
-  const NoteApp({super.key});
+  final User user;
+  const NoteApp({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       home: BlocProvider(
         create: (drawerContext) => DrawerCubit(),
@@ -43,8 +46,8 @@ class NoteApp extends StatelessWidget {
                                 color: Colors.white,
                                 fontSize: 20.0,
                               )),
-                          const Text("test@gmail.com",
-                              style: TextStyle(
+                           Text(user.email,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
                               )),
