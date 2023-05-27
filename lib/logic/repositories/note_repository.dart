@@ -31,9 +31,9 @@ class NoteRepository {
     return NoteData.fromJson(jsonDecode(response.body));
   }
 
-  Future<NoteData> updateNote(String email, String name, String priority,
+  Future<NoteData> updateNote(String email, String name, String? nName, String priority,
       String category, String status, String planDate) async {
-    final url = "${Constant.KEY_UPDATE_NOTE}$email&name=$name&Priority=$priority&Category=$category&Status=$status&PlanDate=$planDate";
+    final url = "${Constant.KEY_UPDATE_NOTE}$email&name=$name&nname=$nName&Priority=$priority&Category=$category&Status=$status&PlanDate=$planDate";
     final uri = Uri.parse(url);
 
     final response = await http.get(uri);

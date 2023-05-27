@@ -33,12 +33,12 @@ class NoteCubit extends Cubit<NoteState> {
     }
   }
 
-  Future<NoteData?> updateNote(String email, String name, String priority,
+  Future<NoteData?> updateNote(String email, String name, String? nName, String priority,
       String category, String status, String planDate) async {
     emit(LoadingNoteState());
     try {
       var result = await _repository.updateNote(
-          email, name, priority, category, status, planDate);
+          email, name, nName, priority, category, status, planDate);
       emit(SuccessSubmitNoteState(result));
       return result;
     } catch (e) {

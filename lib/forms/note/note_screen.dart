@@ -318,13 +318,26 @@ class __NoteScreenState extends State<_NoteScreen> {
                                 }
                               }
                             } else {
-                              NoteData? result = await noteCubit.updateNote(
-                                  email,
-                                  nameController.text,
-                                  priorityDropdownValue,
-                                  categoryDropdownValue,
-                                  statusDropdownValue,
-                                  _selectedDate);
+                              NoteData? result;
+                              if(note[0] == nameController.text) {
+                                result = await noteCubit.updateNote(
+                                    email,
+                                    nameController.text,
+                                    "",
+                                    priorityDropdownValue,
+                                    categoryDropdownValue,
+                                    statusDropdownValue,
+                                    _selectedDate);
+                              } else {
+                                result = await noteCubit.updateNote(
+                                    email,
+                                    note[0],
+                                    nameController.text,
+                                    priorityDropdownValue,
+                                    categoryDropdownValue,
+                                    statusDropdownValue,
+                                    _selectedDate);
+                              }
                               if (result != null) {
                                 if (result.status == 1) {
                                   showMessage("Update Successfully");
