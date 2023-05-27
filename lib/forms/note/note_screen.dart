@@ -44,8 +44,9 @@ class __NoteScreenState extends State<_NoteScreen> {
   final statusCubit = StatusCubit(StatusRepository());
   final priorityCubit = PriorityCubit(PriorityRepository());
 
-  static const iconColor = Colors.white;
-  static const textNormalStyle = TextStyle(fontSize: 20, color: iconColor);
+  static const textNormalStyle = TextStyle(fontSize: 20, color: Colors.black);
+  static const textBigSizeStyle = TextStyle(
+      fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blueAccent);
   static const double _borderRadius = 10;
   static const Color startColor = Color.fromARGB(255, 151, 222, 255);
   static const Color endColor = Color.fromARGB(255, 98, 205, 255);
@@ -93,6 +94,9 @@ class __NoteScreenState extends State<_NoteScreen> {
   }
 
   void _showModalBottomSheet(List<dynamic>? note) {
+
+    const Color iconColor = Colors.blueAccent;
+
     if (note == null) {
       categoryDropdownValue = categoryListData?[0][0];
       statusDropdownValue = statusListData?[0][0];
@@ -127,77 +131,85 @@ class __NoteScreenState extends State<_NoteScreen> {
                     ]),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          const Icon(
-                            Icons.category,
-                            color: Colors.orange,
-                          ),
-                          Expanded(
-                            child: Container(
-                              margin: const EdgeInsets.only(left: 5),
-                              child: DropdownButton(
-                                icon: const Icon(Icons.arrow_drop_down,
-                                    color: Colors.orange),
-                                elevation: 16,
-                                style: const TextStyle(color: Colors.black),
-                                underline: Container(
-                                  height: 2,
-                                  color: Colors.orange,
-                                ),
-                                value: categoryDropdownValue,
-                                items: categoryListData
-                                    ?.map<DropdownMenuItem<dynamic>>((e) {
-                                  return DropdownMenuItem<dynamic>(
-                                    value: e[0],
-                                    child: Text(
-                                      e[0],
-                                      style: const TextStyle(fontSize: 20),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    categoryDropdownValue = value!;
-                                  });
-                                },
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
+                    Container(
+                      width: 100,
+                      height: 5,
+                      margin: const EdgeInsets.only(top: 4),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey[300]),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 5, right: 5),
+                      child: TextFormField(
+                        style: const TextStyle(fontSize: 20),
+                        controller: nameController,
+                        decoration: const InputDecoration(
+                            hintText: 'Name',
+                            border: OutlineInputBorder(),
+                            prefixIcon: Icon(
+                              Icons.person,
+                              color: iconColor,
+                            ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      margin: const EdgeInsets.only(left: 5, right: 5),
+                      width: double.infinity,
+                      height: 60,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black26),
+                          borderRadius: BorderRadius.circular(5)),
+                      clipBehavior: Clip.hardEdge,
+                      child: InkWell(
+                          onTap: () {
+                            showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2023),
+                                lastDate: DateTime(2100))
+                                .then((value) {
+                              setState(() {
+                                _selectedDate = _formatDate(value!);
+                              });
+                            });
+                          },
+                          child: TextFormField(
+                              enabled: false,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.calendar_today, color: iconColor,),
+                              ),
+                              controller: TextEditingController(text: _selectedDate),
+                              style: const TextStyle(fontSize: 20),
+                              textAlign: TextAlign.left)
+                      ),
+                    ),
+                    const SizedBox(height: 10),
                     SizedBox(
                       width: double.infinity,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          const Icon(
-                            Icons.priority_high,
-                            color: Colors.green,
-                          ),
-                          Expanded(
-                              child: Container(
+                      child: Expanded(
+                          child: Container(
                             margin: const EdgeInsets.only(left: 5),
-                            child: DropdownButton(
-                              icon: const Icon(Icons.arrow_drop_down,
-                                  color: Colors.green),
+                            child: DropdownButtonFormField(
                               elevation: 16,
                               style: const TextStyle(color: Colors.black),
-                              underline: Container(
-                                height: 2,
-                                color: Colors.green,
-                              ),
-                              value: priorityDropdownValue,
-                              items: priorityListData
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  prefixIcon: Icon(
+                                    Icons.category,
+                                    color: iconColor,
+                                  )),
+                              value: categoryDropdownValue,
+                              items: categoryListData
                                   ?.map<DropdownMenuItem<dynamic>>((e) {
                                 return DropdownMenuItem<dynamic>(
                                   value: e[0],
@@ -207,133 +219,139 @@ class __NoteScreenState extends State<_NoteScreen> {
                               }).toList(),
                               onChanged: (value) {
                                 setState(() {
-                                  priorityDropdownValue = value!;
+                                  categoryDropdownValue = value!;
                                 });
                               },
                             ),
-                          ))
-                        ],
-                      ),
+                          )),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     SizedBox(
                         width: double.infinity,
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              const Icon(Icons.signal_wifi_statusbar_4_bar,
-                                  color: Colors.red),
-                              Expanded(
-                                child: Container(
-                                    margin: const EdgeInsets.only(left: 5),
-                                    child: DropdownButton(
-                                      icon: const Icon(Icons.arrow_drop_down,
-                                          color: Colors.red),
-                                      elevation: 16,
-                                      style:
-                                          const TextStyle(color: Colors.black),
-                                      underline: Container(
-                                          height: 2, color: Colors.red),
-                                      value: statusDropdownValue,
-                                      items: statusListData
-                                          ?.map<DropdownMenuItem<dynamic>>((e) {
-                                        return DropdownMenuItem<dynamic>(
-                                            value: e[0],
-                                            child: Text(e[0],
-                                                style: const TextStyle(
-                                                    fontSize: 20)));
-                                      }).toList(),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          statusDropdownValue = value!;
-                                        });
-                                      },
+                        child: Expanded(
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 5),
+                              child: DropdownButtonFormField(
+                                elevation: 16,
+                                style: const TextStyle(color: Colors.black),
+                                decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    prefixIcon: Icon(
+                                      Icons.priority_high,
+                                      color: iconColor,
                                     )),
+                                value: priorityDropdownValue,
+                                items: priorityListData
+                                    ?.map<DropdownMenuItem<dynamic>>((e) {
+                                  return DropdownMenuItem<dynamic>(
+                                    value: e[0],
+                                    child: Text(e[0],
+                                        style: const TextStyle(fontSize: 20)),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    priorityDropdownValue = value!;
+                                  });
+                                },
                               ),
-                            ])),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      style: const TextStyle(fontSize: 20),
-                      controller: nameController,
-                      decoration: InputDecoration(
-                          hintText: 'Name',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                            ))),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 5),
+                            child: DropdownButtonFormField(
+                              elevation: 16,
+                              style: const TextStyle(color: Colors.black),
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  prefixIcon: Icon(
+                                    Icons.signal_wifi_statusbar_null_outlined,
+                                    color: iconColor,
+                                  )),
+                              value: statusDropdownValue,
+                              items: statusListData
+                                  ?.map<DropdownMenuItem<dynamic>>((e) {
+                                return DropdownMenuItem<dynamic>(
+                                  value: e[0],
+                                  child: Text(e[0],
+                                      style: const TextStyle(fontSize: 20)),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  statusDropdownValue = value!;
+                                });
+                              },
+                            ),
                           )),
                     ),
                     const SizedBox(height: 10),
-                    Container(
-                        width: double.infinity,
-                        height: 60,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black26),
-                            borderRadius: BorderRadius.circular(10.0)),
-                        child: GestureDetector(
-                            onTap: () {
-                              showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime(2023),
-                                      lastDate: DateTime(2100))
-                                  .then((value) {
-                                setState(() {
-                                  _selectedDate = _formatDate(value!);
-                                });
-                              });
-                            },
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                      margin: const EdgeInsets.only(left: 10),
-                                      child: Text(_selectedDate,
-                                          style: const TextStyle(fontSize: 20),
-                                          textAlign: TextAlign.left)),
-                                ]))),
-                    const SizedBox(height: 10),
-                    ElevatedButton(
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: OutlinedButton(
                         onPressed: () async {
                           Navigator.of(context).pop();
-                          if (note == null) {
-                            NoteData? result = await noteCubit.createNote(
-                                email,
-                                nameController.text,
-                                priorityDropdownValue,
-                                categoryDropdownValue,
-                                statusDropdownValue,
-                                _selectedDate);
-                            if (result != null) {
-                              if (result.status == 1) {
-                                showMessage("Create Successfully");
-                                noteCubit.getAllNotes(email);
-                              } else if (result.status == -1 &&
-                                  result.error == 2) {
-                                showMessage("Duplicate name");
+                          if (nameController.text.isNotEmpty){
+                            if (note == null) {
+                              NoteData? result = await noteCubit.createNote(
+                                  email,
+                                  nameController.text,
+                                  priorityDropdownValue,
+                                  categoryDropdownValue,
+                                  statusDropdownValue,
+                                  _selectedDate);
+                              if (result != null) {
+                                if (result.status == 1) {
+                                  showMessage("Create Successfully");
+                                  noteCubit.getAllNotes(email);
+                                } else if (result.status == -1 &&
+                                    result.error == 2) {
+                                  showMessage("Duplicate name");
+                                }
+                              }
+                            } else {
+                              NoteData? result = await noteCubit.updateNote(
+                                  email,
+                                  nameController.text,
+                                  priorityDropdownValue,
+                                  categoryDropdownValue,
+                                  statusDropdownValue,
+                                  _selectedDate);
+                              if (result != null) {
+                                if (result.status == 1) {
+                                  showMessage("Update Successfully");
+                                  noteCubit.getAllNotes(email);
+                                } else if (result.status == -1 &&
+                                    result.error == 2) {
+                                  showMessage("Duplicate name");
+                                }
                               }
                             }
                           } else {
-                            NoteData? result = await noteCubit.updateNote(
-                                email,
-                                nameController.text,
-                                priorityDropdownValue,
-                                categoryDropdownValue,
-                                statusDropdownValue,
-                                _selectedDate);
-                            if (result != null) {
-                              if (result.status == 1) {
-                                showMessage("Update Successfully");
-                                noteCubit.getAllNotes(email);
-                              } else if (result.status == -1 &&
-                                  result.error == 2) {
-                                showMessage("Duplicate name");
-                              }
-                            }
+                            showMessage("Enter note name");
                           }
                         },
-                        child: Text(note == null ? "Create New" : "Update")),
+                        style: ButtonStyle(
+                          side: MaterialStateProperty.all(const BorderSide(
+                            color: iconColor,
+                            width: 1.0,
+                          )), // border cho button
+                        ),
+                        child: Text(
+                          note == null ? "Create New" : "Update",
+                          style: textBigSizeStyle,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
                   ],
                 ),
               );
@@ -395,8 +413,9 @@ class __NoteScreenState extends State<_NoteScreen> {
               child: Stack(
                 children: <Widget>[
                   Card(
-                    shape: const RoundedRectangleBorder(borderRadius:
-                    BorderRadius.all(Radius.circular(_borderRadius))),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(_borderRadius))),
                     shadowColor: endColor,
                     elevation: 3,
                     child: Container(
@@ -425,10 +444,7 @@ class __NoteScreenState extends State<_NoteScreen> {
                                   children: [
                                     Text(
                                       note[0],
-                                      style: const TextStyle(
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.blueAccent),
+                                      style: textBigSizeStyle,
                                     ),
                                     Container(
                                       margin: const EdgeInsets.only(top: 5),
@@ -437,7 +453,7 @@ class __NoteScreenState extends State<_NoteScreen> {
                                           const Icon(Icons.category),
                                           Container(
                                             margin:
-                                            const EdgeInsets.only(left: 5),
+                                                const EdgeInsets.only(left: 5),
                                             child: Text(
                                               "Category: ${note[1]},",
                                               style: textNormalStyle,
@@ -453,7 +469,7 @@ class __NoteScreenState extends State<_NoteScreen> {
                                           const Icon(Icons.low_priority),
                                           Container(
                                             margin:
-                                            const EdgeInsets.only(left: 5),
+                                                const EdgeInsets.only(left: 5),
                                             child: Text(
                                               "Priority: ${note[2]}",
                                               style: textNormalStyle,
@@ -470,7 +486,7 @@ class __NoteScreenState extends State<_NoteScreen> {
                                               .signal_wifi_statusbar_4_bar),
                                           Container(
                                             margin:
-                                            const EdgeInsets.only(left: 5),
+                                                const EdgeInsets.only(left: 5),
                                             child: Text(
                                               "Status: ${note[3]}",
                                               style: textNormalStyle,
@@ -480,8 +496,7 @@ class __NoteScreenState extends State<_NoteScreen> {
                                       ),
                                     ),
                                   ],
-                                )
-                            ),
+                                )),
                           ),
                         )),
                   ),
@@ -508,11 +523,14 @@ class __NoteScreenState extends State<_NoteScreen> {
                     ),
                   ),
                   Positioned(
-                    top: 80,
-                    right: 10,
-                    bottom: 0,
-                    child: Image.asset('images/ic_note.png', width: 55, height: 55,)
-                  ),
+                      top: 80,
+                      right: 10,
+                      bottom: 0,
+                      child: Image.asset(
+                        'images/ic_note.png',
+                        width: 55,
+                        height: 55,
+                      )),
                 ],
               ),
             ),
@@ -608,12 +626,12 @@ class __NoteScreenState extends State<_NoteScreen> {
       floatingActionButton: FloatingActionButton(
           onPressed: () async {
             if (categories == null || status == null || priorities == null) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(const SnackBar(content: Text("Empty")));
+              showMessage("Empty");
             } else {
               _showModalBottomSheet(null);
             }
           },
+          backgroundColor: endColor,
           child: const Icon(Icons.add)),
     );
   }
