@@ -32,10 +32,10 @@ class _NoteScreen extends StatefulWidget {
   const _NoteScreen();
 
   @override
-  State<_NoteScreen> createState() => __NoteScreenState();
+  State<_NoteScreen> createState() => _NoteScreenState();
 }
 
-class __NoteScreenState extends State<_NoteScreen> {
+class _NoteScreenState extends State<_NoteScreen> {
   final String email = "kyle@r2s.com.vn";
   final nameController = TextEditingController();
 
@@ -94,7 +94,6 @@ class __NoteScreenState extends State<_NoteScreen> {
   }
 
   void _showModalBottomSheet(List<dynamic>? note) {
-
     const Color iconColor = Colors.blueAccent;
 
     if (note == null) {
@@ -118,188 +117,190 @@ class __NoteScreenState extends State<_NoteScreen> {
         backgroundColor: Colors.transparent,
         builder: (_) => StatefulBuilder(builder: (context, setState) {
               return Container(
-                padding: const EdgeInsets.only(top: 8, left: 16, right: 16),
+                padding: const EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 4),
                 margin: const EdgeInsets.all(8),
                 decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    borderRadius: BorderRadius.all(Radius.circular(_borderRadius)),
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
                           color: Colors.black12,
                           blurRadius: 12,
                           offset: Offset(0, 6))
-                    ]),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 100,
-                      height: 5,
-                      margin: const EdgeInsets.only(top: 4),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey[300]),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 5, right: 5),
-                      child: TextFormField(
+                    ],
+                  gradient: LinearGradient(
+                    colors: [endColor, Colors.white, Colors.white],
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topRight
+                  )
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 100,
+                        height: 5,
+                        margin: const EdgeInsets.only(top: 4),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.grey[300]),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
                         style: const TextStyle(fontSize: 20),
                         controller: nameController,
                         decoration: const InputDecoration(
-                            hintText: 'Name',
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(
-                              Icons.person,
-                              color: iconColor,
-                            ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          label: Text('Name'),
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(
+                            Icons.person,
+                            color: iconColor,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Container(
-                      margin: const EdgeInsets.only(left: 5, right: 5),
-                      width: double.infinity,
-                      height: 60,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black26),
-                          borderRadius: BorderRadius.circular(5)),
-                      clipBehavior: Clip.hardEdge,
-                      child: InkWell(
-                          onTap: () {
-                            showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2023),
-                                lastDate: DateTime(2100))
-                                .then((value) {
-                              setState(() {
-                                _selectedDate = _formatDate(value!);
+                      const SizedBox(height: 10),
+                      Container(
+                        width: double.infinity,
+                        height: 65,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(5)),
+                        clipBehavior: Clip.hardEdge,
+                        child: InkWell(
+                            onTap: () {
+                              showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2023),
+                                  lastDate: DateTime(2100))
+                                  .then((value) {
+                                setState(() {
+                                  _selectedDate = _formatDate(value!);
+                                });
                               });
+                            },
+                            child: TextFormField(
+                                enabled: false,
+                                decoration: const InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  border: OutlineInputBorder(),
+                                  prefixIcon: Icon(
+                                    Icons.calendar_today,
+                                    color: iconColor,
+                                  ),
+                                ),
+                                controller:
+                                TextEditingController(text: _selectedDate),
+                                style: const TextStyle(fontSize: 20),
+                                textAlign: TextAlign.left)),
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        width: double.infinity,
+                        child: DropdownButtonFormField(
+                          elevation: 16,
+                          style: const TextStyle(color: Colors.black),
+                          decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(
+                                Icons.category,
+                                color: iconColor,
+                              )),
+                          value: categoryDropdownValue,
+                          items: categoryListData
+                              ?.map<DropdownMenuItem<dynamic>>((e) {
+                            return DropdownMenuItem<dynamic>(
+                              value: e[0],
+                              child: Text(e[0],
+                                  style: const TextStyle(fontSize: 20)),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              categoryDropdownValue = value!;
                             });
                           },
-                          child: TextFormField(
-                              enabled: false,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                prefixIcon: Icon(Icons.calendar_today, color: iconColor,),
-                              ),
-                              controller: TextEditingController(text: _selectedDate),
-                              style: const TextStyle(fontSize: 20),
-                              textAlign: TextAlign.left)
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Expanded(
-                          child: Container(
-                            margin: const EdgeInsets.only(left: 5),
-                            child: DropdownButtonFormField(
-                              elevation: 16,
-                              style: const TextStyle(color: Colors.black),
-                              decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  prefixIcon: Icon(
-                                    Icons.category,
-                                    color: iconColor,
-                                  )),
-                              value: categoryDropdownValue,
-                              items: categoryListData
-                                  ?.map<DropdownMenuItem<dynamic>>((e) {
-                                return DropdownMenuItem<dynamic>(
-                                  value: e[0],
-                                  child: Text(e[0],
-                                      style: const TextStyle(fontSize: 20)),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  categoryDropdownValue = value!;
-                                });
-                              },
-                            ),
-                          )),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                        width: double.infinity,
-                        child: Expanded(
-                            child: Container(
-                              margin: const EdgeInsets.only(left: 5),
-                              child: DropdownButtonFormField(
-                                elevation: 16,
-                                style: const TextStyle(color: Colors.black),
-                                decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    prefixIcon: Icon(
-                                      Icons.priority_high,
-                                      color: iconColor,
-                                    )),
-                                value: priorityDropdownValue,
-                                items: priorityListData
-                                    ?.map<DropdownMenuItem<dynamic>>((e) {
-                                  return DropdownMenuItem<dynamic>(
-                                    value: e[0],
-                                    child: Text(e[0],
-                                        style: const TextStyle(fontSize: 20)),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    priorityDropdownValue = value!;
-                                  });
-                                },
-                              ),
-                            ))),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Expanded(
-                          child: Container(
-                            margin: const EdgeInsets.only(left: 5),
-                            child: DropdownButtonFormField(
-                              elevation: 16,
-                              style: const TextStyle(color: Colors.black),
-                              decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  prefixIcon: Icon(
-                                    Icons.signal_wifi_statusbar_null_outlined,
-                                    color: iconColor,
-                                  )),
-                              value: statusDropdownValue,
-                              items: statusListData
-                                  ?.map<DropdownMenuItem<dynamic>>((e) {
-                                return DropdownMenuItem<dynamic>(
-                                  value: e[0],
-                                  child: Text(e[0],
-                                      style: const TextStyle(fontSize: 20)),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  statusDropdownValue = value!;
-                                });
-                              },
-                            ),
-                          )),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: OutlinedButton(
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                          width: double.infinity,
+                          child: DropdownButtonFormField(
+                            elevation: 16,
+                            style: const TextStyle(color: Colors.black),
+                            decoration: const InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(
+                                  Icons.priority_high,
+                                  color: iconColor,
+                                )),
+                            value: priorityDropdownValue,
+                            items: priorityListData
+                                ?.map<DropdownMenuItem<dynamic>>((e) {
+                              return DropdownMenuItem<dynamic>(
+                                value: e[0],
+                                child: Text(e[0],
+                                    style: const TextStyle(fontSize: 20)),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                priorityDropdownValue = value!;
+                              });
+                            },
+                          )
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                          width: double.infinity,
+                          child: DropdownButtonFormField(
+                            elevation: 16,
+                            style: const TextStyle(color: Colors.black),
+                            decoration: const InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(
+                                  Icons.signal_wifi_statusbar_null_outlined,
+                                  color: iconColor,
+                                )),
+                            value: statusDropdownValue,
+                            items:
+                            statusListData?.map<DropdownMenuItem<dynamic>>((e) {
+                              return DropdownMenuItem<dynamic>(
+                                value: e[0],
+                                child: Text(e[0],
+                                    style: const TextStyle(fontSize: 20)),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                statusDropdownValue = value!;
+                              });
+                            },
+                          )
+                      ),
+                      const SizedBox(height: 10),
+                      OutlinedButton.icon(
                         onPressed: () async {
                           Navigator.of(context).pop();
-                          if (nameController.text.isNotEmpty){
+                          if (nameController.text.isNotEmpty) {
                             if (note == null) {
                               NoteData? result = await noteCubit.createNote(
                                   email,
@@ -319,7 +320,7 @@ class __NoteScreenState extends State<_NoteScreen> {
                               }
                             } else {
                               NoteData? result;
-                              if(note[0] == nameController.text) {
+                              if (note[0] == nameController.text) {
                                 result = await noteCubit.updateNote(
                                     email,
                                     nameController.text,
@@ -353,19 +354,22 @@ class __NoteScreenState extends State<_NoteScreen> {
                           }
                         },
                         style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.white),
+                          fixedSize: MaterialStateProperty.all(const Size(400, 55)),
                           side: MaterialStateProperty.all(const BorderSide(
                             color: iconColor,
                             width: 1.0,
                           )), // border cho button
                         ),
-                        child: Text(
+                        label: Text(
                           note == null ? "Create New" : "Update",
                           style: textBigSizeStyle,
                         ),
+                        icon: Icon(note == null? Icons.add : Icons.update, size: 28,),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                  ],
+                      const SizedBox(height: 10),
+                    ],
+                  ),
                 ),
               );
             }));
