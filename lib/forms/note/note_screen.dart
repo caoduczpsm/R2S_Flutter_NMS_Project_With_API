@@ -356,7 +356,7 @@ class __NoteScreenState extends State<_NoteScreen> {
                 NoteData? result = await noteCubit.deleteNote(email, note[0]);
                 if(result != null) {
                   if(result.status == 1) {
-                    noteCubit.getAllNotes(email);
+                    //noteCubit.getAllNotes(email);
                     showMessage("Delete Successfully");
                   } else if(result.status == -1 && result.error == 2){
                     showMessage("Less 6 months");

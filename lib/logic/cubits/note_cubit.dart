@@ -48,10 +48,10 @@ class NoteCubit extends Cubit<NoteState> {
   }
 
   Future<NoteData?> deleteNote(String email, String name) async {
-    emit(LoadingNoteState());
+    //emit(LoadingNoteState());
     try {
       var result = await _repository.deleteNote(email, name);
-      emit(SuccessSubmitNoteState(result));
+      //emit(SuccessSubmitNoteState(result));
       return result;
     } catch (e) {
       emit(FailureNoteState(e.toString()));
