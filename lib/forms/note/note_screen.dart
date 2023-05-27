@@ -14,6 +14,7 @@ import 'package:note_management_system_api/logic/repositories/status_repository.
 import '../../logic/cubits/note_cubit.dart';
 import '../../logic/repositories/note_repository.dart';
 import '../../logic/states/note_state.dart';
+import 'custom_paint_card.dart';
 
 class NoteScreen extends StatelessWidget {
   const NoteScreen({super.key});
@@ -43,7 +44,11 @@ class __NoteScreenState extends State<_NoteScreen> {
   final statusCubit = StatusCubit(StatusRepository());
   final priorityCubit = PriorityCubit(PriorityRepository());
 
-  static const textNormalStyle = TextStyle(fontSize: 20);
+  static const iconColor = Colors.white;
+  static const textNormalStyle = TextStyle(fontSize: 20, color: iconColor);
+  static const double _borderRadius = 10;
+  static const Color startColor = Color.fromARGB(255, 151, 222, 255);
+  static const Color endColor = Color.fromARGB(255, 98, 205, 255);
   int selectedIndex = -1;
 
   NoteData? categories, status, priorities;
@@ -354,11 +359,11 @@ class __NoteScreenState extends State<_NoteScreen> {
               onPressed: () async {
                 Navigator.of(context).pop(true);
                 NoteData? result = await noteCubit.deleteNote(email, note[0]);
-                if(result != null) {
-                  if(result.status == 1) {
+                if (result != null) {
+                  if (result.status == 1) {
                     //noteCubit.getAllNotes(email);
                     showMessage("Delete Successfully");
-                  } else if(result.status == -1 && result.error == 2){
+                  } else if (result.status == -1 && result.error == 2) {
                     showMessage("Less 6 months");
                   }
                 }
@@ -386,105 +391,129 @@ class __NoteScreenState extends State<_NoteScreen> {
           },
           child: Container(
             margin: const EdgeInsets.only(bottom: 5),
-            child: Card(
-              elevation: 3,
-              shadowColor: Colors.grey,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: FittedBox(
-                child: Container(
-                    width: 400,
-                    height: 160,
-                    margin: const EdgeInsets.only(left: 5, right: 5),
-                    child: Center(
-                      child: SizedBox(
-                        width: 375,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    note[0],
-                                    style: const TextStyle(
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.blueAccent),
-                                  ),
-                                  Text(
-                                    "${note[4]}",
-                                    style: const TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.blueAccent),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 5),
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.category),
-                                        Container(
-                                          margin:
-                                              const EdgeInsets.only(left: 5),
-                                          child: Text(
-                                            "Category: ${note[1]},",
-                                            style: textNormalStyle,
-                                          ),
-                                        )
-                                      ],
+            child: FittedBox(
+              child: Stack(
+                children: <Widget>[
+                  Card(
+                    shape: const RoundedRectangleBorder(borderRadius:
+                    BorderRadius.all(Radius.circular(_borderRadius))),
+                    shadowColor: endColor,
+                    elevation: 3,
+                    child: Container(
+                        width: 400,
+                        height: 160,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(_borderRadius),
+                            gradient: const LinearGradient(
+                                colors: [startColor, endColor],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight),
+                            boxShadow: const [
+                              BoxShadow(
+                                  color: Color.fromARGB(255, 130, 148, 196),
+                                  blurRadius: 12,
+                                  offset: Offset(0, 6))
+                            ]),
+                        child: Center(
+                          child: SizedBox(
+                            width: 375,
+                            child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      note[0],
+                                      style: const TextStyle(
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.blueAccent),
                                     ),
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 5),
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.low_priority),
-                                        Container(
-                                          margin:
-                                              const EdgeInsets.only(left: 5),
-                                          child: Text(
-                                            "Priority: ${note[2]}",
-                                            style: textNormalStyle,
-                                          ),
-                                        )
-                                      ],
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 5),
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.category),
+                                          Container(
+                                            margin:
+                                            const EdgeInsets.only(left: 5),
+                                            child: Text(
+                                              "Category: ${note[1]},",
+                                              style: textNormalStyle,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 5),
-                                    child: Row(
-                                      children: [
-                                        const Icon(
-                                            Icons.signal_wifi_statusbar_4_bar),
-                                        Container(
-                                          margin:
-                                              const EdgeInsets.only(left: 5),
-                                          child: Text(
-                                            "Status: ${note[3]}",
-                                            style: textNormalStyle,
-                                          ),
-                                        )
-                                      ],
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 5),
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.low_priority),
+                                          Container(
+                                            margin:
+                                            const EdgeInsets.only(left: 5),
+                                            child: Text(
+                                              "Priority: ${note[2]}",
+                                              style: textNormalStyle,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              )
-                            ],
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 5),
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons
+                                              .signal_wifi_statusbar_4_bar),
+                                          Container(
+                                            margin:
+                                            const EdgeInsets.only(left: 5),
+                                            child: Text(
+                                              "Status: ${note[3]}",
+                                              style: textNormalStyle,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                            ),
                           ),
-                        ),
-                      ),
-                    )),
+                        )),
+                  ),
+                  Positioned(
+                    right: 5,
+                    top: 0,
+                    bottom: 0,
+                    child: CustomPaint(
+                      size: const Size(100, 80),
+                      painter: CustomCardShapePainter(
+                          _borderRadius, startColor, endColor),
+                    ),
+                  ),
+                  Positioned(
+                    top: 32,
+                    right: 15,
+                    bottom: 0,
+                    child: Text(
+                      "${note[4]}",
+                      style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blueAccent),
+                    ),
+                  ),
+                  Positioned(
+                    top: 80,
+                    right: 10,
+                    bottom: 0,
+                    child: Image.asset('images/ic_note.png', width: 55, height: 55,)
+                  ),
+                ],
               ),
             ),
           ),
@@ -561,7 +590,8 @@ class __NoteScreenState extends State<_NoteScreen> {
                                 _showModalBottomSheet(note[index]);
                                 return false;
                               } else {
-                                return await _showConfirmDeleteNoteDialog(note[index]);
+                                return await _showConfirmDeleteNoteDialog(
+                                    note[index]);
                               }
                             },
                             child: buildListCard(note[index], index),
