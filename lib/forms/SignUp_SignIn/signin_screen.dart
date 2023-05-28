@@ -60,125 +60,45 @@ class _MySignInFormState extends State<_MySignInForm> {
         title: const Text('Note Management System'),
       ),
       body:  BlocConsumer<UserCubit, UserState> (
-          listener: (context, state){
-            if (state is FailureUserState){
+        listener: (context, state){
+          if (state is FailureUserState){
 
-<<<<<<< HEAD
-                        validator: (value){
-                          if (value == null || value.isEmpty){
-                            return 'Please enter password';
-                          }
-                          return null;
-                        },
-                        controller: _password,
-                        obscureText: true,
-                      ),
-                    ),
-                    SizedBox(
-                      width: size.width * 0.9,
-                      child:CheckboxListTile(
-                        title: const Text("                             "
-                            "               Remember me"),
-                        value: false,
-                        onChanged: (value) {
-                        },
-                      ),
-                    ),
-
-                    SizedBox(
-                      width: size.width * 0.8,
-                      height: size.height * 0.06,
-                      child:ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(size.width * 0.5),
-                              side: BorderSide(
-                                width: size.width * 0.8,
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ),
-                        ),
-                        onPressed:() async {
-                          if (_signInForm.currentState!.validate()){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => NoteApp(),
-                                ),
-                              );
-                          }
-                        },
-                        child: const Text(
-                          'LOGIN',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20,),
-                    const Text('_________________Or Login With_________________',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w500,
-                    ),),
-                    const SizedBox(height: 10,),
-                    GoogleAuthButton(
-                        onPressed: () {
-
-                        },
-                      ),
-
-
-
-                  ],
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.errorMessage)));
+          }
+        },
+        builder: (context, state){
+          bool isLoading = true;
+          if (state is SuccessSignInUserState){
+            User user = state.user;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              isLoading = false; // Ẩn CircularProgressIndicator
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>  NoteApp(user: user),
                 ),
-              ),
-            ],
-          ),
-=======
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.errorMessage)));
-            }
-          },
-          builder: (context, state){
-            bool isLoading = true;
-            if (state is SuccessSignInUserState){
-              User user = state.user;
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                isLoading = false; // Ẩn CircularProgressIndicator
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>  NoteApp(user: user),
-                  ),
-                );
-              });
-             if (isLoading == true) {
-               return const Center(
-                 child: CircularProgressIndicator(),
-               );
-             }
-            } else if (state is LoadingUserState){
+              );
+            });
+            if (isLoading == true) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (state is FailureUserState){
-              return _buildSignInForm();
-            } else {
-              return _buildSignInForm();
             }
-            return Center(
-              child: Text(state.toString()),
+          } else if (state is LoadingUserState){
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          },
->>>>>>> SignIn_SignUp_Logic
-        ),
+          } else if (state is FailureUserState){
+            return _buildSignInForm();
+          } else {
+            return _buildSignInForm();
+          }
+          return Center(
+            child: Text(state.toString()),
+          );
+        },
+      ),
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -349,14 +269,14 @@ class _MySignInFormState extends State<_MySignInForm> {
   }
 
   void moveToMain(User user){
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>  NoteApp(user: user),
-          ),
-        );
-      });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>  NoteApp(user: user),
+        ),
+      );
+    });
   }
 }
 // UserData userData =  await UserRepository.signIn(_email.text,_password.text);

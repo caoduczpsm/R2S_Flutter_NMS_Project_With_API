@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:note_management_system_api/ultilities/Constant.dart';
-=======
 import '../../data/user_data.dart';
->>>>>>> SignIn_SignUp_Logic
 import '../../logic/cubits/drawer_cubit.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,8 +17,9 @@ import 'package:restart_app/restart_app.dart';
 
 // ignore: must_be_immutable
 class NoteApp extends StatelessWidget {
-<<<<<<< HEAD
-  NoteApp({super.key});
+  User user;
+
+  NoteApp({super.key, required this.user});
 
   static const Color iconColor = Colors.black;
   static const TextStyle textStyle =
@@ -30,15 +28,10 @@ class NoteApp extends StatelessWidget {
   bool isEnglish = false;
 
   DrawerCubit drawerCubit = DrawerCubit();
-=======
-  final User user;
-  const NoteApp({super.key, required this.user});
->>>>>>> SignIn_SignUp_Logic
 
   @override
   Widget build(BuildContext context) {
 
-<<<<<<< HEAD
     return FutureBuilder<SharedPreferences>(
       future: drawerCubit.initSharePreference(),
         builder: (context, snapshot) {
@@ -71,31 +64,6 @@ class NoteApp extends StatelessWidget {
                     drawer: Drawer(
                       child: ListView(
                         padding: EdgeInsets.zero,
-=======
-    return MaterialApp(
-      home: BlocProvider(
-        create: (drawerContext) => DrawerCubit(),
-        child: BlocBuilder<DrawerCubit, int>(
-          builder: (cubitContext, state) {
-            return Scaffold(
-              appBar: AppBar(
-                title:
-                Text(cubitContext.read<DrawerCubit>().getCurrentTitle()!),
-              ),
-              drawer: Drawer(
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    DrawerHeader(
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('images/drawer_background.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
->>>>>>> SignIn_SignUp_Logic
                         children: [
                           DrawerHeader(
                             decoration: const BoxDecoration(
@@ -126,7 +94,6 @@ class NoteApp extends StatelessWidget {
                               ],
                             ),
                           ),
-<<<<<<< HEAD
                           ListTile(
                             title: Text(
                               AppLocalizations.of(cubitContext).home,
@@ -282,18 +249,6 @@ class NoteApp extends StatelessWidget {
                               ],
                             ),
                           )
-=======
-                          const Text('Group 1',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                              )),
-                           Text(user.email,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                              )),
->>>>>>> SignIn_SignUp_Logic
                         ],
                       ),
                     ),
