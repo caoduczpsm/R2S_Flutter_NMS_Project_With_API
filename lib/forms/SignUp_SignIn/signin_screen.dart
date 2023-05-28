@@ -145,7 +145,7 @@ class _MySignInFormState extends State<_MySignInForm> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const NoteApp(),
+                                  builder: (context) => NoteApp(),
                                 ),
                               );
                           }

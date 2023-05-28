@@ -1,5 +1,7 @@
-abstract class DrawerState {}
+class DrawerState {
+  int index;
+  bool? switchStatus;
 
-class DrawerInitial extends DrawerState {}
+  DrawerState({required this.index, this.switchStatus});
+}
 
-class DrawerNavState extends DrawerState {}

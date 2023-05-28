@@ -56,4 +56,21 @@ class Constant {
   static const KEY_NAME_WITH_FINAL_SPACE = 2;
   // ignore: constant_identifier_names
   static const KEY_NAME_VALID = 0;
+
+  //Language
+  // ignore: constant_identifier_names
+  static const KEY_LANGUAGE = "language";
+  // ignore: constant_identifier_names
+  static const KEY_ENGLISH = "en";
+  // ignore: constant_identifier_names
+  static const KEY_VIETNAMESE = "vi";
+
+  // ignore: constant_identifier_names
+  static const KEY_STATUS_1 = 1;
+  // ignore: constant_identifier_names
+  static const KEY_STATUS__1 = -1;
+  // ignore: constant_identifier_names
+  static const KEY_ERROR_1 = 1;
+  // ignore: constant_identifier_names
+  static const KEY_ERROR_2 = 2;
 }

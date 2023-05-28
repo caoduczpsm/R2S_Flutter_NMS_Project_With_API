@@ -11,6 +11,7 @@ import 'package:note_management_system_api/logic/repositories/category_repositor
 import 'package:intl/intl.dart';
 import 'package:note_management_system_api/logic/repositories/priority_repository.dart';
 import 'package:note_management_system_api/logic/repositories/status_repository.dart';
+import 'package:note_management_system_api/ultilities/Constant.dart';
 import '../../logic/cubits/note_cubit.dart';
 import '../../logic/repositories/note_repository.dart';
 import '../../logic/states/note_state.dart';
@@ -21,9 +22,8 @@ class NoteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: _NoteScreen(),
+    return const Scaffold(
+      body: _NoteScreen(),
     );
   }
 }
@@ -310,11 +310,11 @@ class _NoteScreenState extends State<_NoteScreen> {
                                   statusDropdownValue,
                                   _selectedDate);
                               if (result != null) {
-                                if (result.status == 1) {
+                                if (result.status == Constant.KEY_STATUS_1) {
                                   showMessage("Create Successfully");
                                   noteCubit.getAllNotes(email);
-                                } else if (result.status == -1 &&
-                                    result.error == 2) {
+                                } else if (result.status == Constant.KEY_STATUS__1 &&
+                                    result.error == Constant.KEY_ERROR_2) {
                                   showMessage("Duplicate name");
                                 }
                               }
@@ -340,11 +340,11 @@ class _NoteScreenState extends State<_NoteScreen> {
                                     _selectedDate);
                               }
                               if (result != null) {
-                                if (result.status == 1) {
+                                if (result.status == Constant.KEY_STATUS_1) {
                                   showMessage("Update Successfully");
                                   noteCubit.getAllNotes(email);
-                                } else if (result.status == -1 &&
-                                    result.error == 2) {
+                                } else if (result.status == Constant.KEY_STATUS__1 &&
+                                    result.error == Constant.KEY_ERROR_2) {
                                   showMessage("Duplicate name");
                                 }
                               }
@@ -641,7 +641,7 @@ class _NoteScreenState extends State<_NoteScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () async {
+          onPressed: () {
             if (categories == null || status == null || priorities == null) {
               showMessage("Empty");
             } else {

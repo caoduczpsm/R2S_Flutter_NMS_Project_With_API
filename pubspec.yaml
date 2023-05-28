@@ -40,17 +40,24 @@ dependencies:
   google_fonts: ^3.0.1
   intl: ^0.18.1
   d_chart: ^2.2.11
+  flutter_localizations:
+    sdk: flutter
+
+dependency_overrides:
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  shared_preferences: ^2.1.1
   sqflite: ^2.2.6
-  intl: ^0.18.1
   crypto: ^3.0.1
   pie_chart: ^5.3.2
   http: ^0.13.5
   flutter_bloc: ^8.1.1
+  flutter_switch: ^0.3.2
+  restart_app: ^1.2.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -69,7 +76,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  generate: true
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/

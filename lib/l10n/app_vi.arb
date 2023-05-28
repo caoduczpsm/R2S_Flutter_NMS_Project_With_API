@@ -1,0 +1,11 @@
+{
+    "hello_world" : "Chào",
+    "home" : "Trang chủ",
+    "category" : "Danh mục",
+    "note" : "Ghi chú",
+    "priority" : "Độ ưu tiên",
+    "status" : "Trạng thái",
+    "account" : "Tài khoản",
+    "edit_profile" : "Thay đổi thông tin",
+    "change_password" : "Đổi mật khẩu"
+}
