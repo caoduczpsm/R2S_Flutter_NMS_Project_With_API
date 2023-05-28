@@ -1,8 +1,8 @@
 import 'package:auth_buttons/auth_buttons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:note_management_system_api/forms/SignUp_SignIn/signup_screen.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_management_system_api/logic/cubits/user_cubit.dart';
 import '../../data/user_data.dart';
