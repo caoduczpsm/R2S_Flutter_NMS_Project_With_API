@@ -1,0 +1,11 @@
+{
+    "hello_world" : "Hello World",
+    "home" : "Home",
+    "category" : "Category",
+    "note" : "Note",
+    "priority" : "Priority",
+    "status" : "Status",
+    "account" : "Account",
+    "edit_profile" : "Edit Profile",
+    "change_password" : "Change Password"
+}
