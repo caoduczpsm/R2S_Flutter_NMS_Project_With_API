@@ -116,7 +116,7 @@ class _NoteScreenState extends State<_NoteScreen> {
         elevation: 5,
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
-        builder: (_) => StatefulBuilder(builder: (context, setState) {
+        builder: (_) => StatefulBuilder(builder: (builderContext, setState) {
               return Container(
                 padding: const EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 4),
                 margin: const EdgeInsets.all(8),
@@ -385,20 +385,20 @@ class _NoteScreenState extends State<_NoteScreen> {
     bool result = await showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) {
+      builder: (builderContext) {
         return AlertDialog(
           title: Text(AppLocalizations.of(context).delete_confirm),
           content: Text(AppLocalizations.of(context).delete_title),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(false);
+                Navigator.of(builderContext).pop(false);
               },
               child: Text(AppLocalizations.of(context).no),
             ),
             TextButton(
               onPressed: () async {
-                Navigator.of(context).pop(true);
+                Navigator.of(builderContext).pop(true);
                 NoteData? result = await noteCubit.deleteNote(email, note[0]);
                 if (result != null) {
                   if (result.status == 1) {

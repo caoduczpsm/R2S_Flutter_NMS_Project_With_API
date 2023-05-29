@@ -26,6 +26,6 @@
 
     "delete_confirm" : "Xác nhận xóa",
     "delete_title" : "Bạn có chắc chắn muốn xóa không?",
-     "yes" : "Đồng ý",
-     "no" : "Hủy"
+    "yes" : "Đồng ý",
+    "no" : "Hủy"
 }

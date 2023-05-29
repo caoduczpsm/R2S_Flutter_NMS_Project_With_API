@@ -211,7 +211,7 @@ class NoteApp extends StatelessWidget {
                                 style: textStyle),
                             leading: const Icon(Icons.logout, color: iconColor),
                             onTap: () {
-                              
+
                             },
                           ),
                           Container(
