@@ -16,6 +16,7 @@ import '../../logic/cubits/note_cubit.dart';
 import '../../logic/repositories/note_repository.dart';
 import '../../logic/states/note_state.dart';
 import 'custom_paint_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NoteScreen extends StatelessWidget {
   const NoteScreen({super.key});
@@ -154,12 +155,12 @@ class _NoteScreenState extends State<_NoteScreen> {
                       TextFormField(
                         style: const TextStyle(fontSize: 20),
                         controller: nameController,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
-                          label: Text('Name'),
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(
+                          label: Text(AppLocalizations.of(context).name),
+                          border: const OutlineInputBorder(),
+                          prefixIcon: const Icon(
                             Icons.person,
                             color: iconColor,
                           ),
@@ -311,11 +312,13 @@ class _NoteScreenState extends State<_NoteScreen> {
                                   _selectedDate);
                               if (result != null) {
                                 if (result.status == Constant.KEY_STATUS_1) {
-                                  showMessage("Create Successfully");
+                                  if(!mounted) return;
+                                  showMessage(AppLocalizations.of(context).create_successful);
                                   noteCubit.getAllNotes(email);
                                 } else if (result.status == Constant.KEY_STATUS__1 &&
                                     result.error == Constant.KEY_ERROR_2) {
-                                  showMessage("Duplicate name");
+                                  if(!mounted) return;
+                                  showMessage(AppLocalizations.of(context).create_error_name);
                                 }
                               }
                             } else {
@@ -341,16 +344,19 @@ class _NoteScreenState extends State<_NoteScreen> {
                               }
                               if (result != null) {
                                 if (result.status == Constant.KEY_STATUS_1) {
-                                  showMessage("Update Successfully");
+                                  if(!mounted) return;
+                                  showMessage(AppLocalizations.of(context).update_successful);
                                   noteCubit.getAllNotes(email);
                                 } else if (result.status == Constant.KEY_STATUS__1 &&
                                     result.error == Constant.KEY_ERROR_2) {
-                                  showMessage("Duplicate name");
+                                  if(!mounted) return;
+                                  showMessage(AppLocalizations.of(context).create_error_name);
                                 }
                               }
                             }
                           } else {
-                            showMessage("Enter note name");
+                            if(!mounted) return;
+                            showMessage(AppLocalizations.of(context).create_empty_name);
                           }
                         },
                         style: ButtonStyle(
@@ -362,7 +368,7 @@ class _NoteScreenState extends State<_NoteScreen> {
                           )), // border cho button
                         ),
                         label: Text(
-                          note == null ? "Create New" : "Update",
+                          note == null ? AppLocalizations.of(context).create : AppLocalizations.of(context).update,
                           style: textBigSizeStyle,
                         ),
                         icon: Icon(note == null? Icons.add : Icons.update, size: 28,),
@@ -381,14 +387,14 @@ class _NoteScreenState extends State<_NoteScreen> {
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Confirm Delete"),
-          content: const Text("Are you sure you want to delete this note?"),
+          title: Text(AppLocalizations.of(context).delete_confirm),
+          content: Text(AppLocalizations.of(context).delete_title),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: const Text("No"),
+              child: Text(AppLocalizations.of(context).no),
             ),
             TextButton(
               onPressed: () async {
@@ -397,13 +403,15 @@ class _NoteScreenState extends State<_NoteScreen> {
                 if (result != null) {
                   if (result.status == 1) {
                     //noteCubit.getAllNotes(email);
-                    showMessage("Delete Successfully");
+                    if(!mounted) return;
+                    showMessage(AppLocalizations.of(context).delete_successful);
                   } else if (result.status == -1 && result.error == 2) {
-                    showMessage("Less 6 months");
+                    if(!mounted) return;
+                    showMessage(AppLocalizations.of(context).delete_note_error);
                   }
                 }
               },
-              child: const Text("Yes"),
+              child: Text(AppLocalizations.of(context).yes),
             ),
           ],
         );
@@ -425,7 +433,7 @@ class _NoteScreenState extends State<_NoteScreen> {
             });
           },
           child: Container(
-            margin: const EdgeInsets.only(bottom: 5),
+            margin: const EdgeInsets.only(top: 15),
             child: FittedBox(
               child: Stack(
                 children: <Widget>[
@@ -472,7 +480,7 @@ class _NoteScreenState extends State<_NoteScreen> {
                                             margin:
                                                 const EdgeInsets.only(left: 5),
                                             child: Text(
-                                              "Category: ${note[1]},",
+                                              "${AppLocalizations.of(context).category}: ${note[1]},",
                                               style: textNormalStyle,
                                             ),
                                           )
@@ -488,7 +496,7 @@ class _NoteScreenState extends State<_NoteScreen> {
                                             margin:
                                                 const EdgeInsets.only(left: 5),
                                             child: Text(
-                                              "Priority: ${note[2]}",
+                                              "${AppLocalizations.of(context).priority}: ${note[2]}",
                                               style: textNormalStyle,
                                             ),
                                           )
@@ -505,7 +513,7 @@ class _NoteScreenState extends State<_NoteScreen> {
                                             margin:
                                                 const EdgeInsets.only(left: 5),
                                             child: Text(
-                                              "Status: ${note[3]}",
+                                              "${AppLocalizations.of(context).status}: ${note[3]}",
                                               style: textNormalStyle,
                                             ),
                                           )
@@ -558,7 +566,7 @@ class _NoteScreenState extends State<_NoteScreen> {
           child: Container(
             margin: const EdgeInsets.only(top: 5, bottom: 5, right: 5),
             child: Text(
-              "Created at: ${note[6]}",
+              "${AppLocalizations.of(context).created_at}: ${note[6]}",
               style: textNormalStyle,
             ),
           ),
@@ -643,7 +651,7 @@ class _NoteScreenState extends State<_NoteScreen> {
       floatingActionButton: FloatingActionButton(
           onPressed: () {
             if (categories == null || status == null || priorities == null) {
-              showMessage("Empty");
+              showMessage(AppLocalizations.of(context).empty);
             } else {
               _showModalBottomSheet(null);
             }

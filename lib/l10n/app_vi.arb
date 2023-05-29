@@ -7,5 +7,25 @@
     "status" : "Trạng thái",
     "account" : "Tài khoản",
     "edit_profile" : "Thay đổi thông tin",
-    "change_password" : "Đổi mật khẩu"
+    "change_password" : "Đổi mật khẩu",
+    "logout" : "Đăng xuất",
+    "name": "Tên",
+    "created_at": "Tạo lúc",
+
+
+    "create" : "Tạo mới",
+    "update" : "Cập nhật",
+    "empty": "Bạn chưa tạo danh mục hoặc độ ưu tiên hoặc trạng thái",
+    "create_empty_name" : "Bạn phải nhật tên",
+    "create_successful" : "Tạo ghi chú thành công",
+    "create_error_name" : "Lỗi: trùng tên với một ghi chú khác",
+    "create_error_date" : "Lỗi: ngày hoàn thành phải bắt đầu từ hôm nay",
+    "delete_successful" : "Xóa ghi chú thành công",
+    "delete_note_error" : "Lỗi: ghi chú được hoàn thành nhỏ hơn 6 tháng",
+    "update_successful" : "Cập nhật ghi chú thành công",
+
+    "delete_confirm" : "Xác nhận xóa",
+    "delete_title" : "Bạn có chắc chắn muốn xóa không?",
+     "yes" : "Đồng ý",
+     "no" : "Hủy"
 }

@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "658801652344-r06ugcqnvc25tluo7u2o69ueeofhiim1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.note_management_system_api",
+            "certificate_hash": "2076acbcf59e028b29ab090736a92e6df81b1bae"
+          }
+        },
+        {
           "client_id": "658801652344-st8dkmdjalcf345g6s6orgu9usibo06e.apps.googleusercontent.com",
           "client_type": 3
         }

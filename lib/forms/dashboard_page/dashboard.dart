@@ -109,7 +109,7 @@ class NoteApp extends StatelessWidget {
                                   .selectIndex(0);
                               Navigator.pop(cubitContext);
                             },
-                            selected: state.index == 0, // Thêm dòng này
+                            selected: state.index == 0,
                             selectedTileColor: selectedColor,
                           ),
                           ListTile(
@@ -125,7 +125,7 @@ class NoteApp extends StatelessWidget {
                                   .selectIndex(1);
                               Navigator.pop(cubitContext);
                             },
-                            selected: state.index == 1, // Thêm dòng này
+                            selected: state.index == 1,
                             selectedTileColor: selectedColor,
                           ),
                           ListTile(
@@ -138,7 +138,7 @@ class NoteApp extends StatelessWidget {
                                   .selectIndex(2);
                               Navigator.pop(cubitContext);
                             },
-                            selected: state.index == 2, // Thêm dòng này
+                            selected: state.index == 2,
                             selectedTileColor: selectedColor,
                           ),
                           ListTile(
@@ -151,7 +151,7 @@ class NoteApp extends StatelessWidget {
                                   .selectIndex(3);
                               Navigator.pop(cubitContext);
                             },
-                            selected: state.index == 3, // Thêm dòng này
+                            selected: state.index == 3,
                             selectedTileColor: selectedColor,
                           ),
                           ListTile(
@@ -165,7 +165,7 @@ class NoteApp extends StatelessWidget {
                                   .selectIndex(4);
                               Navigator.pop(cubitContext);
                             },
-                            selected: state.index == 4, // Thêm dòng này
+                            selected: state.index == 4,
                             selectedTileColor: selectedColor,
                           ),
                           const Divider(),
@@ -188,7 +188,7 @@ class NoteApp extends StatelessWidget {
                                   .selectIndex(5);
                               Navigator.pop(cubitContext);
                             },
-                            selected: state.index == 5, // Thêm dòng này
+                            selected: state.index == 5,
                             selectedTileColor: selectedColor,
                           ),
                           ListTile(
@@ -204,6 +204,15 @@ class NoteApp extends StatelessWidget {
                             },
                             selected: state.index == 6, // Thêm dòng này
                             selectedTileColor: selectedColor,
+                          ),
+                          ListTile(
+                            title: Text(
+                                AppLocalizations.of(cubitContext).logout,
+                                style: textStyle),
+                            leading: const Icon(Icons.logout, color: iconColor),
+                            onTap: () {
+                              
+                            },
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 20),
