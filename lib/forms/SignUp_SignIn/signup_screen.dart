@@ -74,7 +74,7 @@ class _MySignUpFormState extends State<_MySignUpForm> {
             if (state is SuccessSignUpUserState){
               clearData();
               ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Register Successfully")));
+                  const SnackBar(content: Text("Register Successfully")));
             }
           },
           builder: (context, state){

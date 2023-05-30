@@ -2,7 +2,8 @@
 import 'dart:convert';
 
 import 'package:note_management_system_api/data/user_data.dart';
-
+import 'package:note_management_system_api/logic/cubits/user_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../ultilities/Constant.dart';
 import 'package:http/http.dart' as http;
 class UserRepository {
@@ -51,7 +52,7 @@ class UserRepository {
   }
 
   static Future<UserData> signIn(User user) async {
-    final uri = Uri.parse('${Constant.KEY_BASE_URL}/login/?email=${user.email}&pass=${user.password}');
+    final uri = Uri.parse('${Constant.KEY_BASE_URL}/login/?email=${user.email}&pass=${UserCubit.hashPassword(user.password)}');
 
     final response = await http.get(uri);
 
@@ -66,7 +67,7 @@ class UserRepository {
   static Future<UserData> signUp(User user) async {
     Info? info = user.info;
     final uri = Uri.parse(
-        '${Constant.KEY_BASE_URL}/signup?email=${user.email}&pass=${user.password}&firstname=${info?.firstName}&lastname=${info?.lastName}');
+        '${Constant.KEY_BASE_URL}/signup?email=${user.email}&pass=${UserCubit.hashPassword(user.password)}&firstname=${info?.firstName}&lastname=${info?.lastName}');
 
     final response = await http.get(uri);
 

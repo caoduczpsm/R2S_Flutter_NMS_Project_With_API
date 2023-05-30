@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +13,7 @@ import '../../logic/states/user_state.dart';
 import '../../ultilities/Constant.dart';
 import '../dashboard_page/dashboard.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(const SignInForm());
 
@@ -36,13 +39,22 @@ class _MySignInForm extends StatefulWidget {
 
 class _MySignInFormState extends State<_MySignInForm> {
 
-
   final _signInForm = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
   final userCubit = UserCubit();
-
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  bool _isGmail = false;
+  bool _isRemember = false;
+  String photoUrl = "";
+  late SharedPreferences loginData;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkRemember();
+  }
 
   @override
   void dispose(){
@@ -51,7 +63,14 @@ class _MySignInFormState extends State<_MySignInForm> {
     _password.dispose();
   }
 
+  void checkRemember() async{
+    loginData = await SharedPreferences.getInstance();
+    bool? isRemember = (loginData.getBool('isRemember'));
 
+    if (isRemember == true){
+      moveToMain();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +81,6 @@ class _MySignInFormState extends State<_MySignInForm> {
       body:  BlocConsumer<UserCubit, UserState> (
         listener: (context, state){
           if (state is FailureUserState){
-
             ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.errorMessage)));
           }
@@ -72,11 +90,26 @@ class _MySignInFormState extends State<_MySignInForm> {
           if (state is SuccessSignInUserState){
             User user = state.user;
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              isLoading = false; // Ẩn CircularProgressIndicator
+              isLoading = false;
+                if (_isGmail == true){
+                  loginData.setBool('isGmail', true);
+                } else {
+                  loginData.setBool('isGmail', false);
+                }
+                if (_isRemember == true && _isGmail == false){
+                  loginData.setBool("isRemember", true);
+                } else {
+                  loginData.setBool("isRemember", false);
+                }
+                loginData.setString('email', user.email);
+                loginData.setString('password', user.password);
+                Info? userInfo = user.info;
+                loginData.setString('firstName', userInfo!.firstName);
+                loginData.setString('lastName', userInfo.lastName);
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>  NoteApp(user: user),
+                  builder: (context) =>  NoteApp(),
                 ),
               );
             });
@@ -195,8 +228,11 @@ class _MySignInFormState extends State<_MySignInForm> {
                     child:CheckboxListTile(
                       title: const Text("                             "
                           "               Remember me"),
-                      value: false,
+                      value: _isRemember,
                       onChanged: (value) {
+                        setState(() {
+                          _isRemember = value!;
+                        });
                       },
                     ),
                   ),
@@ -246,14 +282,28 @@ class _MySignInFormState extends State<_MySignInForm> {
                   GoogleAuthButton(
                     onPressed: () {
                       _googleSignIn.signIn().then((value){
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(value!.email)));
+                        _isGmail = true;
+                        String displayName = value?.displayName ?? "";
+                        List<String> nameParts = displayName.split(" ");
+
+                        String firstName = nameParts.last;
+                        String lastName = nameParts.sublist(0, nameParts.length - 1).join(" ");
+
+                        Info userInfo = Info(
+                          firstName: firstName,
+                          lastName: lastName,
+                        );
+
+                        User user = User(
+                          email: value!.email,
+                          password: UserCubit.hashPassword(" "),
+                          info: userInfo,
+                        );
+                        loginData.setString('photoUrl', value.photoUrl!);
+                        context.read<UserCubit>().signInWithGmail(user);
                       });
                     },
                   ),
-
-
-
                 ],
               ),
             ),
@@ -268,38 +318,14 @@ class _MySignInFormState extends State<_MySignInForm> {
         SnackBar(content: Text(message)));
   }
 
-  void moveToMain(User user){
+  void moveToMain(){
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>  NoteApp(user: user),
+          builder: (context) =>  NoteApp(),
         ),
       );
     });
   }
 }
-// UserData userData =  await UserRepository.signIn(_email.text,_password.text);
-//
-// if (userData.status == 1) {
-//   User user = User(
-//       email: _email.text,
-//       password: _password.text,
-//       info: userData.info);
-//   moveToMain(user);
-// } else if (userData.status == -1) {
-//   final error = userData.error;
-//
-//   if (error == 1) {
-//     ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text('Can not find')));
-//   } else if (error == 2) {
-//     // Lỗi sai mật khẩu
-//     ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text('Wrong Password')));
-//   }
-// } else {
-//   // Xử lý lỗi khác nếu cần thiết
-//   ScaffoldMessenger.of(context).showSnackBar(
-//       const SnackBar(content: Text('Not Define')));
-// }

@@ -41,8 +41,6 @@ class User {
   final String password;
   Info? info;
 
-  User ({required this.email, required this.password, this.info});
-
-
+  User ({required this.email, required this.password,this.info});
 
 }
