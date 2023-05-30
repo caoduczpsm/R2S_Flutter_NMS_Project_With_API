@@ -127,12 +127,12 @@ class _NoteManagementAppState extends State<NoteManagementApp> {
                                   Text(fullName,
                                       style: const TextStyle(
                                         color: Colors.white,
-                                        fontSize: 20.0,
+                                        fontSize: 16,
                                       )),
                                   Text("$email",
                                       style: const TextStyle(
                                         color: Colors.white,
-                                        fontSize: 16,
+                                        fontSize: 14,
                                       )),
                                 ],
                               ),
