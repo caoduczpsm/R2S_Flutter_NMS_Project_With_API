@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:note_management_system_api/forms/SignUp_SignIn/signin_screen.dart';
 import 'package:note_management_system_api/ultilities/Constant.dart';
-import '../../data/user_data.dart';
 import '../../logic/cubits/drawer_cubit.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,8 +15,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import '../../logic/states/drawer_state.dart';
 // ignore: depend_on_referenced_packages
 import 'package:restart_app/restart_app.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../logic/repositories/user_repository.dart';
 // ignore: must_be_immutable
 class NoteApp extends StatelessWidget {
   const NoteApp({super.key});

@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +12,7 @@ import '../../logic/states/user_state.dart';
 import '../../ultilities/Constant.dart';
 import '../dashboard_page/dashboard.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+// ignore: depend_on_referenced_packages
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(const SignInForm());
@@ -96,7 +96,7 @@ class _MySignInFormState extends State<_MySignInForm> {
                 } else {
                   loginData.setBool('isGmail', false);
                 }
-                if (_isRemember == true && _isGmail == false){
+                if (_isRemember == true){
                   loginData.setBool("isRemember", true);
                 } else {
                   loginData.setBool("isRemember", false);
@@ -109,7 +109,7 @@ class _MySignInFormState extends State<_MySignInForm> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>  NoteApp(),
+                  builder: (context) =>  const NoteApp(),
                 ),
               );
             });
@@ -323,7 +323,7 @@ class _MySignInFormState extends State<_MySignInForm> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>  NoteApp(),
+          builder: (context) =>  const NoteApp(),
         ),
       );
     });
