@@ -81,4 +81,23 @@ class Constant {
   static const KEY_ERROR_1 = 1;
   // ignore: constant_identifier_names
   static const KEY_ERROR_2 = 2;
+
+  //Share Preference
+  // ignore: constant_identifier_names
+  static const KEY_EMAIL = "email";
+
+  // ignore: constant_identifier_names
+  static const KEY_FIRST_NAME = "firstName";
+
+  // ignore: constant_identifier_names
+  static const KEY_LAST_NAME = "lastName";
+
+  // ignore: constant_identifier_names
+  static const KEY_IS_GMAIL = "isGmail";
+
+  // ignore: constant_identifier_names
+  static const KEY_IS_REMEMBER = "isRemember";
+
+  // ignore: constant_identifier_names
+  static const KEY_PHOTO_URL = "photoUrl";
 }

@@ -66,7 +66,7 @@ class DrawerCubit extends Cubit<DrawerState> {
 
   Future<void> onSwitchListener(bool isOn) async {
     switchStatus = isOn;
-    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences = await SharedPreferences.getInstance();
     if (isOn) {
       emit(DrawerState(index: state.index, switchStatus: isOn));
       preferences.remove(Constant.KEY_LANGUAGE);
@@ -90,6 +90,32 @@ class DrawerCubit extends Cubit<DrawerState> {
     } else {
       currentTitle = "Note Management System";
       return false;
+    }
+  }
+
+  String? getEmail(){
+    return preferences.getString(Constant.KEY_EMAIL);
+  }
+
+  String? getFirstName(){
+    return preferences.getString(Constant.KEY_FIRST_NAME);
+  }
+
+  String? getLastName(){
+    return preferences.getString(Constant.KEY_LAST_NAME);
+  }
+
+  bool? getIsGmail(){
+    return preferences.getBool(Constant.KEY_IS_GMAIL)!;
+  }
+
+  String? getFullName(){
+    String? firstName = preferences.getString(Constant.KEY_FIRST_NAME);
+    String? lastName = preferences.getString(Constant.KEY_LAST_NAME);;
+    if (firstName!.contains(RegExp(r'[a-zA-Z]')) && lastName!.contains(RegExp(r'[a-zA-Z]'))) {
+      return "$lastName $firstName";
+    } else {
+      return "Group 1";
     }
   }
 

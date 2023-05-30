@@ -109,7 +109,7 @@ class _MySignInFormState extends State<_MySignInForm> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>  const NoteApp(),
+                  builder: (context) => NoteApp(),
                 ),
               );
             });
@@ -323,7 +323,7 @@ class _MySignInFormState extends State<_MySignInForm> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>  const NoteApp(),
+          builder: (context) =>  NoteApp(),
         ),
       );
     });

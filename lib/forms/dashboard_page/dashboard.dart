@@ -17,24 +17,8 @@ import '../../logic/states/drawer_state.dart';
 import 'package:restart_app/restart_app.dart';
 // ignore: must_be_immutable
 class NoteApp extends StatelessWidget {
-  const NoteApp({super.key});
+  NoteApp({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: NoteManagementApp(),
-    );
-  }
-}
-
-class NoteManagementApp extends StatefulWidget {
-  const NoteManagementApp({Key? key}) : super(key: key);
-
-  @override
-  State<NoteManagementApp> createState() => _NoteManagementAppState();
-}
-
-class _NoteManagementAppState extends State<NoteManagementApp> {
   static const Color iconColor = Colors.black;
   static const TextStyle textStyle =
   TextStyle(fontSize: 16, color: Colors.black);
@@ -45,40 +29,27 @@ class _NoteManagementAppState extends State<NoteManagementApp> {
   String firstName = " ";
   String lastName = " ";
   bool isGmail = false;
-  late SharedPreferences loginData;
+  late SharedPreferences preferences;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    initial();
-  }
 
-  initial() async {
-    loginData = await SharedPreferences.getInstance();
-    setState(() {
-      email = loginData.getString('email');
-      firstName = loginData.getString('firstName')!;
-      lastName = loginData.getString('lastName')!;
-      isGmail = loginData.getBool('isGmail')!;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    String fullName = "";
 
-    if (firstName.contains(RegExp(r'[a-zA-Z]')) && lastName.contains(RegExp(r'[a-zA-Z]'))) {
-      fullName = "$lastName $firstName";
-    } else {
-      fullName = "Group 1";
-    }
     return FutureBuilder<SharedPreferences>(
         future: drawerCubit.initSharePreference(),
         builder: (context, snapshot) {
           if(snapshot.hasData) {
-            SharedPreferences preferences = snapshot.data!;
+            preferences = snapshot.data!;
             isEnglish = drawerCubit.initLanguage();
+
+            email = drawerCubit.getEmail();
+            firstName = drawerCubit.getFirstName()!;
+            lastName = drawerCubit.getLastName()!;
+            isGmail = drawerCubit.getIsGmail()!;
+
+            String fullName = drawerCubit.getFullName()!;
+
             return  MaterialApp(
               supportedLocales: const [
                 Locale(Constant.KEY_ENGLISH),
@@ -233,20 +204,20 @@ class _NoteManagementAppState extends State<NoteManagementApp> {
                             ),
                             Visibility(
                               visible: !isGmail,
-                                child:  ListTile(
-                                  title: Text(
-                                      AppLocalizations.of(cubitContext).change_password,
-                                      style: textStyle),
-                                  leading: const Icon(Icons.password, color: iconColor),
-                                  onTap: () {
-                                    cubitContext
-                                        .read<DrawerCubit>()
-                                        .selectIndex(6);
-                                    Navigator.pop(cubitContext);
-                                  },
-                                  selected: state.index == 6, // Thêm dòng này
-                                  selectedTileColor: selectedColor,
-                                ),
+                              child:  ListTile(
+                                title: Text(
+                                    AppLocalizations.of(cubitContext).change_password,
+                                    style: textStyle),
+                                leading: const Icon(Icons.password, color: iconColor),
+                                onTap: () {
+                                  cubitContext
+                                      .read<DrawerCubit>()
+                                      .selectIndex(6);
+                                  Navigator.pop(cubitContext);
+                                },
+                                selected: state.index == 6, // Thêm dòng này
+                                selectedTileColor: selectedColor,
+                              ),
                             ),
                             ListTile(
                               title: Text(
@@ -254,7 +225,7 @@ class _NoteManagementAppState extends State<NoteManagementApp> {
                                   style: textStyle),
                               leading: const Icon(Icons.logout, color: iconColor),
                               onTap: () {
-                                loginData.setBool("isRemember", false);
+                                preferences.setBool(Constant.KEY_IS_REMEMBER, false);
                                 _googleSignIn.signOut();
                                 Navigator.pushReplacement(
                                   context,
@@ -326,7 +297,7 @@ class _NoteManagementAppState extends State<NoteManagementApp> {
 
   Widget _buildCircleAvatar() {
     return CircleAvatar(
-      backgroundImage: NetworkImage(loginData.getString('photoUrl')!),
+      backgroundImage: NetworkImage(preferences.getString(Constant.KEY_PHOTO_URL)!),
       radius: 45,
     );
   }
@@ -339,3 +310,4 @@ class _NoteManagementAppState extends State<NoteManagementApp> {
     );
   }
 }
+
