@@ -92,20 +92,20 @@ class _MySignInFormState extends State<_MySignInForm> {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               isLoading = false;
                 if (_isGmail == true){
-                  loginData.setBool('isGmail', true);
+                  loginData.setBool(Constant.KEY_IS_GMAIL, true);
                 } else {
-                  loginData.setBool('isGmail', false);
+                  loginData.setBool(Constant.KEY_IS_GMAIL, false);
                 }
                 if (_isRemember == true){
-                  loginData.setBool("isRemember", true);
+                  loginData.setBool(Constant.KEY_IS_REMEMBER, true);
                 } else {
-                  loginData.setBool("isRemember", false);
+                  loginData.setBool(Constant.KEY_IS_REMEMBER, false);
                 }
-                loginData.setString('email', user.email);
-                loginData.setString('password', user.password);
+                loginData.setString(Constant.KEY_EMAIL, user.email);
+                loginData.setString(Constant.KEY_PASSWORD, user.password);
                 Info? userInfo = user.info;
-                loginData.setString('firstName', userInfo!.firstName);
-                loginData.setString('lastName', userInfo.lastName);
+                loginData.setString(Constant.KEY_FIRST_NAME, userInfo!.firstName);
+                loginData.setString(Constant.KEY_LAST_NAME, userInfo.lastName);
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -299,7 +299,7 @@ class _MySignInFormState extends State<_MySignInForm> {
                           password: UserCubit.hashPassword(" "),
                           info: userInfo,
                         );
-                        loginData.setString('photoUrl', value.photoUrl!);
+                        loginData.setString(Constant.KEY_PHOTO_URL, value.photoUrl!);
                         context.read<UserCubit>().signInWithGmail(user);
                       });
                     },

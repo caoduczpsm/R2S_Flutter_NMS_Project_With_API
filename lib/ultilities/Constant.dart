@@ -87,6 +87,9 @@ class Constant {
   static const KEY_EMAIL = "email";
 
   // ignore: constant_identifier_names
+  static const KEY_PASSWORD = "password";
+
+  // ignore: constant_identifier_names
   static const KEY_FIRST_NAME = "firstName";
 
   // ignore: constant_identifier_names
