@@ -9,12 +9,18 @@ import 'package:note_management_system_api/logic/cubits/status_cubit.dart';
 import 'package:note_management_system_api/logic/repositories/category_repository.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
+import 'package:note_management_system_api/logic/states/category_state.dart';
+import 'package:note_management_system_api/logic/states/priority_state.dart';
+// ignore: depend_on_referenced_packages
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:note_management_system_api/logic/repositories/priority_repository.dart';
 import 'package:note_management_system_api/logic/repositories/status_repository.dart';
 import 'package:note_management_system_api/ultilities/Constant.dart';
+import '../../logic/cubits/drawer_cubit.dart';
 import '../../logic/cubits/note_cubit.dart';
 import '../../logic/repositories/note_repository.dart';
 import '../../logic/states/note_state.dart';
+import '../../logic/states/status_state.dart';
 import 'custom_paint_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -37,13 +43,15 @@ class _NoteScreen extends StatefulWidget {
 }
 
 class _NoteScreenState extends State<_NoteScreen> {
-  final String email = "kyle@r2s.com.vn";
+  late String email;
   final nameController = TextEditingController();
+  late SharedPreferences preference;
 
   final noteCubit = NoteCubit(NoteRepository());
   final categoryCubit = CategoryCubit(CategoryRepository());
   final statusCubit = StatusCubit(StatusRepository());
   final priorityCubit = PriorityCubit(PriorityRepository());
+  final drawerCubit = DrawerCubit();
 
   static const textNormalStyle = TextStyle(fontSize: 20, color: Colors.black);
   static const textBigSizeStyle = TextStyle(
@@ -62,13 +70,6 @@ class _NoteScreenState extends State<_NoteScreen> {
   String _selectedDate = "";
   final DateTime _dateTime = DateTime.now();
 
-  @override
-  void initState() {
-    super.initState();
-    noteCubit.getAllNotes(email);
-    getData();
-  }
-
   String _formatDate(DateTime date) {
     return DateFormat('dd/MM/yyyy').format(date);
   }
@@ -80,11 +81,27 @@ class _NoteScreenState extends State<_NoteScreen> {
   }
 
   Future<void> getData() async {
-    categories = await categoryCubit.getAllData(email);
+
+    if(categoryCubit.state is SuccessLoadAllCategoryState){
+      categories = categoryCubit.state.data;
+    } else {
+      categories = await categoryCubit.getAllData(email);
+    }
+
+    if(statusCubit.state is SuccessLoadAllStatusState){
+      status = statusCubit.state.data;
+    } else {
+      status = await statusCubit.getAllData(email);
+    }
+
+    if(priorityCubit.state is SuccessLoadAllPriorityState){
+      priorities = priorityCubit.state.data;
+    } else {
+      priorities = await priorityCubit.getAllData(email);
+    }
+
     categoryListData = categories?.data;
-    status = await statusCubit.getAllData(email);
     statusListData = status?.data;
-    priorities = await priorityCubit.getAllData(email);
     priorityListData = priorities?.data;
   }
 
@@ -118,10 +135,16 @@ class _NoteScreenState extends State<_NoteScreen> {
         backgroundColor: Colors.transparent,
         builder: (_) => StatefulBuilder(builder: (builderContext, setState) {
               return Container(
-                padding: const EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 4),
+                padding: EdgeInsets.only(
+                  top: 8,
+                  left: 24,
+                  right: 24,
+                  bottom: MediaQuery.of(builderContext).viewInsets.bottom,
+                ),
                 margin: const EdgeInsets.all(8),
                 decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(_borderRadius)),
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(_borderRadius)),
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
@@ -129,12 +152,10 @@ class _NoteScreenState extends State<_NoteScreen> {
                           blurRadius: 12,
                           offset: Offset(0, 6))
                     ],
-                  gradient: LinearGradient(
-                    colors: [endColor, Colors.white, Colors.white],
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.topRight
-                  )
-                ),
+                    gradient: LinearGradient(
+                        colors: [endColor, Colors.white, Colors.white],
+                        begin: Alignment.bottomLeft,
+                        end: Alignment.topRight)),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -177,10 +198,10 @@ class _NoteScreenState extends State<_NoteScreen> {
                         child: InkWell(
                             onTap: () {
                               showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(2023),
-                                  lastDate: DateTime(2100))
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(2023),
+                                      lastDate: DateTime(2100))
                                   .then((value) {
                                 setState(() {
                                   _selectedDate = _formatDate(value!);
@@ -199,7 +220,7 @@ class _NoteScreenState extends State<_NoteScreen> {
                                   ),
                                 ),
                                 controller:
-                                TextEditingController(text: _selectedDate),
+                                    TextEditingController(text: _selectedDate),
                                 style: const TextStyle(fontSize: 20),
                                 textAlign: TextAlign.left)),
                       ),
@@ -263,8 +284,7 @@ class _NoteScreenState extends State<_NoteScreen> {
                                 priorityDropdownValue = value!;
                               });
                             },
-                          )
-                      ),
+                          )),
                       const SizedBox(
                         height: 10,
                       ),
@@ -282,8 +302,8 @@ class _NoteScreenState extends State<_NoteScreen> {
                                   color: iconColor,
                                 )),
                             value: statusDropdownValue,
-                            items:
-                            statusListData?.map<DropdownMenuItem<dynamic>>((e) {
+                            items: statusListData
+                                ?.map<DropdownMenuItem<dynamic>>((e) {
                               return DropdownMenuItem<dynamic>(
                                 value: e[0],
                                 child: Text(e[0],
@@ -295,8 +315,7 @@ class _NoteScreenState extends State<_NoteScreen> {
                                 statusDropdownValue = value!;
                               });
                             },
-                          )
-                      ),
+                          )),
                       const SizedBox(height: 10),
                       OutlinedButton.icon(
                         onPressed: () async {
@@ -312,13 +331,16 @@ class _NoteScreenState extends State<_NoteScreen> {
                                   _selectedDate);
                               if (result != null) {
                                 if (result.status == Constant.KEY_STATUS_1) {
-                                  if(!mounted) return;
-                                  showMessage(AppLocalizations.of(context).create_successful);
+                                  if (!mounted) return;
+                                  showMessage(AppLocalizations.of(context)
+                                      .create_successful);
                                   noteCubit.getAllNotes(email);
-                                } else if (result.status == Constant.KEY_STATUS__1 &&
+                                } else if (result.status ==
+                                        Constant.KEY_STATUS__1 &&
                                     result.error == Constant.KEY_ERROR_2) {
-                                  if(!mounted) return;
-                                  showMessage(AppLocalizations.of(context).create_error_name);
+                                  if (!mounted) return;
+                                  showMessage(AppLocalizations.of(context)
+                                      .create_error_name);
                                 }
                               }
                             } else {
@@ -344,34 +366,45 @@ class _NoteScreenState extends State<_NoteScreen> {
                               }
                               if (result != null) {
                                 if (result.status == Constant.KEY_STATUS_1) {
-                                  if(!mounted) return;
-                                  showMessage(AppLocalizations.of(context).update_successful);
+                                  if (!mounted) return;
+                                  showMessage(AppLocalizations.of(context)
+                                      .update_successful);
                                   noteCubit.getAllNotes(email);
-                                } else if (result.status == Constant.KEY_STATUS__1 &&
+                                } else if (result.status ==
+                                        Constant.KEY_STATUS__1 &&
                                     result.error == Constant.KEY_ERROR_2) {
-                                  if(!mounted) return;
-                                  showMessage(AppLocalizations.of(context).create_error_name);
+                                  if (!mounted) return;
+                                  showMessage(AppLocalizations.of(context)
+                                      .create_error_name);
                                 }
                               }
                             }
                           } else {
-                            if(!mounted) return;
-                            showMessage(AppLocalizations.of(context).create_empty_name);
+                            if (!mounted) return;
+                            showMessage(
+                                AppLocalizations.of(context).create_empty_name);
                           }
                         },
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Colors.white),
-                          fixedSize: MaterialStateProperty.all(const Size(400, 55)),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.white),
+                          fixedSize:
+                              MaterialStateProperty.all(const Size(400, 55)),
                           side: MaterialStateProperty.all(const BorderSide(
                             color: iconColor,
                             width: 1.0,
                           )), // border cho button
                         ),
                         label: Text(
-                          note == null ? AppLocalizations.of(context).create : AppLocalizations.of(context).update,
+                          note == null
+                              ? AppLocalizations.of(context).create
+                              : AppLocalizations.of(context).update,
                           style: textBigSizeStyle,
                         ),
-                        icon: Icon(note == null? Icons.add : Icons.update, size: 28,),
+                        icon: Icon(
+                          note == null ? Icons.add : Icons.update,
+                          size: 28,
+                        ),
                       ),
                       const SizedBox(height: 10),
                     ],
@@ -403,10 +436,10 @@ class _NoteScreenState extends State<_NoteScreen> {
                 if (result != null) {
                   if (result.status == 1) {
                     //noteCubit.getAllNotes(email);
-                    if(!mounted) return;
+                    if (!mounted) return;
                     showMessage(AppLocalizations.of(context).delete_successful);
                   } else if (result.status == -1 && result.error == 2) {
-                    if(!mounted) return;
+                    if (!mounted) return;
                     showMessage(AppLocalizations.of(context).delete_note_error);
                   }
                 }
@@ -577,87 +610,112 @@ class _NoteScreenState extends State<_NoteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocProvider.value(
-        value: noteCubit,
-        child: BlocBuilder<NoteCubit, NoteState>(
-          builder: (context, state) {
-            if (state is InitialNoteState || state is LoadingNoteState) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is SuccessLoadAllNoteState) {
-              final note = state.notes.data;
-              return Padding(
-                  padding: const EdgeInsets.only(left: 4, right: 4),
-                  child: ListView.builder(
-                      itemCount: note?.length,
-                      itemBuilder: (context, index) => Dismissible(
-                            background: Container(
-                              color: Colors.red,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(left: 20),
-                                    child: const Icon(
-                                      Icons.delete,
-                                      size: 24,
-                                      color: Colors.white,
+    return FutureBuilder(
+        future: drawerCubit.initSharePreference(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+
+            preference = snapshot.data!;
+            email = preference.getString(Constant.KEY_EMAIL)!;
+
+            noteCubit.getAllNotes(email);
+            getData();
+
+            return Scaffold(
+              body: BlocProvider.value(
+                value: noteCubit,
+                child: BlocBuilder<NoteCubit, NoteState>(
+                  builder: (context, state) {
+                    if (state is InitialNoteState ||
+                        state is LoadingNoteState) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (state is SuccessLoadAllNoteState) {
+                      final note = state.notes.data;
+                      return Padding(
+                          padding: const EdgeInsets.only(left: 4, right: 4),
+                          child: ListView.builder(
+                              itemCount: note?.length,
+                              itemBuilder: (context, index) => Dismissible(
+                                    background: Container(
+                                      color: Colors.red,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            margin:
+                                                const EdgeInsets.only(left: 20),
+                                            child: const Icon(
+                                              Icons.delete,
+                                              size: 24,
+                                              color: Colors.white,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            secondaryBackground: Container(
-                              color: Colors.green,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(right: 20),
-                                    child: const Icon(
-                                      Icons.edit,
-                                      size: 24,
-                                      color: Colors.white,
+                                    secondaryBackground: Container(
+                                      color: Colors.green,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                                right: 20),
+                                            child: const Icon(
+                                              Icons.edit,
+                                              size: 24,
+                                              color: Colors.white,
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            key: Key(note![index][6]),
-                            confirmDismiss: (direction) async {
-                              if (direction == DismissDirection.endToStart) {
-                                _showModalBottomSheet(note[index]);
-                                return false;
-                              } else {
-                                return await _showConfirmDeleteNoteDialog(
-                                    note[index]);
-                              }
-                            },
-                            child: buildListCard(note[index], index),
-                          )));
-            } else if (state is FailureNoteState) {
-              return Center(
-                child: Text(state.errorMessage),
-              );
-            }
-            return Text(state.toString());
-          },
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            if (categories == null || status == null || priorities == null) {
-              showMessage(AppLocalizations.of(context).empty);
-            } else {
-              _showModalBottomSheet(null);
-            }
-          },
-          backgroundColor: endColor,
-          child: const Icon(Icons.add)),
-    );
+                                    key: Key(note![index][6]),
+                                    confirmDismiss: (direction) async {
+                                      if (direction ==
+                                          DismissDirection.endToStart) {
+                                        _showModalBottomSheet(note[index]);
+                                        return false;
+                                      } else {
+                                        return await _showConfirmDeleteNoteDialog(
+                                            note[index]);
+                                      }
+                                    },
+                                    child: buildListCard(note[index], index),
+                                  )));
+                    } else if (state is FailureNoteState) {
+                      return Center(
+                        child: Text(state.errorMessage),
+                      );
+                    }
+                    return Text(state.toString());
+                  },
+                ),
+              ),
+              floatingActionButton: FloatingActionButton(
+                  onPressed: () {
+                    if (categories == null ||
+                        status == null ||
+                        priorities == null) {
+                      showMessage(AppLocalizations.of(context).empty);
+                    } else {
+                      _showModalBottomSheet(null);
+                    }
+                  },
+                  backgroundColor: endColor,
+                  child: const Icon(Icons.add)),
+            );
+          } else {
+            return const CircularProgressIndicator();
+          }
+        });
   }
 }

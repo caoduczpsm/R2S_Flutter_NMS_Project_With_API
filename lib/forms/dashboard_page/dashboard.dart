@@ -230,7 +230,7 @@ class NoteApp extends StatelessWidget {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>  const SignInForm(),
+                                    builder: (context) => SignInForm(),
                                   ),
                                 );
                               },

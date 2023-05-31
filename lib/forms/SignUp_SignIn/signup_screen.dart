@@ -1,29 +1,57 @@
-import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:note_management_system_api/forms/SignUp_SignIn/signin_screen.dart';
 import 'package:note_management_system_api/logic/repositories/user_repository.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/user_data.dart';
+import '../../logic/cubits/drawer_cubit.dart';
 import '../../logic/cubits/user_cubit.dart';
 import '../../logic/states/user_state.dart';
 import '../../ultilities/Constant.dart';
-import 'Container.dart';
+// ignore: depend_on_referenced_packages
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() => runApp(const SignUpForm());
-
+// ignore: must_be_immutable
 class SignUpForm extends StatelessWidget {
-  const SignUpForm({Key? key}) : super(key: key);
+  SignUpForm({Key? key}) : super(key: key);
+
+  DrawerCubit drawerCubit = DrawerCubit();
+  late bool isEnglish = false;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BlocProvider(
-        create: (_) => UserCubit(),
-        child: const _MySignUpForm(),
-      ),
+    return FutureBuilder<SharedPreferences>(
+      future: drawerCubit.initSharePreference(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          isEnglish = drawerCubit.initLanguage();
+          return MaterialApp(
+            supportedLocales: const [
+              Locale(Constant.KEY_ENGLISH),
+              Locale(Constant.KEY_VIETNAMESE)
+            ],
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate
+            ],
+            locale: isEnglish
+                ? const Locale(Constant.KEY_VIETNAMESE)
+                : const Locale(Constant.KEY_ENGLISH),
+            home: BlocProvider(
+              create: (_) => UserCubit(),
+              child: const _MySignUpForm(),
+            ),
+          );
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
     );
   }
 }
@@ -63,7 +91,7 @@ class _MySignUpFormState extends State<_MySignUpForm> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Note Management System'),
+          title: Text(AppLocalizations.of(context).app_name),
         ),
         body: BlocConsumer<UserCubit, UserState> (
           listener: (context, state){
@@ -74,11 +102,10 @@ class _MySignUpFormState extends State<_MySignUpForm> {
             if (state is SuccessSignUpUserState){
               clearData();
               ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Register Successfully")));
+                  SnackBar(content: Text(AppLocalizations.of(context).regis_successful)));
             }
           },
           builder: (context, state){
-            bool isLoading = true;
             if (state is LoadingUserState){
               return const Center(
                 child: CircularProgressIndicator(),
@@ -118,18 +145,18 @@ class _MySignUpFormState extends State<_MySignUpForm> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty){
-                          return 'Please enter email';
+                          return AppLocalizations.of(context).please_email;
                         } else {
                           int result = UserRepository.checkValidEmail(_email.text);
                           switch (result){
                             case Constant.KEY_EMAIL_HAS_LENGTH_LESS_6_CHAR: {
-                              return 'Please enter at least 6 characters';
+                              return AppLocalizations.of(context).please_6c;
                             }
                             case Constant.KEY_EMAIL_HAS_LENGTH_GREATER_256_CHAR: {
-                              return 'Please enter up to 256 characters';
+                              return AppLocalizations.of(context).please_256c;
                             }
                             case Constant.KEY_EMAIL_MALFORMED: {
-                              return 'Invalid Email';
+                              return AppLocalizations.of(context).invalid_email;
                             }
                           }
                         }
@@ -141,28 +168,28 @@ class _MySignUpFormState extends State<_MySignUpForm> {
                   SizedBox(
                     width: size.width * 0.8,
                     child:  TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
-                        prefixIcon: Icon(Icons.key, color: Constant.PRIMARY_COLOR),
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).password,
+                        prefixIcon: const Icon(Icons.key, color: Constant.PRIMARY_COLOR),
+                        border: const OutlineInputBorder(),
                       ),
                       inputFormatters: [
                         FilteringTextInputFormatter.deny(RegExp(r"\s")),
                       ],
                       validator: (value){
                         if (value == null || value.isEmpty){
-                          return 'Please enter password';
+                          return AppLocalizations.of(context).please_password;
                         } else {
                           int result = UserRepository.checkValidPassword(_password.text);
                           switch (result){
                             case Constant.KEY_PASSWORD_LENGTH_INVALID: {
-                              return 'Password length from 6 - 32 characters';
+                              return AppLocalizations.of(context).please_password_6_to_32;
                             }
                             case Constant.KEY_PASSWORD_WITHOUT_CAPTCHA: {
-                              return 'Please enter at least 1 capital letter';
+                              return AppLocalizations.of(context).please_password_1_capital;
                             }
                             case Constant.KEY_PASSWORD_WITHOUT_NUMBERS: {
-                              return 'Please enter at least 1 number';
+                              return AppLocalizations.of(context).please_password_1_number;
                             }
                           }
                         }
@@ -175,19 +202,19 @@ class _MySignUpFormState extends State<_MySignUpForm> {
                   SizedBox(
                     width:  size.width * 0.8,
                     child:  TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'Re-Password',
-                        prefixIcon: Icon(Icons.key, color: Constant.PRIMARY_COLOR),
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).re_password,
+                        prefixIcon: const Icon(Icons.key, color: Constant.PRIMARY_COLOR),
+                        border: const OutlineInputBorder(),
                       ),
                       inputFormatters: [
                         FilteringTextInputFormatter.deny(RegExp(r"\s")),
                       ],
                       validator: (value){
                         if (value == null || value.isEmpty){
-                          return 'Please enter re-password';
+                          return AppLocalizations.of(context).please_re_password;
                         } else if (_password.text!=value){
-                          return 'Password does not match!';
+                          return AppLocalizations.of(context).please_password_do_match;
                         }
                         return null;
                       },
@@ -230,9 +257,9 @@ class _MySignUpFormState extends State<_MySignUpForm> {
                                 context.read<UserCubit>().signUp(user);
                               }
                             },
-                            child: const Text(
-                              'SIGN UP',
-                              style: TextStyle(
+                            child: Text(
+                              AppLocalizations.of(context).sign_up,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -261,7 +288,7 @@ class _MySignUpFormState extends State<_MySignUpForm> {
                                 context,
                                 PageRouteBuilder(
                                   pageBuilder: (context, animation, secondaryAnimation) {
-                                    return const SignInForm();
+                                    return SignInForm();
                                   },
                                   transitionsBuilder: (context, animation, secondaryAnimation, child) {
                                     return FadeTransition(
@@ -272,9 +299,9 @@ class _MySignUpFormState extends State<_MySignUpForm> {
                                 ),
                               );
                             },
-                            child: const Text(
-                              'SIGN IN',
-                              style: TextStyle(
+                            child: Text(
+                              AppLocalizations.of(context).sign_in,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,

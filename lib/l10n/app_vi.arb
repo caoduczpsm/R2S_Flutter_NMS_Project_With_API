@@ -1,5 +1,6 @@
 {
     "hello_world" : "Chào",
+    "app_name" : "Note Management System",
     "home" : "Trang chủ",
     "category" : "Danh mục",
     "note" : "Ghi chú",
@@ -12,6 +13,26 @@
     "name": "Tên",
     "created_at": "Tạo lúc",
 
+    "please_email" : "Vui lòng nhập email",
+    "please_6c" : "Vui lòng nhập ít nhất 6 ký tự",
+    "please_256c" : "Vui lòng nhập tối đa 256 ký tự",
+    "invalid_email" : "Email không hợp lệ",
+    "password" : "Mật khẩu",
+    "please_password" : "Vui lòng nhập mật khẩu",
+    "remember_me" : "          Ghi nhớ",
+    "login" : "ĐĂNG NHẬP",
+    "or_login_with" : "_________________Hoặc đăng nhập với_________________",
+    "login_google" : "Đăng nhập với Google",
+
+    "regis_successful" : "Đăng ký thành công",
+    "please_password_6_to_32" : "Mật khẩu phải có độ dài từ 6 đến 32 ký tự",
+    "please_password_1_capital" : "Vui lòng nhập mật khẩu với ít nhất 1 ký tự hoa",
+    "please_password_1_number" : "Vui lòng nhập mật khẩu với ít nhất 1 ký tự số",
+    "re_password" : "Nhập lại mật khẩu",
+    "please_re_password" : "Vui lòng nhập lại mật khẩu",
+    "please_password_do_match" : "Không khớp với mật khẩu",
+    "sign_up" : "ĐĂNG KÝ",
+    "sign_in" : "ĐĂNG NHẬP",
 
     "create" : "Tạo mới",
     "update" : "Cập nhật",

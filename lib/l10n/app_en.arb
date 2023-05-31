@@ -1,5 +1,6 @@
 {
     "hello_world" : "Hello World",
+    "app_name" : "Note Management System",
     "home" : "Home",
     "category" : "Category",
     "note" : "Note",
@@ -12,6 +13,26 @@
     "name": "Name",
     "created_at": "Create at",
 
+    "please_email" : "Please enter email",
+    "please_6c" : "Please enter at least 6 characters",
+    "please_256c" : "Please enter up to 256 characters",
+    "invalid_email" : "Invalid Email",
+    "password" : "Password",
+    "please_password" : "Please enter password",
+    "remember_me" : "Remember me",
+    "login" : "LOGIN",
+    "or_login_with" : "_________________Or Login With_________________",
+    "login_google" : "Login with Google",
+
+     "regis_successful" : "Register Successfully",
+     "please_password_6_to_32" : "Password length from 6 - 32 characters",
+     "please_password_1_capital" : "Please enter at least 1 capital letter",
+     "please_password_1_number" : "Please enter at least 1 number",
+     "re_password" : "Re-Password",
+     "please_re_password" : "Please enter re-password",
+     "please_password_do_match" : "Password does not match!",
+     "sign_up" : "SIGN UP",
+     "sign_in" : "SIGN IN",
 
     "create" : "Create New",
     "update" : "Update",

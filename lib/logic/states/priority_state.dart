@@ -1,7 +1,9 @@
 
 import '../../data/note_data.dart';
 
-abstract class PriorityState{}
+abstract class PriorityState{
+  late final NoteData data;
+}
 
 class InitialPriorityState extends PriorityState{}
 
@@ -13,11 +15,9 @@ class FailurePriorityState extends PriorityState{
 }
 
 class SuccessLoadAllPriorityState extends PriorityState{
-  final NoteData data;
-  SuccessLoadAllPriorityState(this.data);
+  SuccessLoadAllPriorityState(data);
 }
 
 class SuccessSubmitPriorityState extends PriorityState{
-  final NoteData noteData;
-  SuccessSubmitPriorityState(this.noteData);
+  SuccessSubmitPriorityState(noteData);
 }

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:note_management_system_api/forms/SignUp_SignIn/signup_screen.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_management_system_api/logic/cubits/drawer_cubit.dart';
 import 'package:note_management_system_api/logic/cubits/user_cubit.dart';
 import '../../data/user_data.dart';
 import '../../logic/repositories/user_repository.dart';
@@ -14,18 +15,47 @@ import '../dashboard_page/dashboard.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 // ignore: depend_on_referenced_packages
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() => runApp(const SignInForm());
-
+// ignore: must_be_immutable
 class SignInForm extends StatelessWidget {
-  const SignInForm({Key? key}) : super(key: key);
+
+  SignInForm({Key? key}) : super(key: key);
+
+  DrawerCubit drawerCubit = DrawerCubit();
+  late bool isEnglish = false;
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BlocProvider(
-        create: (_) => UserCubit(),
-        child: const _MySignInForm(),
-      ),
+    return FutureBuilder<SharedPreferences>(
+      future: drawerCubit.initSharePreference(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          isEnglish = drawerCubit.initLanguage();
+          return MaterialApp(
+            supportedLocales: const [
+              Locale(Constant.KEY_ENGLISH),
+              Locale(Constant.KEY_VIETNAMESE)
+            ],
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate
+            ],
+            locale: isEnglish
+                ? const Locale(Constant.KEY_VIETNAMESE)
+                : const Locale(Constant.KEY_ENGLISH),
+            home: BlocProvider(
+              create: (_) => UserCubit(),
+              child: const _MySignInForm(),
+            ),
+          );
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
     );
   }
 }
@@ -65,7 +95,7 @@ class _MySignInFormState extends State<_MySignInForm> {
 
   void checkRemember() async{
     loginData = await SharedPreferences.getInstance();
-    bool? isRemember = (loginData.getBool('isRemember'));
+    bool? isRemember = (loginData.getBool(Constant.KEY_IS_REMEMBER));
 
     if (isRemember == true){
       moveToMain();
@@ -76,7 +106,7 @@ class _MySignInFormState extends State<_MySignInForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Note Management System'),
+        title: Text(AppLocalizations.of(context).app_name),
       ),
       body:  BlocConsumer<UserCubit, UserState> (
         listener: (context, state){
@@ -139,7 +169,7 @@ class _MySignInFormState extends State<_MySignInForm> {
             context,
             PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) {
-                return const SignUpForm();
+                return SignUpForm();
               },
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 return FadeTransition(
@@ -179,18 +209,18 @@ class _MySignInFormState extends State<_MySignInForm> {
                       ),
                       validator: (value){
                         if (value == null || value.isEmpty){
-                          return 'Please enter email';
+                          return AppLocalizations.of(context).please_email;
                         } else {
                           int result = UserRepository.checkValidEmail(_email.text);
                           switch (result){
                             case Constant.KEY_EMAIL_HAS_LENGTH_LESS_6_CHAR: {
-                              return 'Please enter at least 6 characters';
+                              return AppLocalizations.of(context).please_6c;
                             }
                             case Constant.KEY_EMAIL_HAS_LENGTH_GREATER_256_CHAR: {
-                              return 'Please enter up to 256 characters';
+                              return AppLocalizations.of(context).please_256c;
                             }
                             case Constant.KEY_EMAIL_MALFORMED: {
-                              return 'Invalid Email';
+                              return AppLocalizations.of(context).invalid_email;
                             }
                           }
                         }
@@ -203,10 +233,10 @@ class _MySignInFormState extends State<_MySignInForm> {
                   SizedBox(
                     width: size.width * 0.8,
                     child: TextFormField(
-                      decoration:  const InputDecoration(
-                        labelText: 'Password',
-                        prefixIcon: Icon(Icons.key, color: Constant.PRIMARY_COLOR),
-                        border: OutlineInputBorder(),
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).password,
+                        prefixIcon: const Icon(Icons.key, color: Constant.PRIMARY_COLOR),
+                        border: const OutlineInputBorder(),
                       ),
                       inputFormatters: [
                         FilteringTextInputFormatter.deny(RegExp(r"\s")),
@@ -214,7 +244,7 @@ class _MySignInFormState extends State<_MySignInForm> {
 
                       validator: (value){
                         if (value == null || value.isEmpty){
-                          return 'Please enter password';
+                          return AppLocalizations.of(context).please_password;
                         }
                         return null;
                       },
@@ -225,9 +255,11 @@ class _MySignInFormState extends State<_MySignInForm> {
 
                   SizedBox(
                     width: size.width * 0.9,
-                    child:CheckboxListTile(
-                      title: const Text("                             "
-                          "               Remember me"),
+                    child: CheckboxListTile(
+                      title: Transform.translate (
+                        offset: const Offset (200, 0),
+                        child: Text(AppLocalizations.of(context).remember_me),
+                      ),
                       value: _isRemember,
                       onChanged: (value) {
                         setState(() {
@@ -262,9 +294,9 @@ class _MySignInFormState extends State<_MySignInForm> {
 
                         }
                       },
-                      child: const Text(
-                        'LOGIN',
-                        style: TextStyle(
+                      child: Text(
+                        AppLocalizations.of(context).login,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -273,13 +305,14 @@ class _MySignInFormState extends State<_MySignInForm> {
                     ),
                   ),
                   const SizedBox(height: 20,),
-                  const Text('_________________Or Login With_________________',
-                    style: TextStyle(
+                  Text(AppLocalizations.of(context).or_login_with,
+                    style: const TextStyle(
                       color: Colors.grey,
                       fontWeight: FontWeight.w500,
                     ),),
                   const SizedBox(height: 10,),
                   GoogleAuthButton(
+                    text: AppLocalizations.of(context).login_google,
                     onPressed: () {
                       _googleSignIn.signIn().then((value){
                         _isGmail = true;

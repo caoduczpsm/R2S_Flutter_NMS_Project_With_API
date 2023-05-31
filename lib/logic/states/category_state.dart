@@ -1,7 +1,9 @@
 
 import '../../data/note_data.dart';
 
-abstract class CategoryState{}
+abstract class CategoryState{
+  late final NoteData data;
+}
 
 class InitialCategoryState extends CategoryState{}
 
@@ -13,11 +15,9 @@ class FailureCategoryState extends CategoryState{
 }
 
 class SuccessLoadAllCategoryState extends CategoryState{
-  final NoteData data;
-  SuccessLoadAllCategoryState(this.data);
+  SuccessLoadAllCategoryState(data);
 }
 
 class SuccessSubmitCategoryState extends CategoryState{
-  final NoteData noteData;
-  SuccessSubmitCategoryState(this.noteData);
+  SuccessSubmitCategoryState(data);
 }
