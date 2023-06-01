@@ -27,6 +27,9 @@ class Constant {
   static const KEY_PRIORITY_READ_ALL = "$KEY_BASE_URL/get?tab=Priority&email=";
 
   // ignore: constant_identifier_names
+  static const KEY_CHART_READ_ALL = "$KEY_BASE_URL/get?tab=Dashboard&email=";
+
+  // ignore: constant_identifier_names
   static const PRIMARY_COLOR = Color(0XFF4CAEE3);
 
   // Đăng nhập đăng ký
