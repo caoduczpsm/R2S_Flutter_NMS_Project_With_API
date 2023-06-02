@@ -80,6 +80,11 @@ class DrawerCubit extends Cubit<DrawerState> {
 
   Future<SharedPreferences> initSharePreference() async {
     preferences = await SharedPreferences.getInstance();
+    if(preferences.getString(Constant.KEY_LANGUAGE) == Constant.KEY_VIETNAMESE) {
+      currentTitle = titlesVI[0];
+    } else {
+      currentTitle = titlesEN[0];
+    }
     return preferences;
   }
 
@@ -127,13 +132,7 @@ class DrawerCubit extends Cubit<DrawerState> {
     return switchStatus;
   }
 
-  Future<String?> getCurrentTitle() async {
-    preferences = await SharedPreferences.getInstance();
-    if(preferences.getString(Constant.KEY_LANGUAGE) == Constant.KEY_VIETNAMESE) {
-      currentTitle = "Trang chủ";
-    } else {
-      currentTitle = "Note Management System";
-    }
+  String? getCurrentTitle() {
     return currentTitle;
   }
 

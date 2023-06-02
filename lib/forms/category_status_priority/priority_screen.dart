@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
+// ignore: depend_on_referenced_packages
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:note_management_system_api/logic/states/priority_state.dart';
@@ -50,10 +51,6 @@ class _PriorityScreenState extends State<_PriorityScreen> {
 
   NoteData? name;
 
-  String formatDateTime(DateTime dateTime) {
-    return DateFormat('yyyy-MM-dd hh:mm:ss').format(dateTime);
-  }
-
   void showMessage(String message) {
     if (!mounted) return;
     ScaffoldMessenger.of(context)
@@ -77,7 +74,7 @@ class _PriorityScreenState extends State<_PriorityScreen> {
   void _showModalBottomSheet(List<dynamic>? priority) {
     if (priority == null) {
       nameController.text = "";
-      createAt = formatDateTime(_dateTime);
+      createAt = priorityCubit.formatDateTime(_dateTime);
     } else {
       nameController.text = priority[0];
       createAt = priority[2];
@@ -209,35 +206,16 @@ class _PriorityScreenState extends State<_PriorityScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        InkWell(
-          onTap: () {
-            setState(() {
-              selectedIndex == index
-                  ? selectedIndex = -1
-                  : selectedIndex = index;
-            });
-          },
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 5),
-            child: Card(
-              elevation: 3,
-              shadowColor: Colors.grey,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: ListTile(
-                title: Text("Name: ${priority[0]}"),
-                subtitle: Text('Created At: ${priority[2]}'),
-              ),
-            ),
-          ),
-        ),
-        Visibility(
-          visible: selectedIndex == index,
-          child: Container(
-            margin: const EdgeInsets.only(top: 5, bottom: 5, right: 5),
-            child: Text(
-              "Created at: ${priority[1]}",
-              style: const TextStyle(fontSize: 14),
+        Container(
+          margin: const EdgeInsets.only(bottom: 5),
+          child: Card(
+            elevation: 3,
+            shadowColor: Colors.grey,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            child: ListTile(
+              title: Text("Name: ${priority[0]}"),
+              subtitle: Text('Created At: ${priority[2]}'),
             ),
           ),
         )
@@ -266,7 +244,7 @@ class _PriorityScreenState extends State<_PriorityScreen> {
                     if (state is InitialPriorityState || state is LoadingPriorityState){
                       return const Center(child: CircularProgressIndicator());
                     } else if (state is SuccessLoadAllPriorityState) {
-                      final priority = state.data.data;
+                      final priority = state.data?.data;
                       return Padding(
                           padding: const EdgeInsets.only(left: 4, right: 4),
                           child: ListView.builder(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
+// ignore: depend_on_referenced_packages
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:note_management_system_api/logic/states/status_state.dart';
@@ -50,10 +51,6 @@ class _StatusScreenState extends State<_StatusScreen> {
 
   NoteData? name;
 
-  String formatDateTime(DateTime dateTime) {
-    return DateFormat('yyyy-MM-dd hh:mm:ss').format(dateTime);
-  }
-
   void showMessage(String message) {
     if (!mounted) return;
     ScaffoldMessenger.of(context)
@@ -77,7 +74,7 @@ class _StatusScreenState extends State<_StatusScreen> {
   void _showModalBottomSheet(List<dynamic>? status) {
     if (status == null) {
       nameController.text = "";
-      createAt = formatDateTime(_dateTime);
+      createAt = statusCubit.formatDateTime(_dateTime);
     } else {
       nameController.text = status[0];
       createAt = status[2];
@@ -209,35 +206,16 @@ class _StatusScreenState extends State<_StatusScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        InkWell(
-          onTap: () {
-            setState(() {
-              selectedIndex == index
-                  ? selectedIndex = -1
-                  : selectedIndex = index;
-            });
-          },
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 5),
-            child: Card(
-              elevation: 3,
-              shadowColor: Colors.grey,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: ListTile(
-                title: Text("Name: ${status[0]}"),
-                subtitle: Text('Created At: ${status[2]}'),
-              ),
-            ),
-          ),
-        ),
-        Visibility(
-          visible: selectedIndex == index,
-          child: Container(
-            margin: const EdgeInsets.only(top: 5, bottom: 5, right: 5),
-            child: Text(
-              "Created at: ${status[1]}",
-              style: const TextStyle(fontSize: 14),
+        Container(
+          margin: const EdgeInsets.only(bottom: 5),
+          child: Card(
+            elevation: 3,
+            shadowColor: Colors.grey,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            child: ListTile(
+              title: Text("Name: ${status[0]}"),
+              subtitle: Text('Created At: ${status[2]}'),
             ),
           ),
         )
@@ -266,7 +244,7 @@ class _StatusScreenState extends State<_StatusScreen> {
                     if (state is InitialStatusState || state is LoadingStatusState){
                       return const Center(child: CircularProgressIndicator());
                     } else if (state is SuccessLoadAllStatusState) {
-                      final status = state.data.data;
+                      final status = state.data?.data;
                       return Padding(
                           padding: const EdgeInsets.only(left: 4, right: 4),
                           child: ListView.builder(

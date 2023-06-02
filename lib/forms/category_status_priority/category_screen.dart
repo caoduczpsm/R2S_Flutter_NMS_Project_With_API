@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
+// ignore: depend_on_referenced_packages
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../data/note_data.dart';
 import '../../logic/cubits/category_cubit.dart';
 import '../../logic/cubits/drawer_cubit.dart';
@@ -48,10 +48,6 @@ class _CategoryScreenState extends State<_CategoryScreen> {
   String createAt = "";
   final DateTime _dateTime = DateTime.now();
 
-  String formatDateTime(DateTime dateTime) {
-    return DateFormat('yyyy-MM-dd hh:mm:ss').format(dateTime);
-  }
-
   void showMessage(String message) {
     if (!mounted) return;
     ScaffoldMessenger.of(context)
@@ -75,7 +71,7 @@ class _CategoryScreenState extends State<_CategoryScreen> {
   void _showModalBottomSheet(List<dynamic>? category) {
     if (category == null) {
       nameController.text = "";
-      createAt = formatDateTime(_dateTime);
+      createAt = categoryCubit.formatDateTime(_dateTime);
     } else {
       nameController.text = category[0];
       createAt = category[2];
@@ -207,35 +203,16 @@ class _CategoryScreenState extends State<_CategoryScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        InkWell(
-          onTap: () {
-            setState(() {
-              selectedIndex == index
-                  ? selectedIndex = -1
-                  : selectedIndex = index;
-            });
-          },
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 5),
-            child: Card(
-              elevation: 3,
-              shadowColor: Colors.grey,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: ListTile(
-                title: Text("Name: ${category[0]}"),
-                subtitle: Text('Created At: ${category[2]}'),
-              ),
-            ),
-          ),
-        ),
-        Visibility(
-          visible: selectedIndex == index,
-          child: Container(
-            margin: const EdgeInsets.only(top: 5, bottom: 5, right: 5),
-            child: Text(
-              "Created at: ${category[1]}",
-              style: const TextStyle(fontSize: 14),
+        Container(
+          margin: const EdgeInsets.only(bottom: 5),
+          child: Card(
+            elevation: 3,
+            shadowColor: Colors.grey,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            child: ListTile(
+              title: Text("Name: ${category[0]}"),
+              subtitle: Text('Created At: ${category[2]}'),
             ),
           ),
         )
@@ -264,7 +241,7 @@ class _CategoryScreenState extends State<_CategoryScreen> {
                     if (state is InitialCategoryState || state is LoadingCategoryState){
                       return const Center(child: CircularProgressIndicator());
                     } else if (state is SuccessLoadAllCategoryState) {
-                      final category = state.data.data;
+                      final category = state.data?.data;
                       return Padding(
                           padding: const EdgeInsets.only(left: 4, right: 4),
                           child: ListView.builder(

@@ -1,6 +1,7 @@
 
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:note_management_system_api/data/note_data.dart';
 
 import '../repositories/status_repository.dart';
@@ -57,5 +58,9 @@ class StatusCubit extends Cubit<StatusState>{
       emit(FailureStatusState(e.toString()));
       return null;
     }
+  }
+
+  String formatDateTime(DateTime dateTime) {
+    return DateFormat('yyyy-MM-dd hh:mm:ss').format(dateTime);
   }
 }

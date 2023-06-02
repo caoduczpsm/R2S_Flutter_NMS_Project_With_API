@@ -41,7 +41,7 @@ class NoteApp extends StatelessWidget {
     isGmail = await drawerCubit.getIsGmail();
     fullName = await drawerCubit.getFullName();
     email = await drawerCubit.getEmail();
-    currentTitle = await drawerCubit.getCurrentTitle();
+    currentTitle = drawerCubit.getCurrentTitle();
   }
 
 
@@ -76,7 +76,9 @@ class NoteApp extends StatelessWidget {
                     return Scaffold(
                       appBar: AppBar(
                         title:
-                        Text(currentTitle!),
+                        Text(cubitContext
+                            .read<DrawerCubit>()
+                            .getCurrentTitle()!),
                       ),
                       drawer: Drawer(
                         child: ListView(
