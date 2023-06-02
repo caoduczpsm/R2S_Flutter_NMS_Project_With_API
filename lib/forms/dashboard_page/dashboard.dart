@@ -26,11 +26,23 @@ class NoteApp extends StatelessWidget {
   bool isEnglish = false;
   DrawerCubit drawerCubit = DrawerCubit();
   String? email;
-  String firstName = " ";
-  String lastName = " ";
-  bool isGmail = false;
+  String? firstName = "";
+  String? lastName = "";
+  String? fullName = "";
+  bool? isGmail = false;
+  String? currentTitle = "";
   late SharedPreferences preferences;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  Future<void> initInfo() async {
+    isEnglish = await drawerCubit.initLanguage();
+    firstName = await drawerCubit.getFirstName();
+    lastName = await drawerCubit.getLastName();
+    isGmail = await drawerCubit.getIsGmail();
+    fullName = await drawerCubit.getFullName();
+    email = await drawerCubit.getEmail();
+    currentTitle = await drawerCubit.getCurrentTitle();
+  }
 
 
   @override
@@ -41,14 +53,7 @@ class NoteApp extends StatelessWidget {
         builder: (context, snapshot) {
           if(snapshot.hasData) {
             preferences = snapshot.data!;
-            isEnglish = drawerCubit.initLanguage();
-
-            email = drawerCubit.getEmail();
-            firstName = drawerCubit.getFirstName()!;
-            lastName = drawerCubit.getLastName()!;
-            isGmail = drawerCubit.getIsGmail()!;
-
-            String fullName = drawerCubit.getFullName()!;
+            initInfo();
 
             return  MaterialApp(
               supportedLocales: const [
@@ -71,7 +76,7 @@ class NoteApp extends StatelessWidget {
                     return Scaffold(
                       appBar: AppBar(
                         title:
-                        Text(cubitContext.read<DrawerCubit>().getCurrentTitle()!),
+                        Text(currentTitle!),
                       ),
                       drawer: Drawer(
                         child: ListView(
@@ -90,9 +95,9 @@ class NoteApp extends StatelessWidget {
                                   SizedBox(
                                     width: 90.0,
                                     height: 90.0,
-                                    child: isGmail ? _buildCircleAvatar() : _buildImageAsset(),
+                                    child: isGmail! ? _buildCircleAvatar() : _buildImageAsset(),
                                   ),
-                                  Text(fullName,
+                                  Text(fullName!,
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 16,
@@ -203,7 +208,7 @@ class NoteApp extends StatelessWidget {
                               selectedTileColor: selectedColor,
                             ),
                             Visibility(
-                              visible: !isGmail,
+                              visible: !isGmail!,
                               child:  ListTile(
                                 title: Text(
                                     AppLocalizations.of(cubitContext).change_password,

@@ -50,7 +50,7 @@ class DrawerCubit extends Cubit<DrawerState> {
   ];
 
   Widget? currentPage = const HomeScreen();
-  late String currentTitle;
+  String? currentTitle;
   late SharedPreferences preferences;
 
   Future<void> selectIndex(int index) async {
@@ -83,35 +83,39 @@ class DrawerCubit extends Cubit<DrawerState> {
     return preferences;
   }
 
-  bool initLanguage() {
+  Future<bool> initLanguage() async {
+    preferences = await SharedPreferences.getInstance();
     if(preferences.getString(Constant.KEY_LANGUAGE) == Constant.KEY_VIETNAMESE) {
-      currentTitle = "Trang chủ";
       return true;
     } else {
-      currentTitle = "Note Management System";
       return false;
     }
   }
 
-  String? getEmail(){
+  Future<String?> getEmail() async {
+    preferences = await SharedPreferences.getInstance();
     return preferences.getString(Constant.KEY_EMAIL);
   }
 
-  String? getFirstName(){
+  Future<String?> getFirstName() async {
+    preferences = await SharedPreferences.getInstance();
     return preferences.getString(Constant.KEY_FIRST_NAME);
   }
 
-  String? getLastName(){
+  Future<String?> getLastName() async {
+    preferences = await SharedPreferences.getInstance();
     return preferences.getString(Constant.KEY_LAST_NAME);
   }
 
-  bool? getIsGmail(){
+  Future<bool?> getIsGmail() async {
+    preferences = await SharedPreferences.getInstance();
     return preferences.getBool(Constant.KEY_IS_GMAIL)!;
   }
 
-  String? getFullName(){
+  Future<String?> getFullName() async {
+    preferences = await SharedPreferences.getInstance();
     String? firstName = preferences.getString(Constant.KEY_FIRST_NAME);
-    String? lastName = preferences.getString(Constant.KEY_LAST_NAME);;
+    String? lastName = preferences.getString(Constant.KEY_LAST_NAME);
     if (firstName!.contains(RegExp(r'[a-zA-Z]')) && lastName!.contains(RegExp(r'[a-zA-Z]'))) {
       return "$lastName $firstName";
     } else {
@@ -123,7 +127,13 @@ class DrawerCubit extends Cubit<DrawerState> {
     return switchStatus;
   }
 
-  String? getCurrentTitle() {
+  Future<String?> getCurrentTitle() async {
+    preferences = await SharedPreferences.getInstance();
+    if(preferences.getString(Constant.KEY_LANGUAGE) == Constant.KEY_VIETNAMESE) {
+      currentTitle = "Trang chủ";
+    } else {
+      currentTitle = "Note Management System";
+    }
     return currentTitle;
   }
 

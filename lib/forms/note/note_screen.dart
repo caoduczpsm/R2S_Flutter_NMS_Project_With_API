@@ -57,6 +57,7 @@ class _NoteScreenState extends State<_NoteScreen> {
   static const double _borderRadius = 10;
   static const Color startColor = Color.fromARGB(255, 151, 222, 255);
   static const Color endColor = Color.fromARGB(255, 98, 205, 255);
+  bool startAnimation = false;
   int selectedIndex = -1;
 
   NoteData? categories, status, priorities, notes;
@@ -75,23 +76,9 @@ class _NoteScreenState extends State<_NoteScreen> {
   }
 
   Future<void> getData() async {
-    if (categoryCubit.state is SuccessLoadAllCategoryState) {
-      categories = categoryCubit.state.data;
-    } else {
-      categories = await categoryCubit.getAllData(email);
-    }
-
-    if (statusCubit.state is SuccessLoadAllStatusState) {
-      status = statusCubit.state.data;
-    } else {
-      status = await statusCubit.getAllData(email);
-    }
-
-    if (priorityCubit.state is SuccessLoadAllPriorityState) {
-      priorities = priorityCubit.state.data;
-    } else {
-      priorities = await priorityCubit.getAllData(email);
-    }
+    categories = await categoryCubit.getAllData(email);
+    status = await statusCubit.getAllData(email);
+    priorities = await priorityCubit.getAllData(email);
 
     categoryListData = categories?.data;
     statusListData = status?.data;
@@ -102,6 +89,17 @@ class _NoteScreenState extends State<_NoteScreen> {
   void dispose() {
     super.dispose();
     nameController.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        startAnimation = true;
+      });
+    });
   }
 
   void _showModalBottomSheet(List<dynamic>? note) {
@@ -446,7 +444,10 @@ class _NoteScreenState extends State<_NoteScreen> {
     return result;
   }
 
-  Widget buildListCard(List<dynamic> note, index) {
+  Widget buildListCard(List<dynamic> note, int index) {
+    //double screenWidth = MediaQuery.of(context).size.width;
+    //double height = MediaQuery.of(context).size.height;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
