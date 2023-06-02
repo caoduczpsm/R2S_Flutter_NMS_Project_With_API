@@ -50,7 +50,7 @@ class DrawerCubit extends Cubit<DrawerState> {
   ];
 
   Widget? currentPage = const HomeScreen();
-  String? currentTitle;
+  String? currentTitle = "";
   late SharedPreferences preferences;
 
   Future<void> selectIndex(int index) async {

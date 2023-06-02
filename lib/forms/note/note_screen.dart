@@ -7,8 +7,6 @@ import 'package:note_management_system_api/logic/cubits/category_cubit.dart';
 import 'package:note_management_system_api/logic/cubits/priority_cubit.dart';
 import 'package:note_management_system_api/logic/cubits/status_cubit.dart';
 import 'package:note_management_system_api/logic/repositories/category_repository.dart';
-import 'package:note_management_system_api/logic/states/category_state.dart';
-import 'package:note_management_system_api/logic/states/priority_state.dart';
 // ignore: depend_on_referenced_packages
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:note_management_system_api/logic/repositories/priority_repository.dart';
@@ -18,7 +16,6 @@ import '../../logic/cubits/drawer_cubit.dart';
 import '../../logic/cubits/note_cubit.dart';
 import '../../logic/repositories/note_repository.dart';
 import '../../logic/states/note_state.dart';
-import '../../logic/states/status_state.dart';
 import 'custom_paint_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

@@ -48,5 +48,6 @@
     "delete_confirm" : "Xác nhận xóa",
     "delete_title" : "Bạn có chắc chắn muốn xóa không?",
     "yes" : "Đồng ý",
-    "no" : "Hủy"
+    "no" : "Hủy",
+    "delete_error_in_use" : "In use, cannot be deleted"
 }

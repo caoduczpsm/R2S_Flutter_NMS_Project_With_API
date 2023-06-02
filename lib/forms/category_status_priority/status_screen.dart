@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: depend_on_referenced_packages
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:note_management_system_api/logic/states/status_state.dart';
 import '../../data/note_data.dart';
 import '../../logic/cubits/drawer_cubit.dart';
 import '../../logic/cubits/status_cubit.dart';
 import '../../logic/repositories/status_repository.dart';
 import '../../ultilities/Constant.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // ignore: must_be_immutable
 class StatusScreen extends StatelessWidget {
@@ -18,9 +18,8 @@ class StatusScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: _StatusScreen());
+    return const Scaffold(
+        body: _StatusScreen());
   }
 }
 
@@ -111,7 +110,7 @@ class _StatusScreenState extends State<_StatusScreen> {
                   style: const TextStyle(fontSize: 20),
                   controller: nameController,
                   decoration: InputDecoration(
-                      hintText: 'Name',
+                      hintText: AppLocalizations.of(context).name,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       )),
@@ -126,11 +125,13 @@ class _StatusScreenState extends State<_StatusScreen> {
                           nameController.text,);
                         if (result != null) {
                           if (result.status == Constant.KEY_STATUS_1) {
-                            showMessage("Create Successfully");
+                            if(!mounted) return;
+                            showMessage(AppLocalizations.of(context).create_successful);
                             statusCubit.getAllData(email);
                           } else if (result.status == Constant.KEY_STATUS__1 &&
                               result.error == Constant.KEY_ERROR_2) {
-                            showMessage("Duplicate name");
+                            if(!mounted) return;
+                            showMessage(AppLocalizations.of(context).create_error_name);
                           }
                         }
                       } else {
@@ -148,16 +149,18 @@ class _StatusScreenState extends State<_StatusScreen> {
                         }
                         if (result != null) {
                           if (result.status == Constant.KEY_STATUS_1) {
-                            showMessage("Update Successfully");
+                            if(!mounted) return;
+                            showMessage(AppLocalizations.of(context).update_successful);
                             statusCubit.getAllData(email);
                           } else if (result.status == Constant.KEY_STATUS__1 &&
                               result.error == Constant.KEY_ERROR_2) {
-                            showMessage("Duplicate name");
+                            if(!mounted) return;
+                            showMessage(AppLocalizations.of(context).create_error_name);
                           }
                         }
                       }
                     },
-                    child: Text(status == null ? "Create New" : "Update")
+                    child: Text(status == null ? AppLocalizations.of(context).create : AppLocalizations.of(context).update)
                 ),
               ],
             ),
@@ -171,14 +174,14 @@ class _StatusScreenState extends State<_StatusScreen> {
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Confirm Delete"),
-          content: const Text("Are you sure you want to delete this status?"),
+          title: Text(AppLocalizations.of(context).delete_confirm),
+          content: Text(AppLocalizations.of(context).delete_title),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: const Text("No"),
+              child: Text(AppLocalizations.of(context).no),
             ),
             TextButton(
               onPressed: () async {
@@ -187,13 +190,15 @@ class _StatusScreenState extends State<_StatusScreen> {
                 if(result != null) {
                   if(result.status == 1) {
                     statusCubit.getAllData(email);
-                    showMessage("Delete Successfully");
+                    if(!mounted) return;
+                    showMessage(AppLocalizations.of(context).delete_successful);
                   } else if(result.status == -1 && result.error == 2){
-                    showMessage("In use, cannot be deleted");
+                    if(!mounted) return;
+                    showMessage(AppLocalizations.of(context).delete_error_in_use);
                   }
                 }
               },
-              child: const Text("Yes"),
+              child: Text(AppLocalizations.of(context).yes),
             ),
           ],
         );
@@ -214,8 +219,8 @@ class _StatusScreenState extends State<_StatusScreen> {
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
             child: ListTile(
-              title: Text("Name: ${status[0]}"),
-              subtitle: Text('Created At: ${status[2]}'),
+              title: Text("${AppLocalizations.of(context).name}: ${status[0]}"),
+              subtitle: Text('${AppLocalizations.of(context).created_at}: ${status[2]}'),
             ),
           ),
         )
