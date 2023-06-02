@@ -1,5 +1,6 @@
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import '../../data/note_data.dart';
 import '../repositories/note_repository.dart';
 import '../states/note_state.dart';
@@ -57,5 +58,9 @@ class NoteCubit extends Cubit<NoteState> {
       emit(FailureNoteState(e.toString()));
       return null;
     }
+  }
+
+  String formatDate(DateTime date) {
+    return DateFormat('dd/MM/yyyy').format(date);
   }
 }

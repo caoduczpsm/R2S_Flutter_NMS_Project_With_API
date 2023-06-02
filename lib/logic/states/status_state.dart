@@ -2,7 +2,9 @@
 import '../../data/note_data.dart';
 
 abstract class StatusState{
-  late final NoteData data;
+  final NoteData? data;
+
+  StatusState({this.data});
 }
 
 class InitialStatusState extends StatusState{}
@@ -15,9 +17,9 @@ class FailureStatusState extends StatusState{
 }
 
 class SuccessLoadAllStatusState extends StatusState{
-  SuccessLoadAllStatusState(data);
+  SuccessLoadAllStatusState(NoteData data) : super(data: data);
 }
 
 class SuccessSubmitStatusState extends StatusState{
-  SuccessSubmitStatusState(data);
+  SuccessSubmitStatusState(NoteData data) : super(data: data);
 }

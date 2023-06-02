@@ -2,7 +2,9 @@
 import '../../data/note_data.dart';
 
 abstract class PriorityState{
-  late final NoteData data;
+  final NoteData? data;
+
+  PriorityState({this.data});
 }
 
 class InitialPriorityState extends PriorityState{}
@@ -15,9 +17,9 @@ class FailurePriorityState extends PriorityState{
 }
 
 class SuccessLoadAllPriorityState extends PriorityState{
-  SuccessLoadAllPriorityState(data);
+  SuccessLoadAllPriorityState(NoteData data) : super(data: data);
 }
 
 class SuccessSubmitPriorityState extends PriorityState{
-  SuccessSubmitPriorityState(noteData);
+  SuccessSubmitPriorityState(NoteData data) : super(data: data);
 }

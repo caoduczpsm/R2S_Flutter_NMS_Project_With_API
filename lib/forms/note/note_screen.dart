@@ -7,8 +7,6 @@ import 'package:note_management_system_api/logic/cubits/category_cubit.dart';
 import 'package:note_management_system_api/logic/cubits/priority_cubit.dart';
 import 'package:note_management_system_api/logic/cubits/status_cubit.dart';
 import 'package:note_management_system_api/logic/repositories/category_repository.dart';
-// ignore: depend_on_referenced_packages
-import 'package:intl/intl.dart';
 import 'package:note_management_system_api/logic/states/category_state.dart';
 import 'package:note_management_system_api/logic/states/priority_state.dart';
 // ignore: depend_on_referenced_packages
@@ -61,7 +59,7 @@ class _NoteScreenState extends State<_NoteScreen> {
   static const Color endColor = Color.fromARGB(255, 98, 205, 255);
   int selectedIndex = -1;
 
-  NoteData? categories, status, priorities;
+  NoteData? categories, status, priorities, notes;
   List<dynamic>? categoryListData, statusListData, priorityListData;
   dynamic categoryDropdownValue;
   dynamic statusDropdownValue;
@@ -70,10 +68,6 @@ class _NoteScreenState extends State<_NoteScreen> {
   String _selectedDate = "";
   final DateTime _dateTime = DateTime.now();
 
-  String _formatDate(DateTime date) {
-    return DateFormat('dd/MM/yyyy').format(date);
-  }
-
   void showMessage(String message) {
     if (!mounted) return;
     ScaffoldMessenger.of(context)
@@ -81,20 +75,19 @@ class _NoteScreenState extends State<_NoteScreen> {
   }
 
   Future<void> getData() async {
-
-    if(categoryCubit.state is SuccessLoadAllCategoryState){
+    if (categoryCubit.state is SuccessLoadAllCategoryState) {
       categories = categoryCubit.state.data;
     } else {
       categories = await categoryCubit.getAllData(email);
     }
 
-    if(statusCubit.state is SuccessLoadAllStatusState){
+    if (statusCubit.state is SuccessLoadAllStatusState) {
       status = statusCubit.state.data;
     } else {
       status = await statusCubit.getAllData(email);
     }
 
-    if(priorityCubit.state is SuccessLoadAllPriorityState){
+    if (priorityCubit.state is SuccessLoadAllPriorityState) {
       priorities = priorityCubit.state.data;
     } else {
       priorities = await priorityCubit.getAllData(email);
@@ -118,7 +111,7 @@ class _NoteScreenState extends State<_NoteScreen> {
       categoryDropdownValue = categoryListData?[0][0];
       statusDropdownValue = statusListData?[0][0];
       priorityDropdownValue = priorityListData?[0][0];
-      _selectedDate = _formatDate(_dateTime);
+      _selectedDate = noteCubit.formatDate(_dateTime);
       nameController.text = "";
     } else {
       nameController.text = note[0];
@@ -204,7 +197,7 @@ class _NoteScreenState extends State<_NoteScreen> {
                                       lastDate: DateTime(2100))
                                   .then((value) {
                                 setState(() {
-                                  _selectedDate = _formatDate(value!);
+                                  _selectedDate = noteCubit.formatDate(value!);
                                 });
                               });
                             },
@@ -614,10 +607,8 @@ class _NoteScreenState extends State<_NoteScreen> {
         future: drawerCubit.initSharePreference(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-
             preference = snapshot.data!;
             email = preference.getString(Constant.KEY_EMAIL)!;
-
             noteCubit.getAllNotes(email);
             getData();
 
@@ -632,7 +623,7 @@ class _NoteScreenState extends State<_NoteScreen> {
                         child: CircularProgressIndicator(),
                       );
                     } else if (state is SuccessLoadAllNoteState) {
-                      final note = state.notes.data;
+                      final note = state.notes?.data;
                       return Padding(
                           padding: const EdgeInsets.only(left: 4, right: 4),
                           child: ListView.builder(
