@@ -15,9 +15,13 @@ class FailurePriorityState extends PriorityState{
 }
 
 class SuccessLoadAllPriorityState extends PriorityState{
-  SuccessLoadAllPriorityState(data);
+  SuccessLoadAllPriorityState(data) : super() {
+    this.data = data;
+  }
 }
 
 class SuccessSubmitPriorityState extends PriorityState{
-  SuccessSubmitPriorityState(noteData);
+  SuccessSubmitPriorityState(data) : super() {
+    this.data = data;
+  }
 }

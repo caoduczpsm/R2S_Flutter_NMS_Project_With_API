@@ -14,10 +14,14 @@ class FailureCategoryState extends CategoryState{
   FailureCategoryState(this.errorMessage);
 }
 
-class SuccessLoadAllCategoryState extends CategoryState{
-  SuccessLoadAllCategoryState(data);
+class SuccessLoadAllCategoryState extends CategoryState {
+  SuccessLoadAllCategoryState(data) : super() {
+    this.data = data;
+  }
 }
 
-class SuccessSubmitCategoryState extends CategoryState{
-  SuccessSubmitCategoryState(data);
+class SuccessSubmitCategoryState extends CategoryState {
+  SuccessSubmitCategoryState(data) : super() {
+    this.data = data;
+  }
 }

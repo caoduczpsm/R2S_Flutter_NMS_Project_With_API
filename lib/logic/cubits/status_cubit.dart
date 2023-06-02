@@ -2,9 +2,9 @@
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_management_system_api/data/note_data.dart';
-import 'package:note_management_system_api/logic/repositories/category_repository.dart';
-import 'package:note_management_system_api/logic/repositories/status_repository.dart';
-import 'package:note_management_system_api/logic/states/status_state.dart';
+
+import '../repositories/status_repository.dart';
+import '../states/status_state.dart';
 
 class StatusCubit extends Cubit<StatusState>{
   final StatusRepository _repository;
@@ -14,8 +14,44 @@ class StatusCubit extends Cubit<StatusState>{
   Future<NoteData?> getAllData(String email) async {
     emit(LoadingStatusState());
     try {
-      var result = await _repository.getAllData(email);
+      var result = await _repository.getAllStatus(email);
       emit(SuccessLoadAllStatusState(result));
+      return result;
+    } catch (e) {
+      emit(FailureStatusState(e.toString()));
+      return null;
+    }
+  }
+
+  Future<NoteData?> createStatus(String email, String name) async {
+    emit(LoadingStatusState());
+    try {
+      var result = await _repository.createStatus(email, name);
+      emit(SuccessSubmitStatusState(result));
+      return result;
+    } catch (e) {
+      emit(FailureStatusState(e.toString()));
+      return null;
+    }
+  }
+
+  Future<NoteData?> updateStatus(String email, String name, String? nName) async {
+    emit(LoadingStatusState());
+    try {
+      var result = await _repository.updateStatus(email, name, nName);
+      emit(SuccessSubmitStatusState(result));
+      return result;
+    } catch (e) {
+      emit(FailureStatusState(e.toString()));
+      return null;
+    }
+  }
+
+  Future<NoteData?> deleteStatus(String email, String name) async {
+    emit(LoadingStatusState());
+    try {
+      var result = await _repository.deleteStatus(email, name);
+      emit(SuccessSubmitStatusState(result));
       return result;
     } catch (e) {
       emit(FailureStatusState(e.toString()));

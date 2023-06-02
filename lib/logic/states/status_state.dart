@@ -15,9 +15,13 @@ class FailureStatusState extends StatusState{
 }
 
 class SuccessLoadAllStatusState extends StatusState{
-  SuccessLoadAllStatusState(data);
+  SuccessLoadAllStatusState(data) : super() {
+    this.data = data;
+  }
 }
 
 class SuccessSubmitStatusState extends StatusState{
-  SuccessSubmitStatusState(data);
+  SuccessSubmitStatusState(data) : super() {
+    this.data = data;
+  }
 }

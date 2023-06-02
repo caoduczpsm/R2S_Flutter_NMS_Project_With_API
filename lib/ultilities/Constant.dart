@@ -21,10 +21,37 @@ class Constant {
   static const KEY_CATEGORY_READ_ALL = "$KEY_BASE_URL/get?tab=Category&email=";
 
   // ignore: constant_identifier_names
+  static const KEY_CREATE_CATEGORY = "$KEY_BASE_URL/add?tab=Category&email=";
+
+  // ignore: constant_identifier_names
+  static const KEY_UPDATE_CATEGORY = "$KEY_BASE_URL/update?tab=Category&email=";
+
+  // ignore: constant_identifier_names
+  static const KEY_DELETE_CATEGORY = "$KEY_BASE_URL/del?tab=Category&email=";
+
+  // ignore: constant_identifier_names
   static const KEY_STATUS_READ_ALL = "$KEY_BASE_URL/get?tab=Status&email=";
 
   // ignore: constant_identifier_names
+  static const KEY_CREATE_STATUS = "$KEY_BASE_URL/add?tab=Status&email=";
+
+  // ignore: constant_identifier_names
+  static const KEY_UPDATE_STATUS = "$KEY_BASE_URL/update?tab=Status&email=";
+
+  // ignore: constant_identifier_names
+  static const KEY_DELETE_STATUS = "$KEY_BASE_URL/del?tab=Status&email=";
+
+  // ignore: constant_identifier_names
   static const KEY_PRIORITY_READ_ALL = "$KEY_BASE_URL/get?tab=Priority&email=";
+
+  // ignore: constant_identifier_names
+  static const KEY_CREATE_PRIORITY = "$KEY_BASE_URL/add?tab=Priority&email=";
+
+  // ignore: constant_identifier_names
+  static const KEY_UPDATE_PRIORITY = "$KEY_BASE_URL/update?tab=Priority&email=";
+
+  // ignore: constant_identifier_names
+  static const KEY_DELETE_PRIORITY = "$KEY_BASE_URL/del?tab=Priority&email=";
 
   // ignore: constant_identifier_names
   static const PRIMARY_COLOR = Color(0XFF4CAEE3);
