@@ -20,6 +20,7 @@ class SignUpForm extends StatelessWidget {
   SignUpForm({Key? key}) : super(key: key);
 
   DrawerCubit drawerCubit = DrawerCubit();
+
   late bool isEnglish = false;
 
   Future<void> initLanguage() async {
