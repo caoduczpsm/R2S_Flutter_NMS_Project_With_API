@@ -10,6 +10,8 @@ import 'package:note_management_system_api/ultilities/Constant.dart';
 import 'package:pie_chart/pie_chart.dart';
 // ignore: depend_on_referenced_packages
 import 'package:shared_preferences/shared_preferences.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatelessWidget {
@@ -63,7 +65,12 @@ class _HomeScreenState extends State<_HomeScreen> {
                   child: BlocBuilder<ChartCubit, ChartState>(
                       builder: (cubitContext, state) {
                     if (state is LoadingChartState) {
-                      return const CircularProgressIndicator();
+                      return const Center(
+                        child: SpinKitThreeInOut(
+                          color: Colors.blueAccent,
+                          size: 50.0,
+                        ),
+                      );
                     } else {
                       return Scaffold(
                           body: PieChart(
@@ -101,7 +108,10 @@ class _HomeScreenState extends State<_HomeScreen> {
             }
           } else {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: SpinKitThreeInOut(
+                color: Colors.blueAccent,
+                size: 50.0,
+              ),
             );
           }
         });

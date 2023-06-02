@@ -10,6 +10,8 @@ import '../../logic/repositories/category_repository.dart';
 import '../../logic/states/category_state.dart';
 import '../../ultilities/Constant.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 // ignore: must_be_immutable
 class CategoryScreen extends StatelessWidget {
@@ -257,7 +259,12 @@ class _CategoryScreenState extends State<_CategoryScreen> {
                   builder: (context, state) {
                     if (state is InitialCategoryState ||
                         state is LoadingCategoryState) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(
+                        child: SpinKitThreeInOut(
+                          color: Colors.blueAccent,
+                          size: 50.0,
+                        ),
+                      );
                     } else if (state is SuccessLoadAllCategoryState) {
                       final category = state.data?.data;
                       return Padding(
@@ -334,7 +341,12 @@ class _CategoryScreenState extends State<_CategoryScreen> {
                   child: const Icon(Icons.add)),
             );
           } else {
-            return const CircularProgressIndicator();
+            return const Center(
+              child: SpinKitThreeInOut(
+                color: Colors.blueAccent,
+                size: 50.0,
+              ),
+            );
           }
         });
   }

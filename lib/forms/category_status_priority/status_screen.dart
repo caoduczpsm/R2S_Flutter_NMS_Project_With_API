@@ -10,6 +10,8 @@ import '../../logic/cubits/status_cubit.dart';
 import '../../logic/repositories/status_repository.dart';
 import '../../ultilities/Constant.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 // ignore: must_be_immutable
 class StatusScreen extends StatelessWidget {
@@ -247,7 +249,12 @@ class _StatusScreenState extends State<_StatusScreen> {
                 child: BlocBuilder<StatusCubit, StatusState>(
                   builder: (context, state) {
                     if (state is InitialStatusState || state is LoadingStatusState){
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(
+                        child: SpinKitThreeInOut(
+                          color: Colors.blueAccent,
+                          size: 50.0,
+                        ),
+                      );
                     } else if (state is SuccessLoadAllStatusState) {
                       final status = state.data?.data;
                       return Padding(
@@ -316,7 +323,12 @@ class _StatusScreenState extends State<_StatusScreen> {
                   child: const Icon(Icons.add)),
             );
           } else {
-            return const CircularProgressIndicator();
+            return const Center(
+              child: SpinKitThreeInOut(
+                color: Colors.blueAccent,
+                size: 50.0,
+              ),
+            );
           }
         });
 

@@ -10,6 +10,8 @@ import '../../logic/cubits/priority_cubit.dart';
 import '../../logic/repositories/priority_repository.dart';
 import '../../ultilities/Constant.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 // ignore: must_be_immutable
 class PriorityScreen extends StatelessWidget {
@@ -259,7 +261,12 @@ class _PriorityScreenState extends State<_PriorityScreen> {
                   builder: (context, state) {
                     if (state is InitialPriorityState ||
                         state is LoadingPriorityState) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(
+                        child: SpinKitThreeInOut(
+                          color: Colors.blueAccent,
+                          size: 50.0,
+                        ),
+                      );
                     } else if (state is SuccessLoadAllPriorityState) {
                       final priority = state.data?.data;
                       return Padding(
@@ -340,7 +347,12 @@ class _PriorityScreenState extends State<_PriorityScreen> {
                   child: const Icon(Icons.add)),
             );
           } else {
-            return const CircularProgressIndicator();
+            return const Center(
+              child: SpinKitThreeInOut(
+                color: Colors.blueAccent,
+                size: 50.0,
+              ),
+            );
           }
         });
   }

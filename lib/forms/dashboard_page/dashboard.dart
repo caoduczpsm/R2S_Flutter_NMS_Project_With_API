@@ -15,6 +15,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import '../../logic/states/drawer_state.dart';
 // ignore: depend_on_referenced_packages
 import 'package:restart_app/restart_app.dart';
+
 // ignore: must_be_immutable
 class NoteApp extends StatelessWidget {
   NoteApp({super.key});

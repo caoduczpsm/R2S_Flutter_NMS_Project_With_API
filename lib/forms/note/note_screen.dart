@@ -18,6 +18,8 @@ import '../../logic/repositories/note_repository.dart';
 import '../../logic/states/note_state.dart';
 import 'custom_paint_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class NoteScreen extends StatelessWidget {
   const NoteScreen({super.key});
@@ -618,7 +620,10 @@ class _NoteScreenState extends State<_NoteScreen> {
                     if (state is InitialNoteState ||
                         state is LoadingNoteState) {
                       return const Center(
-                        child: CircularProgressIndicator(),
+                        child: SpinKitThreeInOut(
+                          color: Colors.blueAccent,
+                          size: 50.0,
+                        ),
                       );
                     } else if (state is SuccessLoadAllNoteState) {
                       final note = state.notes?.data;
@@ -703,7 +708,11 @@ class _NoteScreenState extends State<_NoteScreen> {
                   child: const Icon(Icons.add)),
             );
           } else {
-            return const CircularProgressIndicator();
+            return const Center(
+                child: SpinKitThreeInOut(
+                color: Colors.blueAccent,
+                size: 50.0,
+            ));
           }
         });
   }
