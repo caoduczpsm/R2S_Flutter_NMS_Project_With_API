@@ -32,6 +32,9 @@ class NoteApp extends StatelessWidget {
   late SharedPreferences preferences;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
+  Future<void> initLanguage() async {
+    isEnglish = await drawerCubit.initLanguage();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +44,7 @@ class NoteApp extends StatelessWidget {
         builder: (context, snapshot) {
           if(snapshot.hasData) {
             preferences = snapshot.data!;
-            isEnglish = drawerCubit.initLanguage();
-
+            initLanguage();
             email = drawerCubit.getEmail();
             firstName = drawerCubit.getFirstName()!;
             lastName = drawerCubit.getLastName()!;

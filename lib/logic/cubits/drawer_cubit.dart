@@ -83,7 +83,8 @@ class DrawerCubit extends Cubit<DrawerState> {
     return preferences;
   }
 
-  bool initLanguage() {
+  Future<bool> initLanguage() async {
+    preferences = await SharedPreferences.getInstance();
     if(preferences.getString(Constant.KEY_LANGUAGE) == Constant.KEY_VIETNAMESE) {
       currentTitle = "Trang chủ";
       return true;
@@ -111,7 +112,7 @@ class DrawerCubit extends Cubit<DrawerState> {
 
   String? getFullName(){
     String? firstName = preferences.getString(Constant.KEY_FIRST_NAME);
-    String? lastName = preferences.getString(Constant.KEY_LAST_NAME);;
+    String? lastName = preferences.getString(Constant.KEY_LAST_NAME);
     if (firstName!.contains(RegExp(r'[a-zA-Z]')) && lastName!.contains(RegExp(r'[a-zA-Z]'))) {
       return "$lastName $firstName";
     } else {

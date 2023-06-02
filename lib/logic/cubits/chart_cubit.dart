@@ -20,4 +20,6 @@ class ChartCubit extends Cubit<ChartState> {
       return NoteData(data: []);
     }
   }
+
+
 }
