@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,12 +45,8 @@ class _HomeScreenState extends State<_HomeScreen> {
     preference = await SharedPreferences.getInstance();
     email = preference.getString(Constant.KEY_EMAIL)!;
     data = await chartCubit.getAllNotes(email);
-    data.data?.forEach((element) {
-      dataMap[element[0]] = double.parse(element[1]);
-      randomColors.add(Color.fromARGB(Random().nextInt(256),
-          Random().nextInt(256), Random().nextInt(256), Random().nextInt(256)));
-    });
-    return dataMap;
+    randomColors = chartCubit.randomListColor(data);
+    return chartCubit.toMapData(email, data);
   }
 
   @override
@@ -61,6 +55,7 @@ class _HomeScreenState extends State<_HomeScreen> {
         future: getData(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            dataMap = snapshot.data!;
             if (dataMap.isNotEmpty) {
               return Scaffold(
                 body: BlocProvider.value(

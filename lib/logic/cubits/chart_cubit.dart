@@ -1,4 +1,7 @@
 // ignore: depend_on_referenced_packages
+import 'dart:math';
+import 'dart:ui';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_management_system_api/data/note_data.dart';
 import 'package:note_management_system_api/logic/repositories/chart_repository.dart';
@@ -21,5 +24,21 @@ class ChartCubit extends Cubit<ChartState> {
     }
   }
 
+  Map<String, double> toMapData(String email, NoteData noteData) {
+    Map<String, double> dataMap = {};
+    noteData.data?.forEach((element) {
+      dataMap[element[0]] = double.parse(element[1]);
+    });
+    return dataMap;
+  }
+
+  List<Color> randomListColor(NoteData noteData){
+    List<Color> randomColors = [];
+    for (var i = 0; i < noteData.data!.length; i++){
+      randomColors.add(Color.fromARGB(Random().nextInt(256),
+          Random().nextInt(256), Random().nextInt(256), Random().nextInt(256)));
+    }
+    return randomColors;
+  }
 
 }
