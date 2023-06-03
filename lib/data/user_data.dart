@@ -37,10 +37,10 @@ class Info {
 }
 
 class User {
-  final String email;
-  final String password;
+  String? email;
+  String? password;
   Info? info;
 
-  User ({required this.email, required this.password,this.info});
+  User ({this.email, this.password,this.info});
 
 }

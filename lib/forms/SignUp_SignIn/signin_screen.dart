@@ -135,8 +135,8 @@ class _MySignInFormState extends State<_MySignInForm> {
                 } else {
                   loginData.setBool(Constant.KEY_IS_REMEMBER, false);
                 }
-                loginData.setString(Constant.KEY_EMAIL, user.email);
-                loginData.setString(Constant.KEY_PASSWORD, user.password);
+                loginData.setString(Constant.KEY_EMAIL, user.email!);
+                loginData.setString(Constant.KEY_PASSWORD, UserCubit.hashPassword(user.password!));
                 Info? userInfo = user.info;
                 loginData.setString(Constant.KEY_FIRST_NAME, userInfo!.firstName);
                 loginData.setString(Constant.KEY_LAST_NAME, userInfo.lastName);

@@ -52,7 +52,7 @@ class UserRepository {
   }
 
   static Future<UserData> signIn(User user) async {
-    final uri = Uri.parse('${Constant.KEY_BASE_URL}/login/?email=${user.email}&pass=${UserCubit.hashPassword(user.password)}');
+    final uri = Uri.parse('${Constant.KEY_BASE_URL}/login/?email=${user.email}&pass=${UserCubit.hashPassword(user.password!)}');
 
     final response = await http.get(uri);
 
@@ -67,7 +67,7 @@ class UserRepository {
   static Future<UserData> signUp(User user) async {
     Info? info = user.info;
     final uri = Uri.parse(
-        '${Constant.KEY_BASE_URL}/signup?email=${user.email}&pass=${UserCubit.hashPassword(user.password)}&firstname=${info?.firstName}&lastname=${info?.lastName}');
+        '${Constant.KEY_BASE_URL}/signup?email=${user.email}&pass=${UserCubit.hashPassword(user.password!)}&firstname=${info?.firstName}&lastname=${info?.lastName}');
 
     final response = await http.get(uri);
 
@@ -77,7 +77,37 @@ class UserRepository {
     } else {
       throw Exception('Failed to Sign Up');
     }
+  }
 
+  static Future<UserData> editProfile(User user, String newEmail) async {
+    Info? info = user.info;
 
+    final uri = Uri.parse('${Constant.KEY_BASE_URL}/update?tab=Profile&email=${user.email}'
+        '&nemail=$newEmail&firstname=${info?.firstName}&lastname=${info?.lastName}'
+    );
+
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200){
+      final responseBody = json.decode(response.body);
+      return UserData.fromJson(responseBody);
+    } else {
+      throw Exception('Failed to Edit Profile');
+    }
+  }
+
+  static Future<UserData> changePassword(User user, String newPass) async {
+
+    final uri = Uri.parse('${Constant.KEY_BASE_URL}/update?tab=Profile&'
+        'email=${user.email}&pass=${user.password}&npass=$newPass');
+
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200){
+      final responseBody = json.decode(response.body);
+      return UserData.fromJson(responseBody);
+    } else {
+      throw Exception('Failed to Change Password');
+    }
   }
 }

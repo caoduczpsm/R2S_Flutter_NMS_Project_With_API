@@ -122,6 +122,10 @@ class DrawerCubit extends Cubit<DrawerState> {
     }
   }
 
+  String getPassword(SharedPreferences preferences) {
+    return preferences.getString(Constant.KEY_PASSWORD)!;
+  }
+
   bool getSwitchStatus() {
     return switchStatus;
   }
