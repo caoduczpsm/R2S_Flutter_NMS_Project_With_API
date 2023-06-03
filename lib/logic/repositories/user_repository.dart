@@ -1,11 +1,11 @@
 
 import 'dart:convert';
-
 import 'package:note_management_system_api/data/user_data.dart';
 import 'package:note_management_system_api/logic/cubits/user_cubit.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../ultilities/Constant.dart';
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
+
 class UserRepository {
 
   static int checkValidEmail(String email){

@@ -47,6 +47,23 @@
     "note_error_plan_date" : "Please select completion date starting from current date",
     "delete_note_error_6_months" : "Cannot delete this note because less 6 months",
 
+    "change_success" : "Change Successfully",
+    "change_password" : "Change Password",
+    "current_password" : "Current password",
+    "please_enter_password" : "Please enter password",
+    "change" : "Change",
+
+    "edit_success" : "Edit Successfully",
+    "edit_profile" : "Edit Profile",
+    "first_name" : "First Name",
+    "last_name" : "Last Name",
+    "please_enter_first_name" : "Please enter first name",
+    "please_enter_last_name" : "Please enter last name",
+    "error_first_name_32c" : "First name has a length of 2 - 32 characters",
+    "error_last_name_32c" : "Last name has a length of 2 - 32 characters",
+    "error_name_space" : "Please do not end with a space",
+
+
     "delete_confirm" : "Delete Confirm",
     "delete_title" : "Are you sure you want to delete this?",
     "yes" : "Yes",

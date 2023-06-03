@@ -10,6 +10,7 @@ import '../../logic/states/user_state.dart';
 import '../../ultilities/Constant.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // ignore: must_be_immutable
 class EditProfileScreen extends StatelessWidget {
@@ -80,7 +81,7 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
                           SnackBar(content: Text(state.errorMessage)));
                     } else if (state is SuccessEditProfileState){
                       ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Edit Successfully')));
+                          SnackBar(content: Text(AppLocalizations.of(context).edit_success)));
                     }
                   },
                   builder: (context, state){
@@ -116,9 +117,9 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
         const SizedBox(
           height: 30,
         ),
-        const Center(
-          child: Text('Edit Profile'
-            ,style: TextStyle(
+        Center(
+          child: Text(AppLocalizations.of(context).edit_profile
+            ,style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.grey,
@@ -132,10 +133,10 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
           child: Column(
             children: [
               TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'First Name',
-                  prefixIcon: Icon(Icons.drive_file_rename_outline, color: Constant.PRIMARY_COLOR,),
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).first_name,
+                  prefixIcon: const Icon(Icons.drive_file_rename_outline, color: Constant.PRIMARY_COLOR,),
+                  border: const OutlineInputBorder(),
                 ),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(
@@ -144,15 +145,15 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
                 ],
                 validator: (value){
                   if (value == null || value.isEmpty){
-                    return 'Please enter First Name';
+                    return AppLocalizations.of(context).please_enter_first_name;
                   } else {
                     int result = UserRepository.checkValidName(_firstName.text);
                     switch (result){
                       case Constant.KEY_EMAIL_HAS_LENGTH_LESS_6_CHAR: {
-                        return 'First Name has a length of 2 - 32 characters';
+                        return AppLocalizations.of(context).error_first_name_32c;
                       }
                       case Constant.KEY_EMAIL_HAS_LENGTH_GREATER_256_CHAR: {
-                        return 'Please do not end with a space';
+                        return AppLocalizations.of(context).error_name_space;
                       }
                     }
                   }
@@ -164,10 +165,10 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
                 height: 20,
               ),
               TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Last Name',
-                  prefixIcon: Icon(Icons.drive_file_rename_outline, color: Constant.PRIMARY_COLOR,),
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).last_name,
+                  prefixIcon: const Icon(Icons.drive_file_rename_outline, color: Constant.PRIMARY_COLOR,),
+                  border: const OutlineInputBorder(),
                 ),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(
@@ -176,15 +177,15 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
                 ],
                 validator: (value){
                   if (value == null || value.isEmpty){
-                    return 'Please enter Last Name';
+                    return AppLocalizations.of(context).please_enter_last_name;
                   } else {
                     int result = UserRepository.checkValidName(_lastName.text);
                     switch (result){
                       case Constant.KEY_EMAIL_HAS_LENGTH_LESS_6_CHAR: {
-                        return 'First Name has a length of 2 - 32 characters';
+                        return AppLocalizations.of(context).error_last_name_32c;
                       }
                       case Constant.KEY_EMAIL_HAS_LENGTH_GREATER_256_CHAR: {
-                        return 'Please do not end with a space';
+                        return AppLocalizations.of(context).error_name_space;
                       }
                     }
                   }
@@ -206,18 +207,18 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty){
-                    return 'Please enter email';
+                    return AppLocalizations.of(context).please_email;
                   } else {
                     int result = UserRepository.checkValidEmail(_email.text);
                     switch (result){
                       case 1: {
-                        return 'Please enter at least 6 characters';
+                        return AppLocalizations.of(context).please_6c;
                       }
                       case 2: {
-                        return 'Please enter up to 256 characters';
+                        return AppLocalizations.of(context).please_256c;
                       }
                       case 3: {
-                        return 'Invalid Email';
+                        return AppLocalizations.of(context).invalid_email;
                       }
                     }
                   }
@@ -261,7 +262,7 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
                         // });
                       }
                     },
-                    child: const Text('Change'),
+                    child: Text(AppLocalizations.of(context).change),
                   ),
                   ElevatedButton(
                     onPressed:(){
@@ -271,7 +272,7 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
                       // => NoteApp()));
 
                     },
-                    child: const Text('Home'),
+                    child: Text(AppLocalizations.of(context).home),
                   )
                 ],
               )

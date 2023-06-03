@@ -10,15 +10,15 @@ import '../../logic/states/user_state.dart';
 import '../../ultilities/Constant.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // ignore: must_be_immutable
 class ChangePasswordScreen extends StatelessWidget {
-
   const ChangePasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return  BlocProvider(
+    return BlocProvider(
       create: (_) => UserCubit(),
       child: const _ChangePasswordScreen(),
     );
@@ -27,7 +27,6 @@ class ChangePasswordScreen extends StatelessWidget {
 
 // ignore: must_be_immutable
 class _ChangePasswordScreen extends StatefulWidget {
-
   const _ChangePasswordScreen({Key? key}) : super(key: key);
 
   @override
@@ -36,7 +35,6 @@ class _ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<_ChangePasswordScreen> {
-
   DrawerCubit drawerCubit = DrawerCubit();
   late SharedPreferences preferences;
 
@@ -64,59 +62,61 @@ class _ChangePasswordScreenState extends State<_ChangePasswordScreen> {
     return FutureBuilder<SharedPreferences>(
         future: drawerCubit.initSharePreference(),
         builder: (context, snapshot) {
-          if (snapshot.hasData){
+          if (snapshot.hasData) {
             preferences = snapshot.data!;
             getData(preferences);
             return Scaffold(
-                body: BlocConsumer<UserCubit, UserState>(
-                listener: (context, state){
-                  if (state is FailureUserState){
+              body: BlocConsumer<UserCubit, UserState>(
+                listener: (context, state) {
+                  if (state is FailureUserState) {
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(state.errorMessage)));
-                  } else if (state is SuccessChangePasswordState){
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Change Successfully')));
+                  } else if (state is SuccessChangePasswordState) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content:
+                            Text(AppLocalizations.of(context).change_success)));
                   }
                 },
                 builder: (context, state) {
-                  if (state is SuccessChangePasswordState){
+                  if (state is SuccessChangePasswordState) {
                     User user = state.user;
-                    preferences.setString(Constant.KEY_PASSWORD,user.password!);
+                    preferences.setString(
+                        Constant.KEY_PASSWORD, user.password!);
                     getData(preferences);
                     refreshData();
                     return _changePassword();
-                  }
-                  else if (state is LoadingUserState){
+                  } else if (state is LoadingUserState) {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
                   }
                   return _changePassword();
-                  },
-                ),
+                },
+              ),
             );
           } else {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
-        }
-    );
+        });
   }
 
-  Widget _changePassword(){
+  Widget _changePassword() {
     return Column(
       children: [
         const SizedBox(
           height: 30,
         ),
-        const Center(
-          child: Text('Change Password'
-            ,style: TextStyle(
+        Center(
+          child: Text(
+            AppLocalizations.of(context).change_password,
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.grey,
-            ),),
+            ),
+          ),
         ),
         const SizedBox(
           height: 30,
@@ -126,14 +126,17 @@ class _ChangePasswordScreenState extends State<_ChangePasswordScreen> {
           child: Column(
             children: [
               TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Current Password',
-                  prefixIcon: Icon(Icons.password, color: Constant.PRIMARY_COLOR,),
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).current_password,
+                  prefixIcon: const Icon(
+                    Icons.password,
+                    color: Constant.PRIMARY_COLOR,
+                  ),
+                  border: const OutlineInputBorder(),
                 ),
-                validator: (value){
-                  if (value == null || value.isEmpty){
-                    return 'Please enter password';
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return AppLocalizations.of(context).please_enter_password;
                   }
                   return null;
                 },
@@ -144,29 +147,39 @@ class _ChangePasswordScreenState extends State<_ChangePasswordScreen> {
                 height: 20,
               ),
               TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  prefixIcon: Icon(Icons.key, color: Constant.PRIMARY_COLOR,),
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).password,
+                  prefixIcon: const Icon(
+                    Icons.key,
+                    color: Constant.PRIMARY_COLOR,
+                  ),
+                  border: const OutlineInputBorder(),
                 ),
                 inputFormatters: [
                   FilteringTextInputFormatter.deny(RegExp(r"\s")),
                 ],
-                validator: (value){
-                  if (value == null || value.isEmpty){
-                    return 'Please enter password';
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return AppLocalizations.of(context).please_enter_password;
                   } else {
-                    int result = UserRepository.checkValidPassword(_password.text);
-                    switch (result){
-                      case Constant.KEY_PASSWORD_LENGTH_INVALID: {
-                        return 'Password length from 6 - 32 characters';
-                      }
-                      case Constant.KEY_PASSWORD_WITHOUT_CAPTCHA: {
-                        return 'Please enter at least 1 capital letter';
-                      }
-                      case Constant.KEY_PASSWORD_WITHOUT_NUMBERS: {
-                        return 'Please enter at least 1 number';
-                      }
+                    int result =
+                        UserRepository.checkValidPassword(_password.text);
+                    switch (result) {
+                      case Constant.KEY_PASSWORD_LENGTH_INVALID:
+                        {
+                          return AppLocalizations.of(context)
+                              .please_password_6_to_32;
+                        }
+                      case Constant.KEY_PASSWORD_WITHOUT_CAPTCHA:
+                        {
+                          return AppLocalizations.of(context)
+                              .please_password_1_capital;
+                        }
+                      case Constant.KEY_PASSWORD_WITHOUT_NUMBERS:
+                        {
+                          return AppLocalizations.of(context)
+                              .please_password_1_number;
+                        }
                     }
                   }
                   return null;
@@ -181,16 +194,20 @@ class _ChangePasswordScreenState extends State<_ChangePasswordScreen> {
                 height: 20,
               ),
               TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Re-Password',
-                  prefixIcon: Icon(Icons.key, color: Constant.PRIMARY_COLOR,),
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).re_password,
+                  prefixIcon: const Icon(
+                    Icons.key,
+                    color: Constant.PRIMARY_COLOR,
+                  ),
+                  border: const OutlineInputBorder(),
                 ),
-                validator: (value){
-                  if (value == null || value.isEmpty){
-                    return 'Please enter re-password';
-                  } else if (_password.text!=value){
-                    return 'Password does not match!';
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return AppLocalizations.of(context).please_re_password;
+                  } else if (_password.text != value) {
+                    return AppLocalizations.of(context)
+                        .please_password_do_match;
                   }
                   return null;
                 },
@@ -204,15 +221,19 @@ class _ChangePasswordScreenState extends State<_ChangePasswordScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    onPressed:() async {
-                      if (_changePasswordForm.currentState!.validate()){
-                        String newPassword = UserCubit.hashPassword(_password.text);
+                    onPressed: () async {
+                      if (_changePasswordForm.currentState!.validate()) {
+                        String newPassword =
+                            UserCubit.hashPassword(_password.text);
                         User user = User(
                           email: email,
-                          password: UserCubit.hashPassword(_currentPassword.text),
+                          password:
+                              UserCubit.hashPassword(_currentPassword.text),
                         );
 
-                        context.read<UserCubit>().changePassword(user, newPassword);
+                        context
+                            .read<UserCubit>()
+                            .changePassword(user, newPassword);
 
                         // if (user.password
                         //     == userController.hashPassword(_currentPassword.text.trim())) {
@@ -239,22 +260,21 @@ class _ChangePasswordScreenState extends State<_ChangePasswordScreen> {
                         // //  }
                       }
                     },
-                    child: const Text('Change'),
+                    child: Text(AppLocalizations.of(context).change),
                   ),
                   ElevatedButton(
-                    onPressed:(){
+                    onPressed: () {
                       // Navigator.of(context)
                       //     .push(MaterialPageRoute(builder: (context)
                       // => NoteManagementApp(user: user)));
                     },
-                    child: const Text('Home'),
+                    child: Text(AppLocalizations.of(context).home),
                   )
                 ],
               )
             ],
           ),
         ),
-
       ],
     );
   }

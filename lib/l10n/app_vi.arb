@@ -47,6 +47,22 @@
     "note_error_plan_date" : "Vui lòng chọn ngày thực hiện bắt đầu từ ngày hôm nay",
     "delete_note_error_6_months" : "Không thể xóa ghi chú này vì ngày hoàn thành nhỏ hơn 6 tháng",
 
+    "change_success" : "Change Successfully",
+    "change_password" : "Change Password",
+    "current_password" : "Current password",
+    "please_enter_password" : "Please enter password",
+    "change" : "Change",
+
+    "edit_success" : "Thay đổi thành công",
+    "edit_profile" : "Thay đổi thông tin",
+    "first_name" : "Họ",
+    "last_name" : "Tên",
+    "please_enter_first_name" : "Vui lòng nhập họ",
+    "please_enter_last_name" : "Vui lòng nhập tên",
+    "error_first_name_32c" : "Họ phải từ 2 đến 32 ký tự",
+    "error_last_name_32c" : "Tên phải từ 2 đến 32 ký tự",
+    "error_name_space" : "Không chưa khoảng cách",
+
     "delete_confirm" : "Xác nhận xóa",
     "delete_title" : "Bạn có chắc chắn muốn xóa không?",
     "yes" : "Đồng ý",
