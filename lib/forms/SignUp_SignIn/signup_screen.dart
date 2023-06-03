@@ -266,7 +266,7 @@ class _MySignUpFormState extends State<_MySignUpForm> {
                               AppLocalizations.of(context).sign_up,
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 16,
+                                fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -308,7 +308,7 @@ class _MySignUpFormState extends State<_MySignUpForm> {
                               AppLocalizations.of(context).sign_in,
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 16,
+                                fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
