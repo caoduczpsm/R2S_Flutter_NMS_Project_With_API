@@ -22,10 +22,7 @@ class SignUpForm extends StatelessWidget {
   DrawerCubit drawerCubit = DrawerCubit();
 
   late bool isEnglish = false;
-
-  Future<void> initLanguage() async {
-    isEnglish = await drawerCubit.initLanguage();
-  }
+  late SharedPreferences preferences;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +30,10 @@ class SignUpForm extends StatelessWidget {
       future: drawerCubit.initSharePreference(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          initLanguage();
+
+          preferences = snapshot.data!;
+          isEnglish = drawerCubit.initLanguage(preferences);
+
           return MaterialApp(
             supportedLocales: const [
               Locale(Constant.KEY_ENGLISH),

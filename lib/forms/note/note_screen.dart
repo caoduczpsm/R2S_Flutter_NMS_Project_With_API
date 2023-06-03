@@ -164,7 +164,7 @@ class _NoteScreenState extends State<_NoteScreen> {
                         height: 10,
                       ),
                       TextFormField(
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 20, color: Colors.black),
                         controller: nameController,
                         decoration: InputDecoration(
                           filled: true,
@@ -211,7 +211,7 @@ class _NoteScreenState extends State<_NoteScreen> {
                                 ),
                                 controller:
                                     TextEditingController(text: _selectedDate),
-                                style: const TextStyle(fontSize: 20),
+                                style: const TextStyle(fontSize: 20, color: Colors.black),
                                 textAlign: TextAlign.left)),
                       ),
                       const SizedBox(height: 10),
@@ -311,63 +311,69 @@ class _NoteScreenState extends State<_NoteScreen> {
                         onPressed: () async {
                           Navigator.of(context).pop();
                           if (nameController.text.isNotEmpty) {
-                            if (note == null) {
-                              NoteData? result = await noteCubit.createNote(
-                                  email,
-                                  nameController.text,
-                                  priorityDropdownValue,
-                                  categoryDropdownValue,
-                                  statusDropdownValue,
-                                  _selectedDate);
-                              if (result != null) {
-                                if (result.status == Constant.KEY_STATUS_1) {
-                                  if (!mounted) return;
-                                  showMessage(AppLocalizations.of(context)
-                                      .create_successful);
-                                  noteCubit.getAllNotes(email);
-                                } else if (result.status ==
-                                        Constant.KEY_STATUS__1 &&
-                                    result.error == Constant.KEY_ERROR_2) {
-                                  if (!mounted) return;
-                                  showMessage(AppLocalizations.of(context)
-                                      .create_error_name);
+                            if (noteCubit.isFromThisDay(_selectedDate)) {
+                              if (note == null) {
+                                NoteData? result = await noteCubit.createNote(
+                                    email,
+                                    nameController.text,
+                                    priorityDropdownValue,
+                                    categoryDropdownValue,
+                                    statusDropdownValue,
+                                    _selectedDate);
+                                if (result != null) {
+                                  if (result.status == Constant.KEY_STATUS_1) {
+                                    if (!mounted) return;
+                                    showMessage(AppLocalizations.of(context)
+                                        .create_successful);
+                                    noteCubit.getAllNotes(email);
+                                  } else if (result.status ==
+                                          Constant.KEY_STATUS__1 &&
+                                      result.error == Constant.KEY_ERROR_2) {
+                                    if (!mounted) return;
+                                    showMessage(AppLocalizations.of(context)
+                                        .create_error_name);
+                                  }
+                                }
+                              } else {
+                                NoteData? result;
+                                if (note[0] == nameController.text) {
+                                  result = await noteCubit.updateNote(
+                                      email,
+                                      nameController.text,
+                                      "",
+                                      priorityDropdownValue,
+                                      categoryDropdownValue,
+                                      statusDropdownValue,
+                                      _selectedDate);
+                                } else {
+                                  result = await noteCubit.updateNote(
+                                      email,
+                                      note[0],
+                                      nameController.text,
+                                      priorityDropdownValue,
+                                      categoryDropdownValue,
+                                      statusDropdownValue,
+                                      _selectedDate);
+                                }
+                                if (result != null) {
+                                  if (result.status == Constant.KEY_STATUS_1) {
+                                    if (!mounted) return;
+                                    showMessage(AppLocalizations.of(context)
+                                        .update_successful);
+                                    noteCubit.getAllNotes(email);
+                                  } else if (result.status ==
+                                          Constant.KEY_STATUS__1 &&
+                                      result.error == Constant.KEY_ERROR_2) {
+                                    if (!mounted) return;
+                                    showMessage(AppLocalizations.of(context)
+                                        .create_error_name);
+                                  }
                                 }
                               }
                             } else {
-                              NoteData? result;
-                              if (note[0] == nameController.text) {
-                                result = await noteCubit.updateNote(
-                                    email,
-                                    nameController.text,
-                                    "",
-                                    priorityDropdownValue,
-                                    categoryDropdownValue,
-                                    statusDropdownValue,
-                                    _selectedDate);
-                              } else {
-                                result = await noteCubit.updateNote(
-                                    email,
-                                    note[0],
-                                    nameController.text,
-                                    priorityDropdownValue,
-                                    categoryDropdownValue,
-                                    statusDropdownValue,
-                                    _selectedDate);
-                              }
-                              if (result != null) {
-                                if (result.status == Constant.KEY_STATUS_1) {
-                                  if (!mounted) return;
-                                  showMessage(AppLocalizations.of(context)
-                                      .update_successful);
-                                  noteCubit.getAllNotes(email);
-                                } else if (result.status ==
-                                        Constant.KEY_STATUS__1 &&
-                                    result.error == Constant.KEY_ERROR_2) {
-                                  if (!mounted) return;
-                                  showMessage(AppLocalizations.of(context)
-                                      .create_error_name);
-                                }
-                              }
+                              if (!mounted) return;
+                              showMessage(AppLocalizations.of(context)
+                                  .note_error_plan_date);
                             }
                           } else {
                             if (!mounted) return;
@@ -710,8 +716,8 @@ class _NoteScreenState extends State<_NoteScreen> {
           } else {
             return const Center(
                 child: SpinKitThreeInOut(
-                color: Colors.blueAccent,
-                size: 50.0,
+              color: Colors.blueAccent,
+              size: 50.0,
             ));
           }
         });

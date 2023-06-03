@@ -88,8 +88,7 @@ class DrawerCubit extends Cubit<DrawerState> {
     return preferences;
   }
 
-  Future<bool> initLanguage() async {
-    preferences = await SharedPreferences.getInstance();
+  bool initLanguage(SharedPreferences preferences) {
     if(preferences.getString(Constant.KEY_LANGUAGE) == Constant.KEY_VIETNAMESE) {
       return true;
     } else {
@@ -97,28 +96,23 @@ class DrawerCubit extends Cubit<DrawerState> {
     }
   }
 
-  Future<String?> getEmail() async {
-    preferences = await SharedPreferences.getInstance();
+  String? getEmail(SharedPreferences preferences) {
     return preferences.getString(Constant.KEY_EMAIL);
   }
 
-  Future<String?> getFirstName() async {
-    preferences = await SharedPreferences.getInstance();
+  String? getFirstName(SharedPreferences preferences) {
     return preferences.getString(Constant.KEY_FIRST_NAME);
   }
 
-  Future<String?> getLastName() async {
-    preferences = await SharedPreferences.getInstance();
+  String? getLastName(SharedPreferences preferences) {
     return preferences.getString(Constant.KEY_LAST_NAME);
   }
 
-  Future<bool?> getIsGmail() async {
-    preferences = await SharedPreferences.getInstance();
+  bool getIsGmail(SharedPreferences preferences) {
     return preferences.getBool(Constant.KEY_IS_GMAIL)!;
   }
 
-  Future<String?> getFullName() async {
-    preferences = await SharedPreferences.getInstance();
+  String getFullName(SharedPreferences preferences) {
     String? firstName = preferences.getString(Constant.KEY_FIRST_NAME);
     String? lastName = preferences.getString(Constant.KEY_LAST_NAME);
     if (firstName!.contains(RegExp(r'[a-zA-Z]')) && lastName!.contains(RegExp(r'[a-zA-Z]'))) {

@@ -63,4 +63,15 @@ class NoteCubit extends Cubit<NoteState> {
   String formatDate(DateTime date) {
     return DateFormat('dd/MM/yyyy').format(date);
   }
+
+  bool isLessThan6Months() {
+    return false;
+  }
+
+  bool isFromThisDay(String selectedDate) {
+    var format = DateFormat("dd/MM/yyyy");
+    DateTime date = format.parse(selectedDate);
+    DateTime now = DateTime.now();
+    return date.isAfter(now.subtract(const Duration(days: 1)));
+  }
 }

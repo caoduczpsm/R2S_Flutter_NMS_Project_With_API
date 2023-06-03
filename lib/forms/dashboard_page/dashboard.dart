@@ -35,13 +35,13 @@ class NoteApp extends StatelessWidget {
   late SharedPreferences preferences;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  Future<void> initInfo() async {
-    isEnglish = await drawerCubit.initLanguage();
-    firstName = await drawerCubit.getFirstName();
-    lastName = await drawerCubit.getLastName();
-    isGmail = await drawerCubit.getIsGmail();
-    fullName = await drawerCubit.getFullName();
-    email = await drawerCubit.getEmail();
+  void initInfo(SharedPreferences preferences) {
+    isEnglish = drawerCubit.initLanguage(preferences);
+    firstName = drawerCubit.getFirstName(preferences);
+    lastName = drawerCubit.getLastName(preferences);
+    isGmail = drawerCubit.getIsGmail(preferences);
+    fullName = drawerCubit.getFullName(preferences);
+    email = drawerCubit.getEmail(preferences);
     currentTitle = drawerCubit.getCurrentTitle();
   }
 
@@ -54,7 +54,7 @@ class NoteApp extends StatelessWidget {
         builder: (context, snapshot) {
           if(snapshot.hasData) {
             preferences = snapshot.data!;
-            initInfo();
+            initInfo(preferences);
 
             return  MaterialApp(
               supportedLocales: const [
