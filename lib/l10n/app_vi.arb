@@ -47,11 +47,11 @@
     "note_error_plan_date" : "Vui lòng chọn ngày thực hiện bắt đầu từ ngày hôm nay",
     "delete_note_error_6_months" : "Không thể xóa ghi chú này vì ngày hoàn thành nhỏ hơn 6 tháng",
 
-    "change_success" : "Change Successfully",
-    "change_password" : "Change Password",
-    "current_password" : "Current password",
-    "please_enter_password" : "Please enter password",
-    "change" : "Change",
+    "change_success" : "Thay đổi thành công",
+    "change_password" : "Đổi mật khẩu",
+    "current_password" : "Mật khẩu hiện tại",
+    "please_enter_password" : "Vui lòng nhập mật khẩu",
+    "change" : "Thay đổi",
 
     "edit_success" : "Thay đổi thành công",
     "edit_profile" : "Thay đổi thông tin",
