@@ -23,3 +23,12 @@ class SuccessSignUpUserState extends UserState {
   SuccessSignUpUserState(this.user);
 }
 
+class SuccessEditProfileState extends UserState {
+  final User user;
+  SuccessEditProfileState(this.user);
+}
+
+class SuccessChangePasswordState extends UserState {
+  final User user;
+  SuccessChangePasswordState(this.user);
+}

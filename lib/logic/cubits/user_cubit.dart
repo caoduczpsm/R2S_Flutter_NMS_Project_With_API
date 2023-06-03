@@ -67,4 +67,38 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
+  Future<void> editProfile(User user, String newEmail) async {
+    emit(LoadingUserState());
+
+    try {
+      var result = await UserRepository.editProfile(user, newEmail);
+      if (result.status == Constant.KEY_STATUS_1){
+        user.email = newEmail;
+        user.info = result.info;
+        emit(SuccessEditProfileState(user));
+      } else
+        if (result.status == Constant.KEY_STATUS__1 && result.error == Constant.KEY_ERROR_2){
+          emit(FailureUserState('Email Already Used!'));
+        } else {
+          emit(FailureUserState('Edit Successfully'));
+        }
+    } catch (e){
+      emit(FailureUserState(e.toString()));
+    }
+  }
+
+  Future<void> changePassword(User user, String newPassword) async {
+    emit(LoadingUserState());
+    try {
+      var result = await UserRepository.changePassword(user, newPassword);
+      if (result.status == Constant.KEY_STATUS_1){
+        user.password = newPassword;
+        emit(SuccessChangePasswordState(user));
+      } else if (result.status == Constant.KEY_STATUS__1) {
+        emit(FailureUserState('Wrong Current Password'));
+      }
+    } catch (e) {
+      emit(FailureUserState(e.toString()));
+    }
+  }
 }
