@@ -170,7 +170,8 @@ class _NoteScreenState extends State<_NoteScreen> {
                         height: 10,
                       ),
                       TextFormField(
-                        style: const TextStyle(fontSize: 20, color: Colors.black),
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.black),
                         controller: nameController,
                         decoration: InputDecoration(
                           filled: true,
@@ -217,7 +218,8 @@ class _NoteScreenState extends State<_NoteScreen> {
                                 ),
                                 controller:
                                     TextEditingController(text: _selectedDate),
-                                style: const TextStyle(fontSize: 20, color: Colors.black),
+                                style: const TextStyle(
+                                    fontSize: 20, color: Colors.black),
                                 textAlign: TextAlign.left)),
                       ),
                       const SizedBox(height: 10),
@@ -439,16 +441,19 @@ class _NoteScreenState extends State<_NoteScreen> {
                   if (result != null) {
                     if (result.status == 1) {
                       if (!mounted) return;
-                      showMessage(AppLocalizations.of(context).delete_successful);
+                      showMessage(
+                          AppLocalizations.of(context).delete_successful);
                     } else if (result.status == -1 && result.error == 2) {
                       if (!mounted) return;
-                      showMessage(AppLocalizations.of(context).delete_note_error);
+                      showMessage(
+                          AppLocalizations.of(context).delete_note_error);
                     }
                   }
                 } else {
                   Navigator.of(builderContext).pop(false);
                   if (!mounted) return;
-                  showMessage(AppLocalizations.of(context).delete_note_error_6_months);
+                  showMessage(
+                      AppLocalizations.of(context).delete_note_error_6_months);
                 }
               },
               child: Text(AppLocalizations.of(context).yes),
@@ -625,8 +630,7 @@ class _NoteScreenState extends State<_NoteScreen> {
         value: noteCubit,
         child: BlocBuilder<NoteCubit, NoteState>(
           builder: (context, state) {
-            if (state is InitialNoteState ||
-                state is LoadingNoteState) {
+            if (state is InitialNoteState || state is LoadingNoteState) {
               return const Center(
                 child: SpinKitThreeInOut(
                   color: Colors.blueAccent,
@@ -640,59 +644,52 @@ class _NoteScreenState extends State<_NoteScreen> {
                   child: ListView.builder(
                       itemCount: note?.length,
                       itemBuilder: (context, index) => Dismissible(
-                        background: Container(
-                          color: Colors.red,
-                          child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.start,
-                            crossAxisAlignment:
-                            CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                margin:
-                                const EdgeInsets.only(left: 20),
-                                child: const Icon(
-                                  Icons.delete,
-                                  size: 24,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        secondaryBackground: Container(
-                          color: Colors.green,
-                          child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.end,
-                            crossAxisAlignment:
-                            CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(
-                                    right: 20),
-                                child: const Icon(
-                                  Icons.edit,
-                                  size: 24,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        key: Key(note![index][6]),
-                        confirmDismiss: (direction) async {
-                          if (direction ==
-                              DismissDirection.endToStart) {
-                            _showModalBottomSheet(note[index]);
-                            return false;
-                          } else {
-                            return await _showConfirmDeleteNoteDialog(
-                                note[index]);
-                          }
-                        },
-                        child: buildListCard(note[index], index),
-                      )));
+                            background: Container(
+                              color: Colors.red,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 20),
+                                    child: const Icon(
+                                      Icons.delete,
+                                      size: 24,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            secondaryBackground: Container(
+                              color: Colors.green,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(right: 20),
+                                    child: const Icon(
+                                      Icons.edit,
+                                      size: 24,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            key: Key(note![index][6]),
+                            confirmDismiss: (direction) async {
+                              if (direction == DismissDirection.endToStart) {
+                                _showModalBottomSheet(note[index]);
+                                return false;
+                              } else {
+                                return await _showConfirmDeleteNoteDialog(
+                                    note[index]);
+                              }
+                            },
+                            child: buildListCard(note[index], index),
+                          )));
             } else if (state is FailureNoteState) {
               return Center(
                 child: Text(state.errorMessage),
@@ -704,9 +701,7 @@ class _NoteScreenState extends State<_NoteScreen> {
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            if (categories == null ||
-                status == null ||
-                priorities == null) {
+            if (categories == null || status == null || priorities == null) {
               showMessage(AppLocalizations.of(context).empty);
             } else {
               _showModalBottomSheet(null);

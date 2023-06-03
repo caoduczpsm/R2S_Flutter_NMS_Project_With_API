@@ -34,8 +34,8 @@ class NoteCubit extends Cubit<NoteState> {
     }
   }
 
-  Future<NoteData?> updateNote(String email, String name, String? nName, String priority,
-      String category, String status, String planDate) async {
+  Future<NoteData?> updateNote(String email, String name, String? nName,
+      String priority, String category, String status, String planDate) async {
     emit(LoadingNoteState());
     try {
       var result = await _repository.updateNote(
@@ -66,13 +66,11 @@ class NoteCubit extends Cubit<NoteState> {
 
   bool isNotLessThan6Months(List<dynamic> note) {
     var format = DateFormat("dd/MM/yyyy");
-    DateTime completedDate =
-    format.parse(note[4]);
+    DateTime completedDate = format.parse(note[4]);
     DateTime now = DateTime.now();
 
     bool canDelete =
-        completedDate.isBefore(now.subtract(const Duration(days: 180))) &&
-            completedDate.isBefore(now);
+        completedDate.isBefore(DateTime(now.year, now.month - 6, now.day));
     return canDelete;
   }
 
