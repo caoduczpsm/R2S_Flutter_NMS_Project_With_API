@@ -75,6 +75,11 @@ class _NoteScreenState extends State<_NoteScreen> {
   }
 
   Future<void> getData() async {
+    preference = await drawerCubit.initSharePreference();
+
+    email = preference.getString(Constant.KEY_EMAIL)!;
+    noteCubit.getAllNotes(email);
+
     categories = await categoryCubit.getAllData(email);
     status = await statusCubit.getAllData(email);
     priorities = await priorityCubit.getAllData(email);
@@ -99,6 +104,7 @@ class _NoteScreenState extends State<_NoteScreen> {
         startAnimation = true;
       });
     });
+    getData();
   }
 
   void _showModalBottomSheet(List<dynamic>? note) {
@@ -427,17 +433,22 @@ class _NoteScreenState extends State<_NoteScreen> {
             ),
             TextButton(
               onPressed: () async {
-                Navigator.of(builderContext).pop(true);
-                NoteData? result = await noteCubit.deleteNote(email, note[0]);
-                if (result != null) {
-                  if (result.status == 1) {
-                    //noteCubit.getAllNotes(email);
-                    if (!mounted) return;
-                    showMessage(AppLocalizations.of(context).delete_successful);
-                  } else if (result.status == -1 && result.error == 2) {
-                    if (!mounted) return;
-                    showMessage(AppLocalizations.of(context).delete_note_error);
+                if (noteCubit.isNotLessThan6Months(note)) {
+                  Navigator.of(builderContext).pop(true);
+                  NoteData? result = await noteCubit.deleteNote(email, note[0]);
+                  if (result != null) {
+                    if (result.status == 1) {
+                      if (!mounted) return;
+                      showMessage(AppLocalizations.of(context).delete_successful);
+                    } else if (result.status == -1 && result.error == 2) {
+                      if (!mounted) return;
+                      showMessage(AppLocalizations.of(context).delete_note_error);
+                    }
                   }
+                } else {
+                  Navigator.of(builderContext).pop(false);
+                  if (!mounted) return;
+                  showMessage(AppLocalizations.of(context).delete_note_error_6_months);
                 }
               },
               child: Text(AppLocalizations.of(context).yes),
@@ -596,7 +607,7 @@ class _NoteScreenState extends State<_NoteScreen> {
         Visibility(
           visible: selectedIndex == index,
           child: Container(
-            margin: const EdgeInsets.only(top: 5, bottom: 5, right: 5),
+            margin: const EdgeInsets.only(top: 10, bottom: 5, right: 5),
             child: Text(
               "${AppLocalizations.of(context).created_at}: ${note[6]}",
               style: textNormalStyle,
@@ -609,117 +620,100 @@ class _NoteScreenState extends State<_NoteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: drawerCubit.initSharePreference(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            preference = snapshot.data!;
-            email = preference.getString(Constant.KEY_EMAIL)!;
-            noteCubit.getAllNotes(email);
-            getData();
-
-            return Scaffold(
-              body: BlocProvider.value(
-                value: noteCubit,
-                child: BlocBuilder<NoteCubit, NoteState>(
-                  builder: (context, state) {
-                    if (state is InitialNoteState ||
-                        state is LoadingNoteState) {
-                      return const Center(
-                        child: SpinKitThreeInOut(
-                          color: Colors.blueAccent,
-                          size: 50.0,
-                        ),
-                      );
-                    } else if (state is SuccessLoadAllNoteState) {
-                      final note = state.notes?.data;
-                      return Padding(
-                          padding: const EdgeInsets.only(left: 4, right: 4),
-                          child: ListView.builder(
-                              itemCount: note?.length,
-                              itemBuilder: (context, index) => Dismissible(
-                                    background: Container(
-                                      color: Colors.red,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(left: 20),
-                                            child: const Icon(
-                                              Icons.delete,
-                                              size: 24,
-                                              color: Colors.white,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    secondaryBackground: Container(
-                                      color: Colors.green,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            margin: const EdgeInsets.only(
-                                                right: 20),
-                                            child: const Icon(
-                                              Icons.edit,
-                                              size: 24,
-                                              color: Colors.white,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    key: Key(note![index][6]),
-                                    confirmDismiss: (direction) async {
-                                      if (direction ==
-                                          DismissDirection.endToStart) {
-                                        _showModalBottomSheet(note[index]);
-                                        return false;
-                                      } else {
-                                        return await _showConfirmDeleteNoteDialog(
-                                            note[index]);
-                                      }
-                                    },
-                                    child: buildListCard(note[index], index),
-                                  )));
-                    } else if (state is FailureNoteState) {
-                      return Center(
-                        child: Text(state.errorMessage),
-                      );
-                    }
-                    return Text(state.toString());
-                  },
-                ),
-              ),
-              floatingActionButton: FloatingActionButton(
-                  onPressed: () {
-                    if (categories == null ||
-                        status == null ||
-                        priorities == null) {
-                      showMessage(AppLocalizations.of(context).empty);
-                    } else {
-                      _showModalBottomSheet(null);
-                    }
-                  },
-                  backgroundColor: endColor,
-                  child: const Icon(Icons.add)),
-            );
-          } else {
-            return const Center(
+    return Scaffold(
+      body: BlocProvider.value(
+        value: noteCubit,
+        child: BlocBuilder<NoteCubit, NoteState>(
+          builder: (context, state) {
+            if (state is InitialNoteState ||
+                state is LoadingNoteState) {
+              return const Center(
                 child: SpinKitThreeInOut(
-              color: Colors.blueAccent,
-              size: 50.0,
-            ));
-          }
-        });
+                  color: Colors.blueAccent,
+                  size: 50.0,
+                ),
+              );
+            } else if (state is SuccessLoadAllNoteState) {
+              final note = state.notes?.data;
+              return Padding(
+                  padding: const EdgeInsets.only(left: 4, right: 4),
+                  child: ListView.builder(
+                      itemCount: note?.length,
+                      itemBuilder: (context, index) => Dismissible(
+                        background: Container(
+                          color: Colors.red,
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.start,
+                            crossAxisAlignment:
+                            CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin:
+                                const EdgeInsets.only(left: 20),
+                                child: const Icon(
+                                  Icons.delete,
+                                  size: 24,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        secondaryBackground: Container(
+                          color: Colors.green,
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.end,
+                            crossAxisAlignment:
+                            CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(
+                                    right: 20),
+                                child: const Icon(
+                                  Icons.edit,
+                                  size: 24,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        key: Key(note![index][6]),
+                        confirmDismiss: (direction) async {
+                          if (direction ==
+                              DismissDirection.endToStart) {
+                            _showModalBottomSheet(note[index]);
+                            return false;
+                          } else {
+                            return await _showConfirmDeleteNoteDialog(
+                                note[index]);
+                          }
+                        },
+                        child: buildListCard(note[index], index),
+                      )));
+            } else if (state is FailureNoteState) {
+              return Center(
+                child: Text(state.errorMessage),
+              );
+            }
+            return Text(state.toString());
+          },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            if (categories == null ||
+                status == null ||
+                priorities == null) {
+              showMessage(AppLocalizations.of(context).empty);
+            } else {
+              _showModalBottomSheet(null);
+            }
+          },
+          backgroundColor: endColor,
+          child: const Icon(Icons.add)),
+    );
   }
 }

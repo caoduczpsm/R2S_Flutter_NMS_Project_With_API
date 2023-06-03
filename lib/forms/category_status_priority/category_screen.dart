@@ -124,10 +124,10 @@ class _CategoryScreenState extends State<_CategoryScreen> {
                             );
                             if (result != null) {
                               if (result.status == Constant.KEY_STATUS_1) {
+                                categoryCubit.getAllData(email);
                                 if (!mounted) return;
                                 showMessage(AppLocalizations.of(context)
                                     .create_successful);
-                                categoryCubit.getAllData(email);
                               } else if (result.status ==
                                       Constant.KEY_STATUS__1 &&
                                   result.error == Constant.KEY_ERROR_2) {
@@ -153,10 +153,10 @@ class _CategoryScreenState extends State<_CategoryScreen> {
                             }
                             if (result != null) {
                               if (result.status == Constant.KEY_STATUS_1) {
+                                categoryCubit.getAllData(email);
                                 if (!mounted) return;
                                 showMessage(AppLocalizations.of(context)
                                     .update_successful);
-                                categoryCubit.getAllData(email);
                               } else if (result.status ==
                                       Constant.KEY_STATUS__1 &&
                                   result.error == Constant.KEY_ERROR_2) {

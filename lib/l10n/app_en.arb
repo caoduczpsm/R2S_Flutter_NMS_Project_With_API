@@ -45,6 +45,7 @@
     "delete_note_error" : "Error: Note is less than six months",
     "update_successful" : "Update a note successfully",
     "note_error_plan_date" : "Please select completion date starting from current date",
+    "delete_note_error_6_months" : "Cannot delete this note because less 6 months",
 
     "delete_confirm" : "Delete Confirm",
     "delete_title" : "Are you sure you want to delete this?",

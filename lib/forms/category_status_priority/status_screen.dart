@@ -127,9 +127,9 @@ class _StatusScreenState extends State<_StatusScreen> {
                           nameController.text,);
                         if (result != null) {
                           if (result.status == Constant.KEY_STATUS_1) {
+                            statusCubit.getAllData(email);
                             if(!mounted) return;
                             showMessage(AppLocalizations.of(context).create_successful);
-                            statusCubit.getAllData(email);
                           } else if (result.status == Constant.KEY_STATUS__1 &&
                               result.error == Constant.KEY_ERROR_2) {
                             if(!mounted) return;
@@ -151,9 +151,9 @@ class _StatusScreenState extends State<_StatusScreen> {
                         }
                         if (result != null) {
                           if (result.status == Constant.KEY_STATUS_1) {
+                            statusCubit.getAllData(email);
                             if(!mounted) return;
                             showMessage(AppLocalizations.of(context).update_successful);
-                            statusCubit.getAllData(email);
                           } else if (result.status == Constant.KEY_STATUS__1 &&
                               result.error == Constant.KEY_ERROR_2) {
                             if(!mounted) return;

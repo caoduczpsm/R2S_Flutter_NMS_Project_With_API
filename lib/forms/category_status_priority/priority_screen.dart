@@ -126,10 +126,10 @@ class _PriorityScreenState extends State<_PriorityScreen> {
                             );
                             if (result != null) {
                               if (result.status == Constant.KEY_STATUS_1) {
+                                priorityCubit.getAllData(email);
                                 if (!mounted) return;
                                 showMessage(AppLocalizations.of(context)
                                     .create_successful);
-                                priorityCubit.getAllData(email);
                               } else if (result.status ==
                                       Constant.KEY_STATUS__1 &&
                                   result.error == Constant.KEY_ERROR_2) {
@@ -155,10 +155,10 @@ class _PriorityScreenState extends State<_PriorityScreen> {
                             }
                             if (result != null) {
                               if (result.status == Constant.KEY_STATUS_1) {
+                                priorityCubit.getAllData(email);
                                 if (!mounted) return;
                                 showMessage(AppLocalizations.of(context)
                                     .update_successful);
-                                priorityCubit.getAllData(email);
                               } else if (result.status ==
                                       Constant.KEY_STATUS__1 &&
                                   result.error == Constant.KEY_ERROR_2) {

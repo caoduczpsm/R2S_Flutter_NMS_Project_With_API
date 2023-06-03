@@ -45,6 +45,7 @@
     "delete_note_error" : "Lỗi: ghi chú được hoàn thành nhỏ hơn 6 tháng",
     "update_successful" : "Cập nhật ghi chú thành công",
     "note_error_plan_date" : "Vui lòng chọn ngày thực hiện bắt đầu từ ngày hôm nay",
+    "delete_note_error_6_months" : "Không thể xóa ghi chú này vì ngày hoàn thành nhỏ hơn 6 tháng",
 
     "delete_confirm" : "Xác nhận xóa",
     "delete_title" : "Bạn có chắc chắn muốn xóa không?",

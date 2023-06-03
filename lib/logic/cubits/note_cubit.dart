@@ -64,8 +64,16 @@ class NoteCubit extends Cubit<NoteState> {
     return DateFormat('dd/MM/yyyy').format(date);
   }
 
-  bool isLessThan6Months() {
-    return false;
+  bool isNotLessThan6Months(List<dynamic> note) {
+    var format = DateFormat("dd/MM/yyyy");
+    DateTime completedDate =
+    format.parse(note[4]);
+    DateTime now = DateTime.now();
+
+    bool canDelete =
+        completedDate.isBefore(now.subtract(const Duration(days: 180))) &&
+            completedDate.isBefore(now);
+    return canDelete;
   }
 
   bool isFromThisDay(String selectedDate) {
