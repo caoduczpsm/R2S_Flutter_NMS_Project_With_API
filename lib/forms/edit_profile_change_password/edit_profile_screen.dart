@@ -12,6 +12,8 @@ import '../../ultilities/Constant.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../dashboard_page/dashboard.dart';
+
 // ignore: must_be_immutable
 class EditProfileScreen extends StatelessWidget {
 
@@ -47,7 +49,8 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
   final _lastName = TextEditingController();
   final _email = TextEditingController();
   late String currentEmail;
-
+  late String fullName;
+  bool? isGmail;
   @override
   void initState() {
     // TODO: implement initState
@@ -59,6 +62,8 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
   void getData(SharedPreferences preferences) async {
     _firstName.text = (drawerCubit.getFirstName(preferences))!;
     _lastName.text = (drawerCubit.getLastName(preferences))! ;
+    fullName = (drawerCubit.getFullName(preferences));
+    isGmail = drawerCubit.getIsGmail(preferences);
     _email.text = (drawerCubit.getEmail(preferences))! ;
     currentEmail = _email.text;
   }
@@ -112,6 +117,7 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
 
 
   Widget _editProfile(){
+    Size size = MediaQuery.of(context).size;
     return Column(
       children: [
         const SizedBox(
@@ -200,6 +206,7 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
                 height: 20,
               ),
               TextFormField(
+                enabled: false,
                 decoration: const InputDecoration(
                   labelText: 'Email',
                   prefixIcon: Icon(Icons.email, color: Constant.PRIMARY_COLOR,),
@@ -232,48 +239,66 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                    onPressed:() async {
-                      if (_editProfileForm.currentState!.validate())
-                      {
-                        String newEmail = _email.text;
-                        Info info = Info(
-                          firstName: _firstName.text,
-                          lastName: _lastName.text,
-                        );
-                        User user = User(
-                          email: currentEmail,
-                          info: info,
-                        );
-                        context.read<UserCubit>().editProfile(user, newEmail);
+                  SizedBox(
+                    width: size.width * 0.3,
+                    height: size.height * 0.05,
+                    child:  ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(size.width * 0.5),
+                            side: BorderSide(
+                              width: size.width * 0.8,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                      onPressed:() async {
+                        if (_editProfileForm.currentState!.validate())
+                        {
+                          String newEmail = _email.text;
+                          Info info = Info(
+                            firstName: _firstName.text,
+                            lastName: _lastName.text,
+                          );
+                          User user = User(
+                            email: currentEmail,
+                            info: info,
+                          );
+                          context.read<UserCubit>().editProfile(user, newEmail);
 
-
-                        // userController.editProfile(user.id!, _email.text,
-                        //     _firstName.text, _lastName.text);
-                        //
-                        // ScaffoldMessenger.of(context).showSnackBar(
-                        //     const SnackBar(content: Text('Change Successful!')));
-                        //
-                        // setState(() {
-                        //   user.email = _email.text;
-                        //   user.firstName = _firstName.text;
-                        //   user.lastName = _lastName.text;
-                        //
-                        // });
-                      }
-                    },
-                    child: Text(AppLocalizations.of(context).change),
+                        }
+                      },
+                      child: Text(AppLocalizations.of(context).change),
+                    ),
                   ),
-                  ElevatedButton(
-                    onPressed:(){
+                  SizedBox(
+                    width: size.width * 0.3,
+                    height: size.height * 0.05,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(size.width * 0.5),
+                            side: BorderSide(
+                              width: size.width * 0.8,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                      onPressed:(){
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context)
+                        => NoteApp()));
+                      },
+                      child: Text(AppLocalizations.of(context).home),
+                    ),
+                  ),
 
-                      // Navigator.of(context)
-                      //     .push(MaterialPageRoute(builder: (context)
-                      // => NoteApp()));
-
-                    },
-                    child: Text(AppLocalizations.of(context).home),
-                  )
                 ],
               )
             ],
@@ -282,7 +307,20 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
 
       ],
     );
+  }
 
+  Widget _buildCircleAvatar() {
+    return CircleAvatar(
+      backgroundImage: NetworkImage(preferences.getString(Constant.KEY_PHOTO_URL)!),
+      radius: 45,
+    );
+  }
 
+  Widget _buildImageAsset() {
+    return SizedBox(
+      width: 90.0,
+      height: 90.0,
+      child: Image.asset('images/logo.png', fit: BoxFit.contain),
+    );
   }
 }

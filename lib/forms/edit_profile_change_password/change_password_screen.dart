@@ -12,6 +12,8 @@ import '../../ultilities/Constant.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../dashboard_page/dashboard.dart';
+
 // ignore: must_be_immutable
 class ChangePasswordScreen extends StatelessWidget {
   const ChangePasswordScreen({super.key});
@@ -103,6 +105,7 @@ class _ChangePasswordScreenState extends State<_ChangePasswordScreen> {
   }
 
   Widget _changePassword() {
+    Size size = MediaQuery.of(context).size;
     return Column(
       children: [
         const SizedBox(
@@ -220,56 +223,66 @@ class _ChangePasswordScreenState extends State<_ChangePasswordScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (_changePasswordForm.currentState!.validate()) {
-                        String newPassword =
-                            UserCubit.hashPassword(_password.text);
-                        User user = User(
-                          email: email,
-                          password:
-                              UserCubit.hashPassword(_currentPassword.text),
-                        );
+                  SizedBox(
+                    width: size.width * 0.3,
+                    height: size.height * 0.05,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(size.width * 0.5),
+                            side: BorderSide(
+                              width: size.width * 0.8,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (_changePasswordForm.currentState!.validate()) {
+                          String newPassword =
+                          UserCubit.hashPassword(_password.text);
+                          User user = User(
+                            email: email,
+                            password:
+                            UserCubit.hashPassword(_currentPassword.text),
+                          );
 
-                        context
-                            .read<UserCubit>()
-                            .changePassword(user, newPassword);
+                          context
+                              .read<UserCubit>()
+                              .changePassword(user, newPassword);
 
-                        // if (user.password
-                        //     == userController.hashPassword(_currentPassword.text.trim())) {
-                        //
-                        //   userController.changePassword(user.email!,
-                        //       userController.hashPassword(_password.text.trim()));
-                        //
-                        //   ScaffoldMessenger.of(context).showSnackBar(
-                        //       const SnackBar(content: Text('Change Successful!')));
-                        //
-                        //   setState(() {
-                        //     user.password = userController.hashPassword(_password.text.trim());
-                        //     _currentPassword.text = "";
-                        //     _password.text = "";
-                        //     _repassword.text = "";
-                        //
-                        //   });
-                        //
-                        // } else {
-                        //   ScaffoldMessenger.of(context).showSnackBar(
-                        //       const SnackBar(content: Text('Current Password '
-                        //           'Does Not Match!')));
-                        // }
-                        // //  }
-                      }
-                    },
-                    child: Text(AppLocalizations.of(context).change),
+                        }
+                      },
+                      child: Text(AppLocalizations.of(context).change),
+                    ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Navigator.of(context)
-                      //     .push(MaterialPageRoute(builder: (context)
-                      // => NoteManagementApp(user: user)));
-                    },
-                    child: Text(AppLocalizations.of(context).home),
-                  )
+                  SizedBox(
+                    width: size.width * 0.3,
+                    height: size.height * 0.05,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(size.width * 0.5),
+                            side: BorderSide(
+                              width: size.width * 0.8,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                      onPressed:(){
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context)
+                        => NoteApp()));
+                      },
+                      child: Text(AppLocalizations.of(context).home),
+                    ),
+
+                  ),
                 ],
               )
             ],

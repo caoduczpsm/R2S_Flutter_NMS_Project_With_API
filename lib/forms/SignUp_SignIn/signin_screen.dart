@@ -190,8 +190,6 @@ class _MySignInFormState extends State<_MySignInForm> {
     );
   }
 
-
-
   Widget _buildSignInForm(){
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
