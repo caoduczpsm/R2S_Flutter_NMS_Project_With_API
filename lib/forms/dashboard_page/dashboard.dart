@@ -51,7 +51,7 @@ class NoteApp extends StatelessWidget {
 
     return FutureBuilder<SharedPreferences>(
         future: drawerCubit.initSharePreference(),
-        builder: (context, snapshot) {
+        builder: (builderContext, snapshot) {
           if(snapshot.hasData) {
             preferences = snapshot.data!;
             initInfo(preferences);
@@ -100,7 +100,9 @@ class NoteApp extends StatelessWidget {
                                     height: 90.0,
                                     child: isGmail! ? _buildCircleAvatar() : _buildImageAsset(),
                                   ),
-                                  Text(fullName!,
+                                  Text(cubitContext
+                                      .read<DrawerCubit>()
+                                      .getFullName(preferences)!,
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 16,

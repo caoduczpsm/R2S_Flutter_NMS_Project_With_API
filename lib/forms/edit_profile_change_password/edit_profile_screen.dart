@@ -309,18 +309,18 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
     );
   }
 
-  Widget _buildCircleAvatar() {
-    return CircleAvatar(
-      backgroundImage: NetworkImage(preferences.getString(Constant.KEY_PHOTO_URL)!),
-      radius: 45,
-    );
-  }
-
-  Widget _buildImageAsset() {
-    return SizedBox(
-      width: 90.0,
-      height: 90.0,
-      child: Image.asset('images/logo.png', fit: BoxFit.contain),
-    );
-  }
+  // Widget _buildCircleAvatar() {
+  //   return CircleAvatar(
+  //     backgroundImage: NetworkImage(preferences.getString(Constant.KEY_PHOTO_URL)!),
+  //     radius: 45,
+  //   );
+  // }
+  //
+  // Widget _buildImageAsset() {
+  //   return SizedBox(
+  //     width: 90.0,
+  //     height: 90.0,
+  //     child: Image.asset('images/logo.png', fit: BoxFit.contain),
+  //   );
+  // }
 }
