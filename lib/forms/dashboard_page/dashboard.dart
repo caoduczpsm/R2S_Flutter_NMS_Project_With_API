@@ -195,22 +195,25 @@ class NoteApp extends StatelessWidget {
                               child: Text(AppLocalizations.of(cubitContext).account,
                                   style: textStyle),
                             ),
-                            ListTile(
-                              title: Text(
-                                  AppLocalizations.of(cubitContext).edit_profile,
-                                  style: textStyle),
-                              leading: const Icon(
-                                Icons.account_box,
-                                color: iconColor,
+                            Visibility(
+                              visible: !isGmail!,
+                              child:  ListTile(
+                                title: Text(
+                                    AppLocalizations.of(cubitContext).edit_profile,
+                                    style: textStyle),
+                                leading: const Icon(
+                                  Icons.account_box,
+                                  color: iconColor,
+                                ),
+                                onTap: () {
+                                  cubitContext
+                                      .read<DrawerCubit>()
+                                      .selectIndex(5);
+                                  Navigator.pop(cubitContext);
+                                },
+                                selected: state.index == 5,
+                                selectedTileColor: selectedColor,
                               ),
-                              onTap: () {
-                                cubitContext
-                                    .read<DrawerCubit>()
-                                    .selectIndex(5);
-                                Navigator.pop(cubitContext);
-                              },
-                              selected: state.index == 5,
-                              selectedTileColor: selectedColor,
                             ),
                             Visibility(
                               visible: !isGmail!,
