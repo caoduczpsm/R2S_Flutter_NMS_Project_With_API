@@ -271,7 +271,12 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
 
                         }
                       },
-                      child: Text(AppLocalizations.of(context).change),
+                      child: Text(AppLocalizations.of(context).change,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),),
                     ),
                   ),
                   SizedBox(
@@ -295,7 +300,12 @@ class _EditProfileScreenState extends State<_EditProfileScreen> {
                             .push(MaterialPageRoute(builder: (context)
                         => NoteApp()));
                       },
-                      child: Text(AppLocalizations.of(context).home),
+                      child: Text(AppLocalizations.of(context).home,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),),
                     ),
                   ),
 
