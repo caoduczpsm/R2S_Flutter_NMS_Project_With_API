@@ -12,6 +12,7 @@ import 'package:pie_chart/pie_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatelessWidget {
@@ -104,7 +105,15 @@ class _HomeScreenState extends State<_HomeScreen> {
                 ),
               );
             } else {
-              return const Text("Empty Note");
+              return Center(
+                child: Text(
+                  AppLocalizations.of(context).empty_note,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.blueAccent),
+                ),
+              );
             }
           } else {
             return const Center(

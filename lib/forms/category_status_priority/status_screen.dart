@@ -257,57 +257,69 @@ class _StatusScreenState extends State<_StatusScreen> {
                       );
                     } else if (state is SuccessLoadAllStatusState) {
                       final status = state.data?.data;
-                      return Padding(
-                          padding: const EdgeInsets.only(left: 4, right: 4),
-                          child: ListView.builder(
-                              itemCount: status?.length,
-                              itemBuilder: (context, index) => Dismissible(
-                                background: Container(
-                                  color: Colors.red,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.only(left: 20),
-                                        child: const Icon(
-                                          Icons.delete,
-                                          size: 24,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                    ],
+                      if (status!.isNotEmpty) {
+                        return Padding(
+                            padding: const EdgeInsets.only(left: 4, right: 4),
+                            child: ListView.builder(
+                                itemCount: status.length,
+                                itemBuilder: (context, index) => Dismissible(
+                                  background: Container(
+                                    color: Colors.red,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          margin: const EdgeInsets.only(left: 20),
+                                          child: const Icon(
+                                            Icons.delete,
+                                            size: 24,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                secondaryBackground: Container(
-                                  color: Colors.green,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.only(right: 20),
-                                        child: const Icon(
-                                          Icons.edit,
-                                          size: 24,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                    ],
+                                  secondaryBackground: Container(
+                                    color: Colors.green,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          margin: const EdgeInsets.only(right: 20),
+                                          child: const Icon(
+                                            Icons.edit,
+                                            size: 24,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                key: Key(status![index][0]),
-                                confirmDismiss: (direction) async {
-                                  if (direction == DismissDirection.endToStart) {
-                                    _showModalBottomSheet(status[index]);
-                                    return false;
-                                  } else {
-                                    return await _showConfirmDeleteDialog(
-                                        status[index]);
-                                  }
-                                },
-                                child: buildListCard(status[index], index),
-                              )));
+                                  key: Key(status[index][0]),
+                                  confirmDismiss: (direction) async {
+                                    if (direction == DismissDirection.endToStart) {
+                                      _showModalBottomSheet(status[index]);
+                                      return false;
+                                    } else {
+                                      return await _showConfirmDeleteDialog(
+                                          status[index]);
+                                    }
+                                  },
+                                  child: buildListCard(status[index], index),
+                                )));
+                      } else {
+                        return Center(
+                          child: Text(
+                            AppLocalizations.of(context).empty_status,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.blueAccent),
+                          ),
+                        );
+                      }
                     } else if (state is FailureStatusState) {
                       return Center(child: Text(state.errorMessage));
                     }

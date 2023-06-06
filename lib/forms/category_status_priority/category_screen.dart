@@ -267,65 +267,78 @@ class _CategoryScreenState extends State<_CategoryScreen> {
                       );
                     } else if (state is SuccessLoadAllCategoryState) {
                       final category = state.data?.data;
-                      return Padding(
-                          padding: const EdgeInsets.only(left: 4, right: 4),
-                          child: ListView.builder(
-                              itemCount: category?.length,
-                              itemBuilder: (context, index) => Dismissible(
-                                    background: Container(
-                                      color: Colors.red,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(left: 20),
-                                            child: const Icon(
-                                              Icons.delete,
-                                              size: 24,
-                                              color: Colors.white,
-                                            ),
-                                          )
-                                        ],
+                      if (category!.isNotEmpty) {
+                        return Padding(
+                            padding: const EdgeInsets.only(left: 4, right: 4),
+                            child: ListView.builder(
+                                itemCount: category.length,
+                                itemBuilder: (context, index) => Dismissible(
+                                      background: Container(
+                                        color: Colors.red,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 20),
+                                              child: const Icon(
+                                                Icons.delete,
+                                                size: 24,
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    secondaryBackground: Container(
-                                      color: Colors.green,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            margin: const EdgeInsets.only(
-                                                right: 20),
-                                            child: const Icon(
-                                              Icons.edit,
-                                              size: 24,
-                                              color: Colors.white,
-                                            ),
-                                          )
-                                        ],
+                                      secondaryBackground: Container(
+                                        color: Colors.green,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  right: 20),
+                                              child: const Icon(
+                                                Icons.edit,
+                                                size: 24,
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    key: Key(category![index][0]),
-                                    confirmDismiss: (direction) async {
-                                      if (direction ==
-                                          DismissDirection.endToStart) {
-                                        _showModalBottomSheet(category[index]);
-                                        return false;
-                                      } else {
-                                        return await _showConfirmDeleteDialog(
-                                            category[index]);
-                                      }
-                                    },
-                                    child:
-                                        buildListCard(category[index], index),
-                                  )));
+                                      key: Key(category[index][0]),
+                                      confirmDismiss: (direction) async {
+                                        if (direction ==
+                                            DismissDirection.endToStart) {
+                                          _showModalBottomSheet(
+                                              category[index]);
+                                          return false;
+                                        } else {
+                                          return await _showConfirmDeleteDialog(
+                                              category[index]);
+                                        }
+                                      },
+                                      child:
+                                          buildListCard(category[index], index),
+                                    )));
+                      } else {
+                        return Center(
+                          child: Text(
+                            AppLocalizations.of(context).empty_category,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.blueAccent),
+                          ),
+                        );
+                      }
                     } else if (state is FailureCategoryState) {
                       return Center(child: Text(state.errorMessage));
                     }

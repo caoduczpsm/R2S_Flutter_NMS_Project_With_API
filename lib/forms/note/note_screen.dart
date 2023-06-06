@@ -450,10 +450,30 @@ class _NoteScreenState extends State<_NoteScreen> {
                     }
                   }
                 } else {
-                  Navigator.of(builderContext).pop(false);
-                  if (!mounted) return;
-                  showMessage(
-                      AppLocalizations.of(context).delete_note_error_6_months);
+                  if (note[3] == "Done" ||
+                      note[3] == "Xong" ||
+                      note[3] == "Hoàn thành" ||
+                      note[3] == "Hoàn tất") {
+                    Navigator.of(builderContext).pop(false);
+                    if (!mounted) return;
+                    showMessage(AppLocalizations.of(context)
+                        .delete_note_error_6_months);
+                  } else {
+                    Navigator.of(builderContext).pop(true);
+                    NoteData? result =
+                        await noteCubit.deleteNote(email, note[0]);
+                    if (result != null) {
+                      if (result.status == 1) {
+                        if (!mounted) return;
+                        showMessage(
+                            AppLocalizations.of(context).delete_successful);
+                      } else if (result.status == -1 && result.error == 2) {
+                        if (!mounted) return;
+                        showMessage(
+                            AppLocalizations.of(context).delete_note_error);
+                      }
+                    }
+                  }
                 }
               },
               child: Text(AppLocalizations.of(context).yes),
@@ -639,57 +659,69 @@ class _NoteScreenState extends State<_NoteScreen> {
               );
             } else if (state is SuccessLoadAllNoteState) {
               final note = state.notes?.data;
-              return Padding(
-                  padding: const EdgeInsets.only(left: 4, right: 4),
-                  child: ListView.builder(
-                      itemCount: note?.length,
-                      itemBuilder: (context, index) => Dismissible(
-                            background: Container(
-                              color: Colors.red,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(left: 20),
-                                    child: const Icon(
-                                      Icons.delete,
-                                      size: 24,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                ],
+              if (note!.isNotEmpty) {
+                return Padding(
+                    padding: const EdgeInsets.only(left: 4, right: 4),
+                    child: ListView.builder(
+                        itemCount: note.length,
+                        itemBuilder: (context, index) => Dismissible(
+                              background: Container(
+                                color: Colors.red,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(left: 20),
+                                      child: const Icon(
+                                        Icons.delete,
+                                        size: 24,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            secondaryBackground: Container(
-                              color: Colors.green,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(right: 20),
-                                    child: const Icon(
-                                      Icons.edit,
-                                      size: 24,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                ],
+                              secondaryBackground: Container(
+                                color: Colors.green,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(right: 20),
+                                      child: const Icon(
+                                        Icons.edit,
+                                        size: 24,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            key: Key(note![index][6]),
-                            confirmDismiss: (direction) async {
-                              if (direction == DismissDirection.endToStart) {
-                                _showModalBottomSheet(note[index]);
-                                return false;
-                              } else {
-                                return await _showConfirmDeleteNoteDialog(
-                                    note[index]);
-                              }
-                            },
-                            child: buildListCard(note[index], index),
-                          )));
+                              key: Key(note[index][6]),
+                              confirmDismiss: (direction) async {
+                                if (direction == DismissDirection.endToStart) {
+                                  _showModalBottomSheet(note[index]);
+                                  return false;
+                                } else {
+                                  return await _showConfirmDeleteNoteDialog(
+                                      note[index]);
+                                }
+                              },
+                              child: buildListCard(note[index], index),
+                            )));
+              } else {
+                return Center(
+                  child: Text(
+                    AppLocalizations.of(context).empty_note,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Colors.blueAccent),
+                  ),
+                );
+              }
             } else if (state is FailureNoteState) {
               return Center(
                 child: Text(state.errorMessage),

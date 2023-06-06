@@ -63,6 +63,11 @@
     "error_last_name_32c" : "Tên phải từ 2 đến 32 ký tự",
     "error_name_space" : "Không chưa khoảng cách",
 
+    "empty_note" : "Bạn chưa tạo ghi chú",
+    "empty_category" : "Bạn chưa tạo danh mục",
+    "empty_status" : "Bạn chưa tạo trạng thái",
+    "empty_priority" : "Bạn chưa tạo độ ưu tiên",
+
     "delete_confirm" : "Xác nhận xóa",
     "delete_title" : "Bạn có chắc chắn muốn xóa không?",
     "yes" : "Đồng ý",

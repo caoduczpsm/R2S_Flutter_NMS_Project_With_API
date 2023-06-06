@@ -269,65 +269,78 @@ class _PriorityScreenState extends State<_PriorityScreen> {
                       );
                     } else if (state is SuccessLoadAllPriorityState) {
                       final priority = state.data?.data;
-                      return Padding(
-                          padding: const EdgeInsets.only(left: 4, right: 4),
-                          child: ListView.builder(
-                              itemCount: priority?.length,
-                              itemBuilder: (context, index) => Dismissible(
-                                    background: Container(
-                                      color: Colors.red,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(left: 20),
-                                            child: const Icon(
-                                              Icons.delete,
-                                              size: 24,
-                                              color: Colors.white,
-                                            ),
-                                          )
-                                        ],
+                      if (priority!.isNotEmpty) {
+                        return Padding(
+                            padding: const EdgeInsets.only(left: 4, right: 4),
+                            child: ListView.builder(
+                                itemCount: priority.length,
+                                itemBuilder: (context, index) => Dismissible(
+                                      background: Container(
+                                        color: Colors.red,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 20),
+                                              child: const Icon(
+                                                Icons.delete,
+                                                size: 24,
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    secondaryBackground: Container(
-                                      color: Colors.green,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            margin: const EdgeInsets.only(
-                                                right: 20),
-                                            child: const Icon(
-                                              Icons.edit,
-                                              size: 24,
-                                              color: Colors.white,
-                                            ),
-                                          )
-                                        ],
+                                      secondaryBackground: Container(
+                                        color: Colors.green,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  right: 20),
+                                              child: const Icon(
+                                                Icons.edit,
+                                                size: 24,
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    key: Key(priority![index][0]),
-                                    confirmDismiss: (direction) async {
-                                      if (direction ==
-                                          DismissDirection.endToStart) {
-                                        _showModalBottomSheet(priority[index]);
-                                        return false;
-                                      } else {
-                                        return await _showConfirmDeleteDialog(
-                                            priority[index]);
-                                      }
-                                    },
-                                    child:
-                                        buildListCard(priority[index], index),
-                                  )));
+                                      key: Key(priority[index][0]),
+                                      confirmDismiss: (direction) async {
+                                        if (direction ==
+                                            DismissDirection.endToStart) {
+                                          _showModalBottomSheet(
+                                              priority[index]);
+                                          return false;
+                                        } else {
+                                          return await _showConfirmDeleteDialog(
+                                              priority[index]);
+                                        }
+                                      },
+                                      child:
+                                          buildListCard(priority[index], index),
+                                    )));
+                      } else {
+                        return Center(
+                          child: Text(
+                            AppLocalizations.of(context).empty_priority,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.blueAccent),
+                          ),
+                        );
+                      }
                     }
                     if (state is InitialPriorityState ||
                         state is LoadingPriorityState) {

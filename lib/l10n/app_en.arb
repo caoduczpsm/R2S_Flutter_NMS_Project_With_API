@@ -63,6 +63,11 @@
     "error_last_name_32c" : "Last name has a length of 2 - 32 characters",
     "error_name_space" : "Please do not end with a space",
 
+    "empty_note" : "Empty Note",
+    "empty_category" : "Empty Category",
+    "empty_status" : "Empty Status",
+    "empty_priority" : "Empty Priority",
+
 
     "delete_confirm" : "Delete Confirm",
     "delete_title" : "Are you sure you want to delete this?",

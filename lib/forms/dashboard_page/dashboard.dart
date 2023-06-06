@@ -102,7 +102,7 @@ class NoteApp extends StatelessWidget {
                                   ),
                                   Text(cubitContext
                                       .read<DrawerCubit>()
-                                      .getFullName(preferences)!,
+                                      .getFullName(preferences),
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 16,
