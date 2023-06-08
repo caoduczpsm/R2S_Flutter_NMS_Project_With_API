@@ -83,13 +83,13 @@ class _PriorityScreenState extends State<_PriorityScreen> {
         elevation: 5,
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
-        builder: (_) => StatefulBuilder(builder: (context, setState) {
+        builder: (_) => StatefulBuilder(builder: (builderContext, setState) {
               return Container(
                 padding: EdgeInsets.only(
                   top: 20,
                   left: 16,
                   right: 16,
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+                  bottom: MediaQuery.of(builderContext).viewInsets.bottom + 20,
                 ),
                 margin: const EdgeInsets.all(8),
                 decoration: const BoxDecoration(
@@ -117,7 +117,7 @@ class _PriorityScreenState extends State<_PriorityScreen> {
                     const SizedBox(height: 10),
                     ElevatedButton(
                         onPressed: () async {
-                          Navigator.of(context).pop();
+                          Navigator.of(builderContext).pop();
                           if (priority == null) {
                             NoteData? result =
                                 await priorityCubit.createPriority(
@@ -182,20 +182,20 @@ class _PriorityScreenState extends State<_PriorityScreen> {
     bool result = await showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) {
+      builder: (builderContext) {
         return AlertDialog(
           title: Text(AppLocalizations.of(context).delete_confirm),
           content: Text(AppLocalizations.of(context).delete_title),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(false);
+                Navigator.of(builderContext).pop(false);
               },
               child: Text(AppLocalizations.of(context).no),
             ),
             TextButton(
               onPressed: () async {
-                Navigator.of(context).pop(true);
+                Navigator.of(builderContext).pop(true);
                 NoteData? result =
                     await priorityCubit.deletePriority(email, priority[0]);
                 if (result != null) {
