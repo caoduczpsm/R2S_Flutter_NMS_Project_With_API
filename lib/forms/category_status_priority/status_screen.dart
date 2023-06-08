@@ -187,7 +187,7 @@ class _StatusScreenState extends State<_StatusScreen> {
             ),
             TextButton(
               onPressed: () async {
-                Navigator.of(context).pop(true);
+                Navigator.of(builderContext).pop(true);
                 NoteData? result = await statusCubit.deleteStatus(email, status[0]);
                 if(result != null) {
                   if(result.status == 1) {
